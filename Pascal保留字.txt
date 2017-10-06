@@ -6,7 +6,7 @@ program,function,procedure
 
 (2)说明部分专用定义符号
 
-array,const,file,label,of packed,record,set,type,var
+array,const,file,label,of,packed,record,set,type,var
 
 （3）语句专用符号
 
