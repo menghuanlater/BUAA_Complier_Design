@@ -1,0 +1,25 @@
+PASCAL保留字中,保留字分为6种共36个:
+
+(1)程序、函数、过程符号
+
+program,function,procedure
+
+(2)说明部分专用定义符号
+
+array,const,file,label,of packed,record,set,type,var
+
+（3）语句专用符号
+
+case,do,downto,else,for,forward,goto,if,repeat,then,to until,while,with
+
+(4)运算符号
+
+and,div,in,mod ,not,or
+
+（5）分隔符号
+
+begin，end
+
+(6)空指针常量
+
+nil
