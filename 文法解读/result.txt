@@ -1,0 +1,82 @@
+g_var_int1:47
+g_var_int2:1;
+g_var_char1:b
+g_var_char2:l
+------------------------
+g_var_int1:46
+g_var_int2:8
+g_var_char1:b
+g_var_char2:l
+------------------------
+g_var_int_arr:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+g_var_char_arr:
+a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+l
+Welcome to BUAA.
+g_var_int_arr:
+0
+1
+2
+g_var_char_arr:
+a
+b
+c
+Sally Go2.
+Hello World.
+g_var_int1:46
+g_var_int2:8
+g_var_char1:b
+g_var_char2:l
+------------------------
+Excuse Me.
+Fib(1):1
+Fib(2):1
+Fib(8):21
+g_var_int1:196
+g_var_int2:30
+g_var_char1:b
+g_var_char2:l
+------------------------
+smaller than n
+smaller than n or equal to n
+not equal to n
+smaller than n
+not bigger than n
+------------------------
+not smaller than n
+smaller than n or equal to n
+equal to n
+bigger than n or equal to n
+not bigger than n
+------------------------
+not smaller than n
+bigger than n
+not equal to n
+bigger than n or equal to n
+bigger than n
+------------------------
+Please enter the number of items you want to calculate the Fibonacci sequence:       
+//从这开始程序会去接收输入的数据,程序会根据输入的数值计算对应的斐波那契数,假设我们输入的数值是20
+the Fib number you want to get is:6765
