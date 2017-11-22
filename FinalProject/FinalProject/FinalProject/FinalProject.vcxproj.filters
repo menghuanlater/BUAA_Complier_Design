@@ -21,9 +21,27 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="error.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SyntaxAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstValue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LexicalAnalysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="error.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SyntaxAnalysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstValue.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

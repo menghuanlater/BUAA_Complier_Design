@@ -1,0 +1,38 @@
+﻿生成启动时间为 2017-11-23 3:21:32。
+     1>项目“H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\FinalProject\FinalProject.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在对“Debug\FinalProject.unsuccessfulbuild”执行 Touch 任务。
+       ClCompile:
+         e:\Vs2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt LexicalAnalysis.cpp
+         LexicalAnalysis.cpp
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp(53): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 e:\vs2010\vc\include\string.h(110) : 参见“strcat”的声明
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp(70): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 e:\vs2010\vc\include\string.h(110) : 参见“strcat”的声明
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp(101): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+                 e:\vs2010\vc\include\string.h(246) : 参见“stricmp”的声明
+       ManifestResourceCompile:
+         所有输出均为最新。
+       Link:
+         e:\Vs2010\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\Debug\FinalProject.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\FinalProject.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\Debug\FinalProject.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\Debug\FinalProject.lib" /MACHINE:X86 Debug\FinalProject.exe.embed.manifest.res
+         Debug\ConstValue.obj
+         Debug\error.obj
+         Debug\LexicalAnalysis.obj
+         Debug\main.obj
+         Debug\SyntaxAnalysis.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\FinalProject.exe.embed.manifest" /manifest Debug\FinalProject.exe.intermediate.manifest
+         所有输出均为最新。
+       LinkEmbedManifest:
+         所有输出均为最新。
+         FinalProject.vcxproj -> H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\Debug\FinalProject.exe
+       FinalizeBuildStatus:
+         正在删除文件“Debug\FinalProject.unsuccessfulbuild”。
+         正在对“Debug\FinalProject.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\FinalProject\FinalProject.vcxproj”(build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.52

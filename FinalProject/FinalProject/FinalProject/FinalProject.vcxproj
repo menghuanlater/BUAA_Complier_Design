@@ -74,11 +74,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ConstValue.cpp" />
+    <ClCompile Include="error.cpp" />
     <ClCompile Include="LexicalAnalysis.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SyntaxAnalysis.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConstValue.h" />
+    <ClInclude Include="error.h" />
     <ClInclude Include="LexicalAnalysis.h" />
+    <ClInclude Include="SyntaxAnalysis.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
