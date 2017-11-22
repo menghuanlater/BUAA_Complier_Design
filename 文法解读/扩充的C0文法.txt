@@ -60,3 +60,7 @@
 （5）数组的下标从0开始
 
 （6）输出字符时,表达式写为字符变量名即可输出字符，其余表达式全部输出
+
+保留字集合{
+    const,int,char,void,main,if,else,switch,case,default,while,scanf,printf,return
+}
