@@ -14,7 +14,7 @@ private:
 
 public:
     //词法分析错误处理程序
-    void LexicalAnalysisError(){
+    void LexicalAnalysisError()const{
     }
 };
 #endif

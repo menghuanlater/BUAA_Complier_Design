@@ -41,38 +41,41 @@ bool LexicalAnalysis::nextSym(){
     if(index >= fileLength)
         return false;
     //否则,进行单词读取
-	char array[maxWordLength] = {'\0'};
+	char Array[maxWordLength] = {'\0'};
     char temp = getChar();
 	//空白字符跳过
 	while(isspace(temp)){
 		temp = getChar();
     }
-	
+	//读到文件结束
+	if(temp==EOF){
+		return false;
+	}
 	if(isalpha(temp) || temp=='_'){//标识符或者保留字
 		while(isalnum(temp) || temp=='_'){
-            strcat(array,&temp);
+            Array[strlen(Array)] = temp;
             temp = getChar();
         }
 		if(temp != EOF){
             retract();
-        }
-        int resultValue = reserver(array);
+		}
+        int resultValue = reserver(Array);
         if(resultValue == 0){
             globalSymbol = IDENTIFIER;
             //全体小写化,统一处理
-            toLow(array);
-            globalString = array;
+            toLow(Array);
+            globalString = Array;
         }else{
             globalSymbol = (SymbolCode)resultValue;
         }
     }else if(isdigit(temp)){//数字
         while(isdigit(temp)){
-            strcat(array,&temp);
+            Array[strlen(Array)] = temp;
             temp = getChar();
         }
         if(temp != EOF)
             retract();
-        globalNumber = atoi(array);
+        globalNumber = atoi(Array);
         globalSymbol = INTNUM;
     }else if(temp=='+'){
         globalChar = '+';
@@ -143,11 +146,11 @@ bool LexicalAnalysis::nextSym(){
     }else if(temp=='"'){
         temp = getChar();
         while(temp==CHAR1 || temp==CHAR2 || (temp>=CHAR3 && temp<=CHAR4)){
-            strcat(array,&temp);
+            Array[strlen(Array)] = temp;
             temp = getChar();
         }
         if(temp=='"'){
-            globalString = array;
+            globalString = Array;
             globalSymbol = STRING;
         }else{
             myError.LexicalAnalysisError();
