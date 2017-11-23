@@ -35,7 +35,7 @@ void LexicalAnalysis::readFile(string FilePath){
 	//检测文本是否存在中文日文...--->char值小于-1
 	for(int i=0;i<fileLength;i++){
 		if(fileContents[i]<-1){
-			cout<<"Found not ascii char\'s existence,the file may conclude Chinese,Japanese or other char.Please divise this problem."<<endl;
+			cout<<"Found not ascii char\'s existence,the file may conclude Chinese,Japanese or other char.Please solve this problem."<<endl;
 			exit(EXIT_SUCCESS);
 		}
 	}
