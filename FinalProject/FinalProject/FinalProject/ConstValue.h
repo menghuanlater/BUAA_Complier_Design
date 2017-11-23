@@ -11,7 +11,7 @@
 #ifndef CONSTVALUE_H
 #define CONSTVALUE_H
 #define KEY_NUM 14 //保留字数量定义
-#define SYM_NUM 37 //记忆符数量
+#define SYM_NUM 38 //记忆符数量
 //枚举记忆符对应的类别编码
 enum SymbolCode{
     CONSTSY,      INTSY,        CHARSY,       VOIDSY,
@@ -21,9 +21,9 @@ enum SymbolCode{
     STRING,       CHAR,         ADD,          SUB,
     MULT,         DIV,          LESS,         LESSEQ,
     EQUAL,        MOREEQ,       NOTEQ,        MORE, 
-    COMMA,        SEMI,         LSBRACKET,    RSBRACKET,
-    LMBRACKET,    RMBRACKET,    LBBRACKET,    RBBRACKET,
-    ASSIGN
+    COMMA,        COLON,        SEMI,         LSBRACKET,    
+    RSBRACKET,    LMBRACKET,    RMBRACKET,    LBBRACKET,    
+    RBBRACKET,    ASSIGN
 };
 /*
 可用字符32,33 35-126

@@ -7,14 +7,27 @@
 #ifndef ERROR_H
 #define ERROR_H
 #include <iostream>
+
 using namespace std;
+
+//词法分析错误种类枚举
+/*
+*1.单字符char不合法
+*2.字符串不合法
+*3.整个程序出现非法字符
+*/
+enum LexicalErrorCode{
+    SingleCharIllegal,
+    StringIllegal,
+    ContentIllegal
+};
+
 class Error
 {
 private:
 
 public:
     //词法分析错误处理程序
-    void LexicalAnalysisError()const{
-    }
+    void LexicalAnalysisError(LexicalErrorCode errorCode,int lineNumber)const;
 };
 #endif

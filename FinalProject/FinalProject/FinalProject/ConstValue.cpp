@@ -15,7 +15,7 @@ const char * SymbolArr[SYM_NUM] = {
     "STRING",       "CHAR",         "ADD",          "SUB",
     "MULT",         "DIV",          "LESS",         "LESSEQ",
     "EQUAL",        "MOREEQ",       "NOTEQ",        "MORE",
-    "COMMA",        "SEMI",         "LSBRACKET",    "RSBRACKET",
-    "LMBRACKET",    "RMBRACKET",    "LBBRACKET",    "RBBRACKET",
-    "ASSIGN"
+    "COMMA",        "COLON",        "SEMI",         "LSBRACKET",    
+    "RSBRACKET",    "LMBRACKET",    "RMBRACKET",    "LBBRACKET",    
+    "RBBRACKET",    "ASSIGN"
 };

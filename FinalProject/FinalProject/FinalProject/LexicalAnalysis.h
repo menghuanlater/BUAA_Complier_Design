@@ -27,7 +27,7 @@ private:
     int    globalNumber;//存放当前读进的整数
     enum   SymbolCode globalSymbol;//当前所识别单词的类型
     static const  int maxWordLength = 1024;//一个单词最大长度
-    //int    lineCount;//行计数器,目的在于发现非法字符提示所在文件的行数
+    int    lineCount;//行计数器,目的在于发现非法字符提示所在文件的行数
     const Error & myError;//错误处理类引用,全局公用
     void retract(){//回退一个字符
         index--;

@@ -18,7 +18,7 @@ LexicalAnalysis::LexicalAnalysis(const Error & error):myError(error){
     index = 0;
     globalChar = '\0';
     globalNumber = 0;
-    //lineCount = 1;
+    lineCount = 1;
 }
 //文件读取
 void LexicalAnalysis::readFile(string FilePath){
@@ -32,6 +32,13 @@ void LexicalAnalysis::readFile(string FilePath){
 	fileContents = string(beg, end);
 	fileIn.close();
     fileLength = fileContents.size();
+	//检测文本是否存在中文日文...--->char值小于-1
+	for(int i=0;i<fileLength;i++){
+		if(fileContents[i]<-1){
+			cout<<"Found not ascii char\'s existence,the file may conclude Chinese,Japanese or other char.Please divise this problem."<<endl;
+			exit(EXIT_SUCCESS);
+		}
+	}
     //输出提示
     cout<<"read file succeed,the file size is: "<<fileLength<<" Bytes."<<endl;
 }
@@ -45,6 +52,8 @@ bool LexicalAnalysis::nextSym(){
     char temp = getChar();
 	//空白字符跳过
 	while(isspace(temp)){
+        if(temp=='\n')//换行
+            lineCount++;
 		temp = getChar();
     }
 	//读到文件结束
@@ -66,7 +75,7 @@ bool LexicalAnalysis::nextSym(){
             toLow(Array);
             globalString = Array;
         }else{
-            globalSymbol = (SymbolCode)resultValue;
+            globalSymbol = (SymbolCode)(resultValue-1);
         }
     }else if(isdigit(temp)){//数字
         while(isdigit(temp)){
@@ -98,6 +107,9 @@ bool LexicalAnalysis::nextSym(){
     }else if(temp==','){
         globalChar = ',';
         globalSymbol = COMMA;
+    }else if(temp==':'){
+        globalChar = ':';
+        globalSymbol = COLON;
     }else if(temp==';'){
         globalChar = ';';
         globalSymbol = SEMI;
@@ -129,18 +141,20 @@ bool LexicalAnalysis::nextSym(){
             globalChar = temp;
             temp = getChar();
             if(temp!='\''){
-                myError.LexicalAnalysisError();
-                while(!isspace(temp)){
+                myError.LexicalAnalysisError(SingleCharIllegal,lineCount);
+                while(temp!='\n'){
                     temp = getChar();
                 }
+                lineCount++;
                 return nextSym();
             }
             globalSymbol = CHAR;
         }else{
-            myError.LexicalAnalysisError();
-            while(!isspace(temp)){
+            myError.LexicalAnalysisError(SingleCharIllegal,lineCount);
+            while(temp!='\n'){
                 temp = getChar();
             }
+            lineCount++;
             return nextSym();
         }
     }else if(temp=='"'){
@@ -153,14 +167,15 @@ bool LexicalAnalysis::nextSym(){
             globalString = Array;
             globalSymbol = STRING;
         }else{
-            myError.LexicalAnalysisError();
-            while(!isspace(temp)){
+            myError.LexicalAnalysisError(StringIllegal,lineCount);
+            while(temp!='\n'){
                 temp = getChar();
             }
+            lineCount++;
             return nextSym();
         }
     }else{
-        myError.LexicalAnalysisError();
+        myError.LexicalAnalysisError(ContentIllegal,lineCount);
         return nextSym();
     }
     return true;
@@ -169,7 +184,7 @@ bool LexicalAnalysis::nextSym(){
 int LexicalAnalysis::reserver(char* target){
     for(int i=0;i<KEY_NUM;i++){
         if(stricmp(keyWordsArr[i],target)==0){
-            return i;
+            return (i+1);//为了与0区分开来
         }
     }
     return 0;

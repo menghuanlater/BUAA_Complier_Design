@@ -1,14 +1,20 @@
-﻿生成启动时间为 2017-11-23 15:46:37。
+﻿生成启动时间为 2017-11-24 1:10:56。
      1>项目“H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\FinalProject\FinalProject\FinalProject.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Debug\FinalProject.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
-         e:\Vs2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt LexicalAnalysis.cpp
+         e:\Vs2010\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ConstValue.cpp LexicalAnalysis.cpp main.cpp
          LexicalAnalysis.cpp
      1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
      1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp(172): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.cpp(186): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _stricmp. See online help for details.
                  e:\vs2010\vc\include\string.h(246) : 参见“stricmp”的声明
+         ConstValue.cpp
+         正在生成代码...
+         正在编译...
+         main.cpp
+     1>h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\finalproject\finalproject\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         正在生成代码...
        ManifestResourceCompile:
          所有输出均为最新。
        Link:
@@ -31,4 +37,4 @@
 
 生成成功。
 
-已用时间 00:00:01.64
+已用时间 00:00:03.34
