@@ -127,15 +127,35 @@ bool LexicalAnalysis::nextSym(){
             temp = getChar();
             if(temp!='\''){
                 myError.LexicalAnalysisError();
+                while(!isspace(temp)){
+                    temp = getChar();
+                }
                 return nextSym();
             }
             globalSymbol = CHAR;
         }else{
             myError.LexicalAnalysisError();
+            while(!isspace(temp)){
+                temp = getChar();
+            }
             return nextSym();
         }
     }else if(temp=='"'){
-
+        temp = getChar();
+        while(temp==CHAR1 || temp==CHAR2 || (temp>=CHAR3 && temp<=CHAR4)){
+            strcat(array,&temp);
+            temp = getChar();
+        }
+        if(temp=='"'){
+            globalString = array;
+            globalSymbol = STRING;
+        }else{
+            myError.LexicalAnalysisError();
+            while(!isspace(temp)){
+                temp = getChar();
+            }
+            return nextSym();
+        }
     }else{
         myError.LexicalAnalysisError();
         return nextSym();
