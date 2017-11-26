@@ -19,7 +19,8 @@ using namespace std;
 enum LexicalErrorCode{
     SingleCharIllegal,
     StringIllegal,
-    ContentIllegal
+    ContentIllegal,
+    NotEqualSymIllegal
 };
 
 class Error

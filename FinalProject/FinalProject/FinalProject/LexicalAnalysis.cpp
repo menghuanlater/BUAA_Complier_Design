@@ -99,11 +99,38 @@ bool LexicalAnalysis::nextSym(){
         globalChar = '/';
         globalSymbol = DIV;
     }else if(temp=='<'){
-        globalChar = '<';
-        globalSymbol = LESS;
+        temp = getChar();
+        if(temp!='='){
+            globalChar = '<';
+            globalSymbol = LESS;
+            retract();
+        }else{
+            globalString = "<=";
+            globalSymbol = LESSEQ;
+        }
     }else if(temp=='>'){
-        globalChar = '>';
-        globalSymbol = MORE;
+        temp = getChar();
+        if(temp!='='){
+            globalChar = '>';
+            globalSymbol = MORE;
+            retract();
+        }else{
+            globalString = ">=";
+            globalSymbol = MOREEQ;
+        }
+    }else if(temp=='!'){
+        temp = getChar();
+        if(temp!='='){
+            myError.LexicalAnalysisError(NotEqualSymIllegal,lineCount);
+            while(temp!='\n'){
+                temp = getChar();
+            }
+            lineCount++;
+            return nextSym();
+        }else{
+            globalString = "!=";
+            globalSymbol = NOTEQ;
+        }
     }else if(temp==','){
         globalChar = ',';
         globalSymbol = COMMA;
@@ -132,8 +159,15 @@ bool LexicalAnalysis::nextSym(){
         globalChar = '}';
         globalSymbol = RBBRACKET;
     }else if(temp=='='){
-        globalChar = '=';
-        globalSymbol = ASSIGN;
+        temp = getChar();
+        if(temp!='='){
+            globalChar = '=';
+            globalSymbol = ASSIGN;
+            retract();
+        }else{
+            globalString = "==";
+            globalSymbol = EQUAL;
+        }
     }else if(temp=='\''){
         temp = getChar();
         if(temp=='+'||temp=='-'||temp=='*'||temp=='/'|| temp=='_'||
