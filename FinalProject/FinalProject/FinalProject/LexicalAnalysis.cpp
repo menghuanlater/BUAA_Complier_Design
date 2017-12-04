@@ -19,6 +19,7 @@ LexicalAnalysis::LexicalAnalysis(const Error & error):myError(error){
     globalChar = '\0';
     globalNumber = 0;
     lineCount = 1;
+    finish = false;
 }
 //文件读取
 void LexicalAnalysis::readFile(string FilePath){
@@ -45,8 +46,10 @@ void LexicalAnalysis::readFile(string FilePath){
 //返回true代表读取了下一个单词,返回false代表读取完毕
 bool LexicalAnalysis::nextSym(){
     //index已经超出内容范围,返回false
-    if(index >= fileLength)
+    if(index >= fileLength){
+        finish = true;////此时代表已经完全分析完所有的词法成分,而且预读的也已经全部处理了
         return false;
+    }
     //否则,进行单词读取
 	char Array[maxWordLength] = {'\0'};
     char temp = getChar();
@@ -58,6 +61,7 @@ bool LexicalAnalysis::nextSym(){
     }
 	//读到文件结束
 	if(temp==EOF){
+        finish = true;//此时代表已经完全分析完所有的词法成分,而且预读的也已经全部处理了
 		return false;
 	}
 	if(isalpha(temp) || temp=='_'){//标识符或者保留字
@@ -122,11 +126,12 @@ bool LexicalAnalysis::nextSym(){
         temp = getChar();
         if(temp!='='){
             myError.LexicalAnalysisError(NotEqualSymIllegal,lineCount);
-            while(temp!='\n'){
+            while(temp!='\n' && temp!=';'){
                 temp = getChar();
             }
-            lineCount++;
-            return nextSym();
+            if(temp=='\n')
+                retract();
+            return false;
         }else{
             globalString = "!=";
             globalSymbol = NOTEQ;
@@ -176,20 +181,22 @@ bool LexicalAnalysis::nextSym(){
             temp = getChar();
             if(temp!='\''){
                 myError.LexicalAnalysisError(SingleCharIllegal,lineCount);
-                while(temp!='\n'){
+                while(temp!='\n' && temp!=';'){
                     temp = getChar();
                 }
-                lineCount++;
-                return nextSym();
+                if(temp=='\n')
+                    retract();
+                return false;
             }
             globalSymbol = CHAR;
         }else{
             myError.LexicalAnalysisError(SingleCharIllegal,lineCount);
-            while(temp!='\n'){
+            while(temp!='\n' && temp!=';'){
                 temp = getChar();
             }
-            lineCount++;
-            return nextSym();
+            if(temp=='\n')
+                retract();
+            return false;
         }
     }else if(temp=='"'){
         temp = getChar();
@@ -202,15 +209,16 @@ bool LexicalAnalysis::nextSym(){
             globalSymbol = STRING;
         }else{
             myError.LexicalAnalysisError(StringIllegal,lineCount);
-            while(temp!='\n'){
+            while(temp!='\n' && temp!=';'){
                 temp = getChar();
             }
-            lineCount++;
-            return nextSym();
+            if(temp=='\n')
+                retract();
+            return false;
         }
     }else{
         myError.LexicalAnalysisError(ContentIllegal,lineCount);
-        return nextSym();
+        return false;
     }
     return true;
 }

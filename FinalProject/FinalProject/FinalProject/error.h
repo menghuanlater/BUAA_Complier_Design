@@ -22,6 +22,12 @@ enum LexicalErrorCode{
     ContentIllegal,
     NotEqualSymIllegal
 };
+//语法分析错误种类枚举
+enum SyntaxErrorCode{
+    EmptyFileError,//文件为空
+    AfterMainContentError,//main函数后多余的内容
+    GeneralError //
+};
 
 class Error
 {
@@ -30,5 +36,7 @@ private:
 public:
     //词法分析错误处理程序
     void LexicalAnalysisError(LexicalErrorCode errorCode,int lineNumber)const;
+    //语法分析错误处理程序
+    void SyntaxAnalysisError(SyntaxErrorCode errorCode,int lineNumber);
 };
 #endif

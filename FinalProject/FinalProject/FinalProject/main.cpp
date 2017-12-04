@@ -6,13 +6,13 @@
 /*相关说明:
 #1编译程序的整体入口
 #2标识符不区分大小写
-#3对于词法分析:当遇到error,报错处理后跳过当前行,分析下一行
 */
 #include <iostream>
 #include <string>
 #include "error.h"
 #include "ConstValue.h"
 #include "LexicalAnalysis.h"
+#include "SyntaxAnalysis.h"
 using namespace std;
 
 string compilerFilePath;
@@ -31,26 +31,14 @@ int main(void){
     //全局共用的错误处理类对象
     Error error;
 
-    //语法分析类对象
+    //词法分析类对象
 	LexicalAnalysis myLexical(error);
     myLexical.readFile(compilerFilePath);
     
-    //模拟语法分析程序向词法分析类请求读取单词
-    int count = 1;//输出的行号计数器
-    enum SymbolCode mySym;
-    while(myLexical.nextSym()){
-        mySym = myLexical.getGlobalSymbol();
-        if(mySym>=CONSTSY && mySym<=RETURNSY){//保留字
-            cout<<count<<". "<<SymbolArr[mySym]<<" : "<<keyWordsArr[mySym]<<endl;
-        }else if( (mySym>=CHAR && mySym<=LESS ) || (mySym>=MORE && mySym<=ASSIGN) ){//单字符
-            cout<<count<<". "<<SymbolArr[mySym]<<" : "<<myLexical.getGlobalChar()<<endl;
-        }else if(mySym == INTNUM){//无符号整数
-            cout<<count<<". "<<SymbolArr[mySym]<<" : "<<myLexical.getGlobalNumber()<<endl;
-        }else{//字符串
-            cout<<count<<". "<<SymbolArr[mySym]<<" : "<<myLexical.getGlobalString()<<endl;
-        }
-        count++;//计数器自增
-    }
+    //语法分析类对象
+    SyntaxAnalysis mySyntax(error,myLexical);
+    mySyntax.startAnalysis();//语法分析入口函数
+
     cout<<"Analysis accomplish. Thanks for using!"<<endl;
     return 0;
 }
