@@ -38,6 +38,7 @@ private:
 	bool isAbleInsert(string id, string functionName);
 	//引用变量函数等需要检查是否定义
 	bool isDefined(string id, string functionName);
+	//
 
 public:
     //标准构造函数
