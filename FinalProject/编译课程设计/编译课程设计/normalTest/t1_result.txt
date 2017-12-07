@@ -1,0 +1,105 @@
+g_var_int1:47
+g_var_int2:1
+g_var_char1:b
+g_var_char2:l
+------------------------
+g_var_int1:46
+g_var_int2:8
+g_var_char1:b
+g_var_char2:l
+------------------------
+g_var_int_arr:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+g_var_char_arr:
+a
+b
+c
+d
+e
+f
+g
+h
+i
+j
+k
+l
+Welcome to BUAA.
+g_var_int_arr:
+0
+1
+2
+g_var_char_arr:
+a
+b
+c
+Sally Go2.
+Lala
+DiDi
+Hello World.
+g_var_int1:46
+g_var_int2:8
+g_var_char1:b
+g_var_char2:l
+------------------------
+Sally Go1.
+g_var_int1:46
+g_var_int2:8
+g_var_char1:b
+g_var_char2:l
+------------------------
+Excuse Me.
+BoBo
+CoCo
+Excuse Me.
+mmppppooodd
+Excuse Me.
+a
+Fib(1):1
+Fib(2):1
+Fib(8):21
+g_var_int1:196
+g_var_int2:30
+g_var_char1:b
+g_var_char2:l
+------------------------
+smaller than n
+smaller than n or equal to n
+not equal to n
+smaller than n
+not bigger than n
+not equal to n
+------------------------
+not smaller than n
+smaller than n or equal to n
+equal to n
+bigger than n or equal to n
+not bigger than n
+equal to n
+------------------------
+not smaller than n
+bigger than n
+not equal to n
+bigger than n or equal to n
+bigger than n
+not equal to n
+------------------------
+Please enter the number of items you want to calculate the Fibonacci sequence:
+//输入斐波那契数列的项数,for example:20
+20
+the Fib number you want to get is:6765
+lalalalala.
+//输入三个整数10 20 30
+10 20 30
+sum is:60
+procedure is Over, Thank you.

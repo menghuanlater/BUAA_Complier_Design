@@ -1,0 +1,195 @@
+const int g_const_int1 = 23,g_const_int2 = 24;
+const char g_const_char1 = 'a',g_const_char2 = 'm';
+
+int g_var_int1,g_var_int2;
+int g_var_int_arr[12];
+int g_var_char1,g_var_char2;
+int g_var_char_arr[12];
+
+int Fibnaci(int n){
+    if(n<=2)
+        return (1);
+    else
+        return (Fibnaci(n-1)+Fibnaci(n-2));
+}
+
+void printGlobalVarValue{
+    printf("g_var_int1:",g_var_int1);
+    printf("g_var_int2:",g_var_int2);
+    printf("g_var_char1:",g_var_char1);
+    printf("g_var_char2:",g_var_char2);
+    printf("------------------------");
+}
+
+void printGlobalArrValue(int loopLength){
+    int i;
+    i = 0;
+    printf("g_var_int_arr:");
+    wHIle(i<loopLength){
+        printf(g_var_int_arr[i]);
+        i = i + 1;
+    }
+    i = 0;
+    printf("g_var_char_arr:");
+    while(i<loopLength){
+        printf(g_var_char_arr[i]);
+        i = i + 1;
+    }
+    return;
+}
+
+void testSwitchCase(int value1,int value2){
+    
+    switch(value1){
+        case 0: {
+		    printf("Hello World.");
+            printGlobalVarValue;
+	    }
+        case +1:{
+		    printf("Welcome to BUAA.");
+            printGlobalArrValue(3);
+	    }
+    }
+
+    switch(value2){
+        case 1: printf("Sally Go1.");
+        case +2: printf("Sally Go2.");
+        default:printf("Excuse Me.");
+    }
+
+    switch(value2 + value1){
+        case 3:{
+            switch(value1*value2+3){
+                case 5:{
+                    printf("Lala");
+                    printf("DiDi");
+                }
+                case -15:{
+                    printf("BoBo");
+                    printf("CoCo");
+                }
+                default:printf("mmppppooodd");
+            }
+        }
+        case 1:printGlobalVarValue;
+        default:printf(g_const_char1);
+	}
+}
+
+
+int returnTen(int x){
+    return (10);
+}
+
+int returnTwo(int x){
+    return (2);
+}
+
+void testIfElse(char target){
+    if(target<'n')
+        printf("smaller than n");
+    else
+        printf("not smaller than n");
+    
+    if(target<='n')
+        printf("smaller than n or equal to n");
+    else
+        printf("bigger than n");
+    
+    if(target=='n')
+        printf("equal to n");
+    else
+        printf("not equal to n");
+    
+    if(target>='n')
+        printf("bigger than n or equal to n");
+    else 
+        printf("smaller than n");
+    
+    if(target>'n')
+        printf("bigger than n");
+    else
+        printf("not bigger than n");
+    
+    if(target!='n')
+	    printf("not equal to n");
+    else
+	    printf("equal to n");
+    
+    printf("------------------------");
+    
+}
+
+void main(){
+    int i;
+    int flag1,flag2;
+    int myFib,inputFib;
+    CHAR relationFalg;
+    int testIfElse,returnTen,returnTwo;
+
+    g_var_int1 = g_const_int1 + g_const_int2;
+    g_var_int2 = g_const_int2 - g_const_int1;
+    g_var_char1 = g_const_char1 + 1;
+    g_var_char2 = g_const_char2 - 1;
+    
+    printGlobalVarValue;
+
+    g_var_int1 = g_const_int1 * 2;
+    g_var_int2 = g_const_int2 / 3;
+
+    printGlobalVarValue;
+
+    i = 0;
+    while(i<=11){
+        g_var_int_arr[i] = i;
+        g_var_char_arr[i] = 'a' + i;
+        i = i + 1;
+    }
+    printGlobalArrValue(12);
+
+    flag1 = 1;flag2 = g_var_int_arr[2];
+    testSwitchCase(flag1,flag2);
+    testSwitchCase(flag1-1,flag2-1);
+    testSwitchCase('a'-'d',flag2+4);
+    testSwitchCase('a'-'c',flag2+3);
+    testSwitchCase(111,222);
+
+    myFib = Fibnaci(1);
+    printf("Fib(1):",myFib);
+    myFib = Fibnaci(2);
+    printf("Fib(2):",myFib);
+    myFib = Fibnaci(8);
+    printf("Fib(8):",myFib);
+
+    g_var_int1 = ((1 + 3) * 'a' + g_var_int_arr[4]) / (returnTwo(1));
+    g_var_int2 = (666/g_var_int_arr[2])/111*(returnTen(2));
+    printGlobalVarValue;
+
+    relationFalg = 'a';
+    testIfElse(relationFalg);
+
+    relationFalg = 'n';
+    testIfElse(relationFalg);
+
+    relationFalg = 's';
+    testIfElse(relationFalg);
+
+    printf("Please enter the number of items you want to calculate the Fibonacci sequence:");
+
+    scanf(inputFib);
+
+    myFib = Fibnaci(inputFib);
+
+    printf("the Fib number you want to get is:",myFib);
+
+    {
+    	printf("lalalalala.");
+    	scanf(testIfElse,returnTen,returnTwo);
+    	{
+    		printf("sum is:",testIfElse + returnTen + returnTwo);
+    		printf("procedure is Over, Thank you.");
+    	}
+    }
+
+    return;
+}

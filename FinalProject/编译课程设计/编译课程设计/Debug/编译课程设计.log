@@ -1,0 +1,13 @@
+﻿  SyntaxAnalysis.cpp
+h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\编译课程设计\编译课程设计\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  SymbolTable.cpp
+  main.cpp
+h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\编译课程设计\编译课程设计\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  LexicalAnalysis.cpp
+h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\编译课程设计\编译课程设计\lexicalanalysis.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+h:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\buaa_complier_design\finalproject\编译课程设计\编译课程设计\lexicalanalysis.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  error.cpp
+  ConstValue.cpp
+  正在生成代码...
+  编译课程设计.vcxproj -> H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\编译课程设计\Debug\编译课程设计.exe
+  编译课程设计.vcxproj -> H:\本地与远端github连接库集合\编译器课程设计与远端github连接仓库\BUAA_Complier_Design\FinalProject\编译课程设计\Debug\编译课程设计.pdb (Partial PDB)
