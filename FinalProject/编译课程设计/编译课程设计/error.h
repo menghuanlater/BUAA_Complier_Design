@@ -50,17 +50,29 @@ enum SyntaxErrorCode{
 
 3.引用数组，数组越界
 4.引用函数，函数未定义
-5.引用的函数为main，非法
+5.单个语句只能是函数
 6.调用函数,无参却传参数
 7.调用函数，值参数个数不对
 8.调用函数，值参数类型不对
-9.给常量赋值
-10.赋值类型不匹配
-
+9.赋值对象不是普通变量(包含了多种错误情况)
+10.赋值类型不匹配(int 给 char赋值)
+11.引用标识符,标识符对应类型不匹配
+12.值参数表不可以为空
 */
 enum SemanticErrorCode {
 	DeclareConflictError,
-	NotDefinitionError
+	NotDefinitionError,
+	FuncNotDefineError,
+	ArrIndexOutOfRangeError,
+	TypeNotMatchError,
+	AssignIntToCharError,
+	StateIdNotMatchError,
+	NeedValueButVoidFuncError,
+	NoneValueParamError,
+	NoneParamButDeliverError,
+	ParamNumNotMatchError,
+	ParamTypeNotMatchError,
+	AssignObjectNotVar
 };
 
 class Error

@@ -1868,7 +1868,6 @@ void SyntaxAnalysis::pushItem(string id, string functionName, int num) {
 	newItem.setValueType(IntType);
 	newItem.setConstInt(num);
 	globalSymbolTable.push_back(newItem);
-	cout << "Push in: " << id << " " << functionName << " const int " << num << endl;
 }
 //字符常量
 void SyntaxAnalysis::pushItem(string id, string functionName, char character) {
@@ -1879,10 +1878,9 @@ void SyntaxAnalysis::pushItem(string id, string functionName, char character) {
 	newItem.setValueType(CharType);
 	newItem.setConstChar(character);
 	globalSymbolTable.push_back(newItem);
-	cout << "Push in: " << id << " " << functionName << " const char " << character << endl;
 }
 //数组变量
-void SyntaxAnalysis::pushItem(string id, string functionName,ValueType valueType, int size) {
+void SyntaxAnalysis::pushItem(string id, string functionName, ValueType valueType, int size) {
 	if (!isAbleInsert(id, functionName))
 		return;
 	SymbolTableItem newItem(id, functionName);
@@ -1890,13 +1888,6 @@ void SyntaxAnalysis::pushItem(string id, string functionName,ValueType valueType
 	newItem.setValueType(valueType);
 	newItem.setArrSize(size);
 	globalSymbolTable.push_back(newItem);
-	cout << "Push in: " << id << "[" << size << "] " << functionName;
-	if (valueType == IntType) {
-		cout << " int arr" << endl;
-	}
-	else {
-		cout << " char arr" << endl;
-	}
 }
 //变量+参数
 void SyntaxAnalysis::pushItem(string id, string functionName, ItemType itemType, ValueType valueType) {
@@ -1906,22 +1897,6 @@ void SyntaxAnalysis::pushItem(string id, string functionName, ItemType itemType,
 	newItem.setItemType(itemType);
 	newItem.setValueType(valueType);
 	globalSymbolTable.push_back(newItem);
-	if (itemType == Variable) {
-		if (valueType == IntType) {
-			cout << "Push in: " << id << " " << functionName << " var int." << endl;
-		}
-		else {
-			cout << "Push in: " << id << " " << functionName << " var char." << endl;
-		}
-	}
-	else {
-		if (valueType == IntType) {
-			cout << "Push in: " << id << " " << functionName << " param int." << endl;
-		}
-		else {
-			cout << "Push in: " << id << " " << functionName << " param char." << endl;
-		}
-	}
 }
 //函数
 void SyntaxAnalysis::pushItem(string id, string functionName, FunctionType funcType) {
@@ -1931,15 +1906,6 @@ void SyntaxAnalysis::pushItem(string id, string functionName, FunctionType funcT
 	newItem.setItemType(Function);
 	newItem.setFuncType(funcType);
 	globalSymbolTable.push_back(newItem);
-	if (funcType == VoidType) {
-		cout << "Push in:" << id << " " << functionName << " void function" << endl;
-	}
-	else if (funcType == ReturnIntType) {
-		cout << "Push in:" << id << " " << functionName << " int function" << endl;
-	}
-	else {
-		cout << "Push in:" << id << " " << functionName << " char function" << endl;
-	}
 }
 
 //检查是否可填表
@@ -1955,7 +1921,7 @@ bool SyntaxAnalysis::isAbleInsert(string id, string functionName) {
 	return true;
 }
 
-//检查是否定义
+/*检查是否定义(类型是否匹配)
 bool SyntaxAnalysis::isDefined(string id, string functionName) {
 	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
 		SymbolTableItem item = globalSymbolTable.at(i);
@@ -1971,4 +1937,216 @@ bool SyntaxAnalysis::isDefined(string id, string functionName) {
 	}
 	myError.SemanticAnalysisError(NotDefinitionError,getLineNumber(),id);
 	return false;
+}*/
+/*＜标识符＞‘[’＜表达式＞‘]’需要检查:标识符存不存在，标识符对应的是不是数组，如果是数组,表达式对应的下标值是否越界*/   
+void SyntaxAnalysis::IdArrExpCheck(string identifier,string funcName, bool expSurable, int index = 0) {
+	bool globalIndexOut = false;//在全局中发现此为数组且但越界
+	bool globalNotArray = false;//全局中发现不是数组
+	bool isDefined = false;
+	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
+		SymbolTableItem item = globalSymbolTable.at(i);
+		if (item.getFuncName() == "GLOBAL") {//作用域全局
+			if (item.getId() == identifier) {//标识符名相同
+				isDefined = true;
+				if (item.getArrSize() > 0) {//是数组
+					if (expSurable) {//数组下标值确定
+						if (index >= item.getArrSize || index <0) {//越界
+							globalIndexOut = true;
+						}
+					}
+				}
+				else {//不是数组
+					globalNotArray = true;
+				}
+			}
+		}
+		else if(item.getFuncName() == funcName){//在函数作用域内发现
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if (item.getArrSize() > 0) {
+					if (expSurable) {
+						if (index >= item.getArrSize || index <0) {//越界
+							myError.SemanticAnalysisError(ArrIndexOutOfRangeError, getLineNumber(), identifier);
+							return;
+						}
+					}
+				}
+				else {//不是数组
+					if (globalIndexOut) {
+						break;
+					}
+					else {
+						myError.SemanticAnalysisError(TypeNotMatchError, getLineNumber(), identifier);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	if (globalIndexOut) {
+		myError.SemanticAnalysisError(ArrIndexOutOfRangeError, getLineNumber(), identifier);
+		return;
+	}
+	if (globalNotArray) {
+		myError.SemanticAnalysisError(TypeNotMatchError, getLineNumber(), identifier);
+		return;
+	}
+	//标识符未定义
+	if(!isDefined)
+		myError.SemanticAnalysisError(NotDefinitionError,getLineNumber(),identifier);
 }
+
+//标识符检查-->因子中(不可以为数组和void函数)
+void SyntaxAnalysis::idCheckInFactor(string identifier, string funcName) {
+	bool foundInGlobal = false; // 表示在global中发现此结构存在问题
+	bool isDefined = false;
+	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
+		SymbolTableItem item = globalSymbolTable.at(i);
+		if (item.getFuncName() == "GLOBAL") {//全局作用域
+			if (item.getId() == identifier) {//标识符名字相同
+				isDefined = true;
+				if (item.getArrSize() > 0) {//为数组,否决
+					foundInGlobal = true;
+				}
+				else if (item.getItemType() == Function && item.getFuncType() == VOIDSY) {
+					foundInGlobal = true;
+				}
+			}
+		}
+		else if (item.getFuncName() == funcName) {//作用域相同(局部作用域)
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if (item.getArrSize() > 0) {//为数组,报错
+					myError.SemanticAnalysisError(TypeNotMatchError,getLineNumber(),identifier);
+					return;
+				}
+				else {//正确的
+					return;
+				}
+			}
+		}
+	}
+	if (foundInGlobal) {
+		myError.SemanticAnalysisError(TypeNotMatchError, getLineNumber(), identifier);
+		return;
+	}
+	//未定义标识符
+	if(!isDefined)
+		myError.SemanticAnalysisError(NotDefinitionError,getLineNumber(),identifier);
+}
+
+//标识符检查--->语句中(只能是函数)
+void SyntaxAnalysis::idCheckInState(string identifier) {
+	//由于只能是函数,所以只需要分析全局的即可
+	bool isDefined = false;
+	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
+		SymbolTableItem item = globalSymbolTable.at(i);
+		if (item.getFuncName() == "GLOBAL") {
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if(item.getItemType() == Function)
+					return;
+			}
+		}
+	}
+	if (!isDefined) {
+		myError.SemanticAnalysisError(FuncNotDefineError,getLineNumber(),identifier);
+		return;
+	}
+	myError.SemanticAnalysisError(StateIdNotMatchError,getLineNumber(),identifier);
+}
+
+//＜标识符＞‘(’<值参数表>‘)’--->若是因子项中的(表达式中的,需要判断是否是有返回值)
+void SyntaxAnalysis::funcCallCheck(string identifier, bool isInExp, vector<ValueType> paramType) {
+	bool isDefined = false;
+	bool flag = false;//是否需要进行参数检查(不需要说明函数本身存在了问题)
+	vector<ValueType> actualParam;
+
+	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
+		SymbolTableItem item = globalSymbolTable.at(i);
+		if (item.getFuncName() == "GLOBAL") {
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if (item.getItemType() == Function) {//是函数
+					flag = true;
+					if (isInExp && item.getFuncType() == VoidType) {
+						myError.SemanticAnalysisError(NeedValueButVoidFuncError,getLineNumber(),identifier);
+						return;
+					}
+					for (unsigned int j = i + 1; j < globalSymbolTable.size(); j++) {
+						item = globalSymbolTable.at(j);
+						if (item.getFuncName() == identifier && item.getItemType() == Parament) {
+							actualParam.push_back(item.getValueType());
+						}
+						else {
+							break;
+						}
+					}
+					break;
+				}
+			}	
+		}
+	}
+	//进行参数表考察
+	if (flag) {
+		if (paramType.size() == 0) {
+			myError.SemanticAnalysisError(NoneValueParamError,getLineNumber(),identifier);
+			return;
+		}
+		if (actualParam.size() == 0) {//无参函数却传参
+			myError.SemanticAnalysisError(NoneParamButDeliverError,getLineNumber(),identifier);
+			return;
+		}
+		if (paramType.size() != actualParam.size()) {//参数个数不匹配
+			myError.SemanticAnalysisError(ParamNumNotMatchError,getLineNumber(),identifier);
+			return;
+		}
+		for (unsigned int i = 0; i < paramType.size(); i++) {
+			ValueType first = actualParam.at(i);
+			ValueType second = paramType.at(i);
+			if (first != second) {//参数类型不匹配
+				myError.SemanticAnalysisError(ParamTypeNotMatchError,getLineNumber(),identifier);
+				return;
+			}
+		}
+	}
+
+	if (!isDefined) {
+		myError.SemanticAnalysisError(FuncNotDefineError, getLineNumber(), identifier);
+		return;
+	}
+}
+
+//对赋值语句以及scanf中单纯的标识符的检查(scanf实际就是对变量的赋值操作)
+void SyntaxAnalysis::checkAssignId(string identifier, string funcName) {
+	bool isDefined = false;
+
+	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
+		SymbolTableItem item = globalSymbolTable.at(i);
+		if (item.getFuncName() == "GLOBAL") {
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if (item.getItemType() == Variable && item.getArrSize() == 0) {//是全局变量
+					return;
+				}
+			}
+		}
+		else if (item.getFuncName() == funcName) {
+			if (item.getId() == identifier) {
+				isDefined = true;
+				if ((item.getItemType() == Variable && item.getArrSize() == 0)
+					|| (item.getItemType() == Parament)) {//是变量或者参数
+					return;
+				}
+			}
+		}
+	}
+	if (!isDefined) {
+		myError.SemanticAnalysisError(NotDefinitionError,getLineNumber(),identifier);
+	}
+	else {
+		myError.SemanticAnalysisError(AssignObjectNotVar,getLineNumber(),identifier);
+	}
+}
+

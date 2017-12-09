@@ -37,8 +37,23 @@ private:
 	//检查是否可以填表
 	bool isAbleInsert(string id, string functionName);
 	//引用变量函数等需要检查是否定义
-	bool isDefined(string id, string functionName);
-	//
+	//bool isDefined(string id, string functionName);
+	//标识符检查--->因子项中
+	void idCheckInFactor(string identifier,string funcName);
+	//标识符检查--->语句中
+	void idCheckInState(string identifier);
+	//＜标识符＞‘[’＜表达式＞‘]’检查--->因子项与赋值语句中
+	void IdArrExpCheck(string identifier,string funcName,bool expSurable,int index = 0);
+	//＜标识符＞‘(’<值参数表>‘)’--->若是因子项中的(表达式中的,需要判断是否是有返回值)
+	void funcCallCheck(string identifier,bool isInExp,vector<ValueType> paramType);
+	//类型检查
+	void checkTypeMatch(ValueType s_type, ValueType e_type) {
+		if (s_type == CharType && e_type == IntType) {
+			myError.SemanticAnalysisError(AssignIntToCharError,getLineNumber(),"");
+		}
+	}
+	//对赋值语句单纯的标识符的检查
+	void checkAssignId(string identifier,string funcName);
 
 public:
     //标准构造函数
