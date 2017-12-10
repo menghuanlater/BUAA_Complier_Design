@@ -2,10 +2,10 @@ int fibnaci()
 Param int n
 Temp1 = 2 + 0
 Temp2 = G11n - Temp1
-BGZ Temp2 Lable1
+BGZ Temp2 Label1
 Ret int 1
-Jump Lable2
-Lable1:
+Jump Label2
+Label1:
 Temp3 = G11n - 1
 Push Temp3
 Call fibnaci
@@ -16,7 +16,7 @@ Call fibnaci
 Temp6 = Ret + 0
 Temp7 = Temp4 + Temp6
 Ret id Temp7
-Lable2:
+Label2:
 void printglobalvarvalue()
 Print string "g_var_int1:"
 Print id G4g_var_int1
@@ -37,81 +37,101 @@ Param int looplength
 G15i = 0 + 0
 Print string "g_var_int_arr:"
 New Line.
-Lable3:
-BGEZ Temp8 Lable4
+Label3:
+BGEZ Temp8 Label4
 Temp9 = G6g_var_int_arr[G15i]
 Print id Temp9
 New Line.
 Temp10 = G15i + 1
 G15i = Temp10 + 0
-Jump Lable3
-Lable4:
+Jump Label3
+Label4:
 G15i = 0 + 0
 Print string "g_var_char_arr:"
 New Line.
-Lable5:
-BGEZ Temp11 Lable6
+Label5:
+BGEZ Temp11 Label6
 Temp12 = G9g_var_char_arr[G15i]
 Print id Temp12
 New Line.
 Temp13 = G15i + 1
 G15i = Temp13 + 0
-Jump Lable5
-Lable6:
+Jump Label5
+Label6:
 Ret
 void testswitchcase()
 Param int value1
 Param int value2
-Lable8:
+Temp15 = G17value1 - 0
+BEZ Temp15 Label8
+Temp16 = G17value1 - 1
+BEZ Temp16 Label9
+Jump Label7
+Label8:
 Print string "Hello World."
 New Line.
 Call printglobalvarvalue
-Lable9:
+Jump Label7
+Label9:
 Print string "Welcome to BUAA."
 New Line.
 Temp14 = 3 + 0
 Push Temp14
 Call printglobalarrvalue
-Temp15 = G17value1 - 1
-BEZ Temp15 Lable9
-Lable7:
-Lable12:
-Print string "Sally Go1."
-New Line.
-Lable13:
-Print string "Sally Go2."
-New Line.
-Temp16 = G18value2 - 2
-BEZ Temp16 Lable13
-Lable11:
+Jump Label7
+Label7:
+Temp17 = G18value2 - 1
+BEZ Temp17 Label12
+Temp18 = G18value2 - 2
+BEZ Temp18 Label13
 Print string "Excuse Me."
 New Line.
-Temp17 = G18value2 + G17value1
-Lable16:
-Temp18 = G17value1 * G18value2
-Temp19 = Temp18 + 3
-Lable18:
+Jump Label11
+Label12:
+Print string "Sally Go1."
+New Line.
+Jump Label11
+Label13:
+Print string "Sally Go2."
+New Line.
+Jump Label11
+Label11:
+Temp19 = G18value2 + G17value1
+Temp24 = Temp19 - 3
+BEZ Temp24 Label16
+Temp25 = Temp19 - 1
+BEZ Temp25 Label21
+Print char 'a'
+New Line.
+Jump Label15
+Label16:
+Temp20 = G17value1 * G18value2
+Temp21 = Temp20 + 3
+Temp22 = Temp21 - 5
+BEZ Temp22 Label18
+Temp23 = Temp21 - -15
+BEZ Temp23 Label19
+Print string "mmppppooodd"
+New Line.
+Jump Label17
+Label18:
 Print string "Lala"
 New Line.
 Print string "DiDi"
 New Line.
-Lable19:
+Jump Label17
+Label19:
 Print string "BoBo"
 New Line.
 Print string "CoCo"
 New Line.
-Temp20 = Temp19 - -15
-BEZ Temp20 Lable19
-Lable17:
-Print string "mmppppooodd"
-New Line.
-Lable21:
+Jump Label17
+Label17:
+Jump Label15
+Label21:
 Call printglobalvarvalue
-Temp21 = Temp17 - 1
-BEZ Temp21 Lable21
-Lable15:
-Print char 'a'
-New Line.
+Jump Label15
+Label15:
 int returnten()
 Param int x
 Ret int 10
@@ -120,170 +140,171 @@ Param int x
 Ret int 2
 void testifelse()
 Param char target
-Temp22 = 110 + 0
-Temp23 = G24target - Temp22
-BGEZ Temp23 Lable23
-Print string "smaller than n"
-New Line.
-Jump Lable24
-Lable23:
-Print string "not smaller than n"
-New Line.
-Lable24:
-Temp24 = 110 + 0
-Temp25 = G24target - Temp24
-BGZ Temp25 Lable25
-Print string "smaller than n or equal to n"
-New Line.
-Jump Lable26
-Lable25:
-Print string "bigger than n"
-New Line.
-Lable26:
 Temp26 = 110 + 0
 Temp27 = G24target - Temp26
-BNZ Temp27 Lable27
-Print string "equal to n"
-New Line.
-Jump Lable28
-Lable27:
-Print string "not equal to n"
-New Line.
-Lable28:
-Temp28 = 110 + 0
-Temp29 = G24target - Temp28
-BLZ Temp29 Lable29
-Print string "bigger than n or equal to n"
-New Line.
-Jump Lable30
-Lable29:
+BGEZ Temp27 Label23
 Print string "smaller than n"
 New Line.
-Lable30:
-Temp30 = 110 + 0
-Temp31 = G24target - Temp30
-BLEZ Temp31 Lable31
+Jump Label24
+Label23:
+Print string "not smaller than n"
+New Line.
+Label24:
+Temp28 = 110 + 0
+Temp29 = G24target - Temp28
+BGZ Temp29 Label25
+Print string "smaller than n or equal to n"
+New Line.
+Jump Label26
+Label25:
 Print string "bigger than n"
 New Line.
-Jump Lable32
-Lable31:
-Print string "not bigger than n"
-New Line.
-Lable32:
-Temp32 = 110 + 0
-Temp33 = G24target - Temp32
-BEZ Temp33 Lable33
-Print string "not equal to n"
-New Line.
-Jump Lable34
-Lable33:
+Label26:
+Temp30 = 110 + 0
+Temp31 = G24target - Temp30
+BNZ Temp31 Label27
 Print string "equal to n"
 New Line.
-Lable34:
+Jump Label28
+Label27:
+Print string "not equal to n"
+New Line.
+Label28:
+Temp32 = 110 + 0
+Temp33 = G24target - Temp32
+BLZ Temp33 Label29
+Print string "bigger than n or equal to n"
+New Line.
+Jump Label30
+Label29:
+Print string "smaller than n"
+New Line.
+Label30:
+Temp34 = 110 + 0
+Temp35 = G24target - Temp34
+BLEZ Temp35 Label31
+Print string "bigger than n"
+New Line.
+Jump Label32
+Label31:
+Print string "not bigger than n"
+New Line.
+Label32:
+Temp36 = 110 + 0
+Temp37 = G24target - Temp36
+BEZ Temp37 Label33
+Print string "not equal to n"
+New Line.
+Jump Label34
+Label33:
+Print string "equal to n"
+New Line.
+Label34:
 Print string "------------------------"
 New Line.
-Temp34 = 23 + 24
-G4g_var_int1 = Temp34 + 0
-Temp35 = 24 - 23
-G5g_var_int2 = Temp35 + 0
-Temp36 = 97 + 1
-G7g_var_char1 = Temp36 + 0
-Temp37 = 109 - 1
-G8g_var_char2 = Temp37 + 0
-Call printglobalvarvalue
-Temp38 = 23 * 2
+void main()
+Temp38 = 23 + 24
 G4g_var_int1 = Temp38 + 0
-Temp39 = 24 / 3
+Temp39 = 24 - 23
 G5g_var_int2 = Temp39 + 0
+Temp40 = 97 + 1
+G7g_var_char1 = Temp40 + 0
+Temp41 = 109 - 1
+G8g_var_char2 = Temp41 + 0
+Call printglobalvarvalue
+Temp42 = 23 * 2
+G4g_var_int1 = Temp42 + 0
+Temp43 = 24 / 3
+G5g_var_int2 = Temp43 + 0
 Call printglobalvarvalue
 G26i = 0 + 0
-Lable35:
-Temp40 = 11 + 0
-Temp41 = G26i - Temp40
-BGZ Temp41 Lable36
+Label35:
+Temp44 = 11 + 0
+Temp45 = G26i - Temp44
+BGZ Temp45 Label36
 G6g_var_int_arr[G26i] = G26i + 0
-Temp42 = 97 + G26i
-G9g_var_char_arr[G26i] = Temp42 + 0
-Temp43 = G26i + 1
-G26i = Temp43 + 0
-Jump Lable35
-Lable36:
-Temp44 = 12 + 0
-Push Temp44
+Temp46 = 97 + G26i
+G9g_var_char_arr[G26i] = Temp46 + 0
+Temp47 = G26i + 1
+G26i = Temp47 + 0
+Jump Label35
+Label36:
+Temp48 = 12 + 0
+Push Temp48
 Call printglobalarrvalue
 G27flag1 = 1 + 0
-Temp45 = -52 + 0
-Temp46 = G6g_var_int_arr[Temp45]
-G28flag2 = Temp46 + 0
+Temp49 = -52 + 0
+Temp50 = G6g_var_int_arr[Temp49]
+G28flag2 = Temp50 + 0
 Push G27flag1
 Push G28flag2
 Call testswitchcase
-Temp47 = G27flag1 - 1
-Temp48 = G28flag2 - 1
-Push Temp47
-Push Temp48
-Call testswitchcase
-Temp49 = 97 - 100
-Temp50 = G28flag2 + 4
-Push Temp49
-Push Temp50
-Call testswitchcase
-Temp51 = 97 - 99
-Temp52 = G28flag2 + 3
+Temp51 = G27flag1 - 1
+Temp52 = G28flag2 - 1
 Push Temp51
 Push Temp52
 Call testswitchcase
-Temp53 = 111 + 0
-Temp54 = 222 + 0
+Temp53 = 97 - 100
+Temp54 = G28flag2 + 4
 Push Temp53
 Push Temp54
 Call testswitchcase
-Temp55 = 1 + 0
+Temp55 = 97 - 99
+Temp56 = G28flag2 + 3
 Push Temp55
-Call fibnaci
-Temp56 = Ret + 0
-G29myfib = Temp56 + 0
-Print string "Fib(1):"
-Print id G29myfib
-New Line.
-Temp57 = 2 + 0
+Push Temp56
+Call testswitchcase
+Temp57 = 111 + 0
+Temp58 = 222 + 0
 Push Temp57
-Call fibnaci
-Temp58 = Ret + 0
-G29myfib = Temp58 + 0
-Print string "Fib(2):"
-Print id G29myfib
-New Line.
-Temp59 = 8 + 0
+Push Temp58
+Call testswitchcase
+Temp59 = 1 + 0
 Push Temp59
 Call fibnaci
 Temp60 = Ret + 0
 G29myfib = Temp60 + 0
+Print string "Fib(1):"
+Print id G29myfib
+New Line.
+Temp61 = 2 + 0
+Push Temp61
+Call fibnaci
+Temp62 = Ret + 0
+G29myfib = Temp62 + 0
+Print string "Fib(2):"
+Print id G29myfib
+New Line.
+Temp63 = 8 + 0
+Push Temp63
+Call fibnaci
+Temp64 = Ret + 0
+G29myfib = Temp64 + 0
 Print string "Fib(8):"
 Print id G29myfib
 New Line.
-Temp61 = 1 + 3
-Temp62 = -52 + 0
-Temp63 = G6g_var_int_arr[Temp62]
-Temp64 = Temp61 * 97
-Temp65 = 1 * Temp64
-Temp66 = Temp63 + Temp63
-Temp67 = 1 + 0
-Push Temp67
+Temp65 = 1 + 3
+Temp66 = -52 + 0
+Temp67 = G6g_var_int_arr[Temp66]
+Temp68 = Temp65 * 97
+Temp69 = 1 * Temp68
+Temp70 = Temp67 + Temp67
+Temp71 = 1 + 0
+Push Temp71
 Call returntwo
-Temp68 = Ret + 0
-Temp69 = Temp65 / Temp68
-G4g_var_int1 = Temp69 + 0
-Temp70 = -52 + 0
-Temp71 = G6g_var_int_arr[Temp70]
-Temp72 = Temp71 / Temp71
-Temp73 = 2 + 0
-Push Temp73
+Temp72 = Ret + 0
+Temp73 = Temp69 / Temp72
+G4g_var_int1 = Temp73 + 0
+Temp74 = -52 + 0
+Temp75 = G6g_var_int_arr[Temp74]
+Temp76 = Temp75 / Temp75
+Temp77 = 2 + 0
+Push Temp77
 Call returnten
-Temp74 = Ret + 0
-Temp75 = 111 * Temp74
-Temp76 =  / Temp75
-G5g_var_int2 = Temp76 + 0
+Temp78 = Ret + 0
+Temp79 = 111 * Temp78
+Temp80 =  / Temp79
+G5g_var_int2 = Temp80 + 0
 Call printglobalvarvalue
 G31relationfalg = 97 + 0
 Push G31relationfalg
@@ -299,8 +320,8 @@ New Line.
 Read Int G30inputfib
 Push G30inputfib
 Call fibnaci
-Temp77 = Ret + 0
-G29myfib = Temp77 + 0
+Temp81 = Ret + 0
+G29myfib = Temp81 + 0
 Print string "the Fib number you want to get is:"
 Print id G29myfib
 New Line.
@@ -310,9 +331,9 @@ Read Int G32testifelse
 Read Int G33returnten
 Read Int G34returntwo
 Print string "sum is:"
-Temp78 = G32testifelse + G33returnten
-Temp79 = Temp78 + G34returntwo
-Print id Temp79
+Temp82 = G32testifelse + G33returnten
+Temp83 = Temp82 + G34returntwo
+Print id Temp83
 New Line.
 Print string "procedure is Over, Thank you."
 New Line.

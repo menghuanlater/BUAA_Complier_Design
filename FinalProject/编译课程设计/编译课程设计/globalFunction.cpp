@@ -22,7 +22,7 @@ string generateLabel() {
 	labelCount++;
 	char x[10] = { '\0' };
 	sprintf(x, "%d", labelCount);
-	return ("Lable" + string(x));
+	return ("Label" + string(x));
 }
 
 string generateVar() {
@@ -94,7 +94,7 @@ void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 }
 
 //生成计算代码
-string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int & ret,int line) {
+string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int & ret,int line,bool isCache,vector<FourYuanItem> & cache) {
 	PostfixItem item,item1;
 	FourYuanItem item2;
 	string tmpVar;
@@ -151,7 +151,12 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 								tmp.pop_back();
 							}
 							item2.op = item.number;
-							globalTmpCodeArr.push_back(item2);
+							if (isCache) {
+								cache.push_back(item2);
+							}
+							else {
+								globalTmpCodeArr.push_back(item2);
+							}
 							item1.type = StringType;
 							item1.str = tmpVar;
 							tmp.push_back(item1);
@@ -185,7 +190,12 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 								}
 							}
 							item2.op = item.number;
-							globalTmpCodeArr.push_back(item2);
+							if (isCache) {
+								cache.push_back(item2);
+							}
+							else {
+								globalTmpCodeArr.push_back(item2);
+							}
 							item1.type = StringType;
 							item1.str = tmpVar;
 							tmp.push_back(item1);

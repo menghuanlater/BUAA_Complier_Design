@@ -25,7 +25,7 @@ void generateMipsCode();
 
 //表达式的相关计算处理
 void turnToPostfixExp(vector<PostfixItem>, vector<PostfixItem> &);
-string calculateExp(vector<PostfixItem> &,bool &,ValueType &,int &,int);
+string calculateExp(vector<PostfixItem> &,bool &,ValueType &,int &,int,bool,vector<FourYuanItem> &);
 
 #endif // !GLOBALFUNCTION_H
 

@@ -1,12 +1,12 @@
 g_var_int1:47
 g_var_int2:1
-g_var_char1:b
-g_var_char2:l
+g_var_char1:a
+g_var_char2:m
 ------------------------
 g_var_int1:46
 g_var_int2:8
-g_var_char1:b
-g_var_char2:l
+g_var_char1:a
+g_var_char2:m
 ------------------------
 g_var_int_arr:
 0
@@ -49,14 +49,14 @@ DiDi
 Hello World.
 g_var_int1:46
 g_var_int2:8
-g_var_char1:b
-g_var_char2:l
+g_var_char1:a
+g_var_char2:m
 ------------------------
 Sally Go1.
 g_var_int1:46
 g_var_int2:8
-g_var_char1:b
-g_var_char2:l
+g_var_char1:a
+g_var_char2:m
 ------------------------
 Excuse Me.
 BoBo
@@ -70,8 +70,8 @@ Fib(2):1
 Fib(8):21
 g_var_int1:196
 g_var_int2:30
-g_var_char1:b
-g_var_char2:l
+g_var_char1:a
+g_var_char2:m
 ------------------------
 smaller than n
 smaller than n or equal to n

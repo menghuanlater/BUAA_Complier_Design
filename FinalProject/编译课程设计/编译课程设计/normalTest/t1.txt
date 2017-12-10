@@ -41,7 +41,7 @@ void printGlobalArrValue(int loopLength){
 void testSwitchCase(int value1,int value2){
     
     switch(value1){
-        case 0: {
+        case 0:{
 		    printf("Hello World.");
             printGlobalVarValue;
 	    }
@@ -129,8 +129,8 @@ void main(){
 
     g_var_int1 = g_const_int1 + g_const_int2;
     g_var_int2 = g_const_int2 - g_const_int1;
-    g_var_char1 = g_const_char1 + 1;
-    g_var_char2 = g_const_char2 - 1;
+    g_var_char1 = g_const_char1;
+    g_var_char2 = g_const_char2;
     
     printGlobalVarValue;
 

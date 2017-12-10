@@ -44,6 +44,7 @@ private:
 	int return_integer;//ZSQX_integer()需要返回的识别的整数值
 	string return_declare_funcName;
 	SymbolCode relation;//关系运算符
+	vector<FourYuanItem> noUseCache;//无用的cache
 	//
     int getLineNumber(){//获取词法分析当前行
         return myLexicalAnalysis.getLineCount();
@@ -108,38 +109,38 @@ public:
     //＜复合语句＞ ::= ［＜常量说明＞］［＜变量说明＞］｛＜语句＞｝
     bool ZSQX_compoundStatement(string funcName);
     //＜表达式＞ ::= ［＋｜－］＜项＞{＜加法运算符＞＜项＞}
-    ExpRet ZSQX_expression(string funcName);
+    ExpRet ZSQX_expression(string funcName,bool isCache,vector<FourYuanItem> & cache);
     //＜项＞ ::= ＜因子＞{＜乘法运算符＞＜因子＞}
-    bool ZSQX_item(vector<PostfixItem> &, string funcName);
+    bool ZSQX_item(vector<PostfixItem> &, string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜因子＞ ::= ＜标识符＞[‘(’<值参数表>‘)’]｜＜标识符＞‘[’＜表达式＞‘]’|‘(’＜表达式＞‘)’｜＜整数＞|＜字符＞
-    bool ZSQX_factor(vector<PostfixItem> &, string funcName);
+    bool ZSQX_factor(vector<PostfixItem> &, string funcName, bool isCache, vector<FourYuanItem> & cache);
     /*＜语句＞ ::= ＜条件语句＞｜＜循环语句＞| ‘{’｛＜语句＞｝‘}’｜＜标识符＞[‘(’<值参数表>‘)’]; 
         ｜＜赋值语句＞;｜＜读语句＞;｜＜写语句＞;｜＜空＞;|＜情况语句＞｜＜返回语句＞;*/
-    bool ZSQX_statement(string funcName);
+    bool ZSQX_statement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜赋值语句＞ ::= ＜标识符＞＝＜表达式＞|＜标识符＞‘[’＜表达式＞‘]’=＜表达式＞
-    bool ZSQX_assignStatement(string funcName,string);
+    bool ZSQX_assignStatement(string funcName,string, bool isCache, vector<FourYuanItem> & cache);
     //＜条件语句＞::= if ‘(’＜条件＞‘)’＜语句＞else＜语句＞
-    bool ZSQX_conditionStatement(string funcName);
+    bool ZSQX_conditionStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜条件＞ ::= ＜表达式＞＜关系运算符＞＜表达式＞｜＜表达式＞ 
-    string ZSQX_condition(string funcName);
+    string ZSQX_condition(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜循环语句＞ ::= while ‘(’＜条件＞‘)’＜语句＞
-    bool ZSQX_loopStatement(string funcName);
+    bool ZSQX_loopStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜情况语句＞ ::= switch ‘(’＜表达式＞‘)’ ‘{’＜情况表＞[＜缺省＞] ‘}’
-    bool ZSQX_situationStatement(string funcName);
+    bool ZSQX_situationStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜情况表＞ ::= ＜情况子语句＞{＜情况子语句＞}
-    vector<CaseRet> ZSQX_situationTable(string funcName,string endLabel);
+    vector<CaseRet> ZSQX_situationTable(string funcName,string endLabel, vector<FourYuanItem> &);
     //＜情况子语句＞ ::= case＜常量＞：＜语句＞
-    CaseRet ZSQX_situationSonStatement(string funcName,string endLabel);
+    CaseRet ZSQX_situationSonStatement(string funcName,string endLabel, vector<FourYuanItem> &);
     //＜缺省＞ ::= default : ＜语句＞
-    bool ZSQX_default(string funcName);
+    bool ZSQX_default(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜值参数表＞ ::= ＜表达式＞{,＜表达式＞}
-    bool ZSQX_valueParamTable(string funcName);
+    bool ZSQX_valueParamTable(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜读语句＞ ::= scanf ‘(’＜标识符＞{,＜标识符＞}‘)’
-    bool ZSQX_readStatement(string funcName);
+    bool ZSQX_readStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜写语句＞ ::= printf ‘(’ ＜字符串＞,＜表达式＞ ‘)’| printf ‘(’＜字符串＞ ‘)’| printf ‘(’＜表达式＞‘)’
-    bool ZSQX_writeStatement(string funcName);
+    bool ZSQX_writeStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜返回语句＞ ::= return[‘(’＜表达式＞‘)’]
-    bool ZSQX_returnStatement(string funcName);
+    bool ZSQX_returnStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜整数＞ ::= ［＋｜－］＜无符号整数＞｜0
     bool ZSQX_integer();
     //＜声明头部＞ ::= int ＜标识符＞ |char ＜标识符＞
