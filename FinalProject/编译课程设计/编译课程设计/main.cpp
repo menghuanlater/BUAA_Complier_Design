@@ -9,10 +9,12 @@
 */
 #include <iostream>
 #include <string>
+#include <vector>
 #include "error.h"
 #include "ConstValue.h"
 #include "LexicalAnalysis.h"
 #include "SyntaxAnalysis.h"
+#include "globalFunction.h"
 
 using namespace std;
 
@@ -20,6 +22,7 @@ string compilerFilePath;
 
 extern const char * keyWordsArr[KEY_NUM];
 extern const char * SymbolArr[SYM_NUM];
+extern bool ErrorFlag;
 
 int main(void){
     //欢迎界面
@@ -36,9 +39,15 @@ int main(void){
 	LexicalAnalysis myLexical(error);
     myLexical.readFile(compilerFilePath);
     
-    //语法分析类对象
+    //语法语义分析类对象
     SyntaxAnalysis mySyntax(error,myLexical);
-    mySyntax.startAnalysis();//语法分析入口函数
+    mySyntax.startAnalysis();//语法语义分析入口函数
+
+	//中间代码写入
+	if (!ErrorFlag) {
+		writeTmpCodeToFile();
+		generateMipsCode();
+	}
 
     cout<<"Analysis accomplish. Thanks for using!"<<endl;
     return 0;

@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="ConstValue.h" />
     <ClInclude Include="error.h" />
+    <ClInclude Include="globalFunction.h" />
     <ClInclude Include="LexicalAnalysis.h" />
     <ClInclude Include="SymbolTable.h" />
     <ClInclude Include="SyntaxAnalysis.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="error.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="globalFunction.cpp" />
     <ClCompile Include="LexicalAnalysis.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

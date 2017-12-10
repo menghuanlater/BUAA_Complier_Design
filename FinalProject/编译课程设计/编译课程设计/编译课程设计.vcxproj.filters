@@ -33,6 +33,9 @@
     <ClInclude Include="SyntaxAnalysis.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="globalFunction.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConstValue.cpp">
@@ -51,6 +54,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SyntaxAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="globalFunction.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

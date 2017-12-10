@@ -58,6 +58,8 @@ enum SyntaxErrorCode{
 10.赋值类型不匹配(int 给 char赋值)
 11.引用标识符,标识符对应类型不匹配
 12.值参数表不可以为空
+13.case出现相同的值
+14.除数不可以为0
 */
 enum SemanticErrorCode {
 	DeclareConflictError,
@@ -72,7 +74,21 @@ enum SemanticErrorCode {
 	NoneParamButDeliverError,
 	ParamNumNotMatchError,
 	ParamTypeNotMatchError,
-	AssignObjectNotVar
+	AssignObjectNotVar,
+	CaseSameValueError
+};
+/*与return语句有关的error
+1.无返回值存在有返回值的return
+2.有返回值存在无返回值的return
+3.有返回值不存在return
+4.有返回值存在return类型不兼容
+5.有返回值存在分支导致无返回值
+*/
+enum ReturnRelatedError {
+	VoidButReturnValueError,
+	CharButReturnIntError,
+	ExistNoneReturnError,
+	ExistReturnEmptyError
 };
 
 class Error
@@ -87,5 +103,7 @@ public:
     void SyntaxAnalysisError(SyntaxErrorCode errorCode,int lineNumber,string info);
 	//语义分析错误处理程序
 	void SemanticAnalysisError(SemanticErrorCode errorCode,int lineNumber,string identifier);//带标识符
+	//关于函数返回语句相关错误
+	void ReturnStatementError(ReturnRelatedError errorCode,int lineNumber,string funcName);
 };
 #endif
