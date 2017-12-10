@@ -99,7 +99,7 @@ bool SyntaxAnalysis::ZSQX_procedure(){
 	globalTmpCodeArr.push_back(four);
 
     ZSQX_compoundStatement("main");
-
+	
     if(myLexicalAnalysis.isFinish()){//没有结尾的},文件读取结束,报错
         myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"main lack }");
         return false;

@@ -7,8 +7,10 @@
 #include <fstream>
 #include <cstring>
 #include "error.h"
+
 static int labelCount = 0;//全局标签计数器
 static int tmpVarCount = 0;//全局临时变量计数器
+static int globalStrCount = 0;//全局字符串计数器
 
 const string tmpCodeToFileName = "tmpCode.txt";//中间代码输出文件
 const string mipsCodeToFileName = "mips.txt";//最终汇编代码输出文件
@@ -17,6 +19,7 @@ extern vector<FourYuanItem> globalTmpCodeArr;
 extern vector<SymbolTableItem> globalSymbolTable;
 
 vector<FourYuanItem> globalTmpCodeArr;//中间代码生成集合
+vector<string> constStringSet;//程序需要打印的常量字符串集合,放在.data域
 
 string generateLabel() {
 	labelCount++;
@@ -31,6 +34,14 @@ string generateVar() {
 	sprintf(x,"%d",tmpVarCount);
 	return ("Temp" + string(x));
 }
+
+string generateStrLabel() {
+	globalStrCount++;
+	char x[10] = {'\0'};
+	sprintf(x,"%d",globalStrCount);
+	return ("String" + string(x));
+}
+
 
 bool isStringDigit(string target) {
 	for (unsigned i = 0; i < target.size(); i++) {
@@ -298,6 +309,7 @@ void writeTmpCodeToFile() {
 			break;
 		case PrintStr:
 			out << "Print string " << '\"'<< item.target <<'\"'<< endl;
+			constStringSet.push_back(item.target);
 			break;
 		case PrintChar:
 			if (item.target.at(0) == '\n') {
@@ -328,9 +340,23 @@ void writeTmpCodeToFile() {
 	}
 	out.close();
 }
-
+//最终汇编代码生成相关的函数
 void generateMipsCode() {
 	ofstream out(mipsCodeToFileName, ios::out);
+	//首先遍历生成.data的宏汇编伪指令
+	out << ".data" << endl;
+	generateData(out);
+
+
 
 	out.close();
+}
+//生成汇编Data段指令，最终地址需要给出,用于知道整个函数运行栈的开始点在哪
+void generateData(ofstream & out) {
+	int strMemSize = 0;
+	for (unsigned int i = 0; i < constStringSet.size(); i++) {
+		string item = constStringSet.at(i);
+		strMemSize += item.size() + 1;
+		out << "\t" << generateStrLabel() << ":.asciiz \"" << item << "\"" << endl;
+	}
 }

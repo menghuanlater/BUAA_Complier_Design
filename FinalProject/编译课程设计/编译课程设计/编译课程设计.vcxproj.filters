@@ -16,6 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="errorTest\t1.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="tmpCode.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstValue.h">

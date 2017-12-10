@@ -143,7 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="errorTest\t1.txt" />
     <Text Include="ReadMe.txt" />
+    <Text Include="tmpCode.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConstValue.h" />
