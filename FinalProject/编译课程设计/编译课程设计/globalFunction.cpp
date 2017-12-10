@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cstring>
 #include "error.h"
-static int lableCount = 0;//全局标签计数器
+static int labelCount = 0;//全局标签计数器
 static int tmpVarCount = 0;//全局临时变量计数器
 
 const string tmpCodeToFileName = "tmpCode.txt";//中间代码输出文件
@@ -19,13 +19,17 @@ extern vector<SymbolTableItem> globalSymbolTable;
 vector<FourYuanItem> globalTmpCodeArr;//中间代码生成集合
 
 string generateLabel() {
-	lableCount++;
-	return ("Lable" + lableCount);
+	labelCount++;
+	char x[10] = { '\0' };
+	sprintf(x, "%d", labelCount);
+	return ("Lable" + string(x));
 }
 
 string generateVar() {
 	tmpVarCount++;
-	return ("Temp" + tmpVarCount);
+	char x[10] = {'\0'};
+	sprintf(x,"%d",tmpVarCount);
+	return ("Temp" + string(x));
 }
 
 bool isStringDigit(string target) {
@@ -61,8 +65,7 @@ void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 		}
 	}
 	for (unsigned int i = 0; i < tar.size(); i++) {
-		PostfixItem item;
-		char x;
+		PostfixItem item = tar.at(i);
 		if (item.type == CharType) {
 			switch (item.number) {
 				case '+':
@@ -129,22 +132,22 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 							tmpVar = generateVar();
 							item2.target = tmpVar;
 							if (tmp.at(tmp.size() - 1).type == StringType) {
-								item2.left = tmp.at(tmp.size()-1).str;
+								item2.right = tmp.at(tmp.size()-1).str;
 								tmp.pop_back();
 							}
 							else {
 								sprintf(x,"%d",tmp.at(tmp.size()-1).number);
-								item2.left = x;
+								item2.right = x;
 								tmp.pop_back();
 							}
 							memset(x,0,15);
 							if (tmp.at(tmp.size() - 1).type == StringType) {
-								item2.right = tmp.at(tmp.size() - 1).str;
+								item2.left = tmp.at(tmp.size() - 1).str;
 								tmp.pop_back();
 							}
 							else {
 								sprintf(x, "%d", tmp.at(tmp.size() - 1).number);
-								item2.right = x;
+								item2.left = x;
 								tmp.pop_back();
 							}
 							item2.op = item.number;
@@ -160,22 +163,22 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 							tmpVar = generateVar();
 							item2.target = tmpVar;
 							if (tmp.at(tmp.size() - 1).type == StringType) {
-								item2.left = tmp.at(tmp.size() - 1).str;
-								tmp.pop_back();
-							}
-							else {
-								sprintf(x, "%d", tmp.at(tmp.size() - 1).number);
-								item2.left = x;
-								tmp.pop_back();
-							}
-							memset(x, 0, 15);
-							if (tmp.at(tmp.size() - 1).type == StringType) {
 								item2.right = tmp.at(tmp.size() - 1).str;
 								tmp.pop_back();
 							}
 							else {
 								sprintf(x, "%d", tmp.at(tmp.size() - 1).number);
 								item2.right = x;
+								tmp.pop_back();
+							}
+							memset(x, 0, 15);
+							if (tmp.at(tmp.size() - 1).type == StringType) {
+								item2.left = tmp.at(tmp.size() - 1).str;
+								tmp.pop_back();
+							}
+							else {
+								sprintf(x, "%d", tmp.at(tmp.size() - 1).number);
+								item2.left = x;
 								tmp.pop_back();
 								if (item.number == '/' && item2.right == "0") {
 									cout << "Error(at line " << line << " surround): exist div 0 situation." << endl;
@@ -210,18 +213,105 @@ void writeTmpCodeToFile() {
 		FourYuanItem item = globalTmpCodeArr.at(i);
 		switch (item.type) {
 		case ValueParamDeliver:
+			out << "Push " << item.target << endl;
 			break;
 		case FunctionCall:
+			out << "Call " << item.target << endl;
 			break;
 		case AssignState:
-			break;
-		case ConditionJudge:
+			if (item.isTargetArr) {
+				out << item.target << "[" << item.index1 << "] = ";
+				if (item.isLeftArr) {
+					out << item.left << "[" << item.index2 << "]" << endl;
+				}
+				else {
+					out << item.left << " " << item.op << " " << item.right << endl;
+				}
+			}
+			else {
+				out << item.target << " = ";
+				if (item.isLeftArr) {
+					out << item.left << "[" << item.index2 << "]" << endl;
+				}
+				else {
+					out << item.left << " " << item.op << " " << item.right << endl;
+				}
+			}
 			break;
 		case Label:
+			out << item.target << ":" << endl;
+			break;
+		case FunctionDef:
+			if (item.funcType == VoidType) {
+				out << "void " + item.target << "()" << endl;
+			}
+			else if (item.funcType == ReturnIntType) {
+				out << "int " + item.target << "()" << endl;
+			}else{
+				out << "char " + item.target << "()" << endl;
+			}
+			break;
+		case ParamDef:
+			if (item.valueType == IntType) {
+				out << "Param int " << item.target << endl;
+			}
+			else {
+				out << "Param char " << item.target << endl;
+			}
 			break;
 		case Jump:
+			out << "Jump " << item.target << endl;
 			break;
-		case Return:
+		case BEZ:
+			out << "BEZ " << item.left << " " << item.target << endl;
+			break;
+		case BNZ:
+			out << "BNZ " << item.left << " " << item.target << endl;
+			break;
+		case BLZ:
+			out << "BLZ " << item.left << " " << item.target << endl;
+			break;
+		case BLEZ:
+			out << "BLEZ " << item.left << " " << item.target << endl;
+			break;
+		case BGZ:
+			out << "BGZ " << item.left << " " << item.target << endl;
+			break;
+		case BGEZ:
+			out << "BGEZ " << item.left << " " << item.target << endl;
+			break;
+		case ReadChar:
+			out << "Read Char " << item.target << endl;
+			break;
+		case ReadInt:
+			out << "Read Int " << item.target << endl;
+			break;
+		case PrintStr:
+			out << "Print string " << '\"'<< item.target <<'\"'<< endl;
+			break;
+		case PrintChar:
+			if (item.target.at(0) == '\n') {
+				out << "New Line." << endl;
+			}else
+				out << "Print char " << '\'' << item.target.at(0) << '\'' << endl;
+			break;
+		case PrintInt:
+			out << "Print int " << stringToInt(item.target) << endl;
+			break;
+		case PrintId:
+			out << "Print id " << item.target << endl;
+			break;
+		case ReturnInt:
+			out << "Ret int " << stringToInt(item.target) << endl;
+			break;
+		case ReturnChar:
+			out << "Ret char " << '\'' << item.target.at(0) << '\'' << endl;
+			break;
+		case ReturnId:
+			out << "Ret id " << item.target << endl;
+			break;
+		case ReturnEmpty:
+			out << "Ret" << endl;
 			break;
 		default:break;
 		}

@@ -12,6 +12,7 @@
 #define CONSTVALUE_H
 #define KEY_NUM 14 //保留字数量定义
 #define SYM_NUM 38 //记忆符数量
+#define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <cstdio>//使用sprintf
 using namespace std;
@@ -65,9 +66,7 @@ enum TmpCodeType {
 	ValueParamDeliver,
 	FunctionCall,
 	AssignState,
-	ConditionJudge,
 	Label,
-	Return,
 	FunctionDef,
 	ParamDef,
 	Jump,

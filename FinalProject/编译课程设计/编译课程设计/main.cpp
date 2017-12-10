@@ -45,7 +45,9 @@ int main(void){
 
 	//中间代码写入
 	if (!ErrorFlag) {
+		cout << "Correct compilation of source program.Next will generator temporary code to tmpCode.txt" << endl;
 		writeTmpCodeToFile();
+		cout << "Temporary Code have been writen to tmpCode.txt,then we will generator final mips32 code to mips.txt" << endl;
 		generateMipsCode();
 	}
 

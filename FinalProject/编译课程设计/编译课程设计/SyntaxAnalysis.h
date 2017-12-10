@@ -5,7 +5,7 @@
 */
 #ifndef SYNTAXANALYSIS_H
 #define SYNTAXANALYSIS_H
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "LexicalAnalysis.h"
 #include "error.h"
 #include "ConstValue.h"

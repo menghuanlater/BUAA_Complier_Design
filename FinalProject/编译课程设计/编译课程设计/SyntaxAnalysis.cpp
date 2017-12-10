@@ -1010,21 +1010,45 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName){
 				}
 				//<表达式>
 				item2 = ZSQX_expression(funcName);
+				string index2;
 				int orderx;
-				if (item2.isSurable)
-					if (item2.type == CharType)
-						orderx = idArrExpCheck(id,funcName,true,item2.character);
-					else
+				if (item2.isSurable) {
+					item3.type = AssignState;
+					item3.target = generateVar();
+					item3.isLeftArr = false;
+					item3.isTargetArr = false;
+					if (item2.type == CharType) {
+						orderx = idArrExpCheck(id, funcName, true, item2.character);
+						char gv[10] = { '\0' };
+						sprintf(gv, "%d", item2.character);
+						item3.left = gv;
+						item3.op = '+';
+						item3.right = "0";
+					}
+					else {
 						orderx = idArrExpCheck(id, funcName, true, item2.number);
-				else
+						char gv[10] = { '\0' };
+						sprintf(gv, "%d", item2.character);
+						item3.left = gv;
+						item3.op = '+';
+						item3.right = "0";
+					}
+					globalTmpCodeArr.push_back(item3);
+					index2 = item3.target;
+				}
+				else {
 					orderx = idArrExpCheck(id, funcName, false);
+					index2 = item2.name;
+				}
 				if (orderx >= 0) {
 					item3.type = AssignState;
 					item3.target = generateVar();
 					item3.isLeftArr = true;
 					item3.isTargetArr = false;
-					item3.left = "G" + orderx + id;
-					item3.index2 = item2.name;
+					char ggg[10] = { '\0' };
+					sprintf(ggg, "%d", orderx);
+					item3.left = "G" + string(ggg) + id;
+					item3.index2 = index2;
 					globalTmpCodeArr.push_back(item3);
 					
 					item.type = StringType;
@@ -1088,7 +1112,9 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName){
 					}
 					else {
 						item.type = StringType;
-						item.str = "G" + order + id;//G12ppp类似
+						char ggg[10] = {'\0'};
+						sprintf(ggg,"%d",order);
+						item.str = "G" + string(ggg) + id;;//G12ppp类似
 					}
 				}
 				else {
@@ -1327,7 +1353,9 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id){
         ExpRet ret = ZSQX_expression(funcName);
 		if (order >= 0)
 			checkTypeMatch(globalSymbolTable.at(order).getValueType(), ret.type);
-		fourItem.target = (order >= 0) ? ("G" + order + id) : id;
+		char ggg[10] = {'\0'};
+		sprintf(ggg,"%d",order);
+		fourItem.target = (order >= 0) ? ("G" + string(ggg) + id) : id;
 		if (ret.isSurable) {
 			char x[15] = {'\0'};
 			sprintf(x,"%d",(ret.type == IntType)? ret.number:ret.character);
@@ -1365,9 +1393,13 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id){
 		}
 		else {
 			orderx = idArrExpCheck(id, funcName, false);
+			fourItem.index1 = ret.name;
 		}
-		if (orderx >= 0)
-			fourItem.target = "G" + orderx + id;
+		if (orderx >= 0) {
+			char ggg[10] = { '\0' };
+			sprintf(ggg,"%d",orderx);
+			fourItem.target = "G" + string(ggg) + id;
+		}
 
         //]
         if(myLexicalAnalysis.isFinish()){
@@ -1958,14 +1990,27 @@ bool SyntaxAnalysis::ZSQX_default(string funcName){
 bool SyntaxAnalysis::ZSQX_valueParamTable(string funcName){
     bool nextSymFlag;
 	SymbolCode symbol;
-	ExpRet item;
-	FourYuanItem item2;
+	ExpRet ret;
+	FourYuanItem four;
     
+	vector<string> paramTable;
 	//分析<表达式>
-    item = ZSQX_expression(funcName);
-	item2.type = ValueParamDeliver;
-	item2.target = item.name;
-	globalTmpCodeArr.push_back(item2);
+	ret = ZSQX_expression(funcName);
+	if (ret.isSurable) {
+		char x[15] = {'\0'};
+		sprintf(x,"%d",ret.type == IntType ? ret.number : ret.character);
+		four.type = AssignState;
+		four.isLeftArr = four.isTargetArr = false;
+		four.target = generateVar();
+		four.op = '+';
+		four.right = "0";
+		four.left = x;
+		globalTmpCodeArr.push_back(four);
+		paramTable.push_back(four.target);
+	}
+	else {
+		paramTable.push_back(ret.name);
+	}
 
     while(true){
         if(myLexicalAnalysis.isFinish()){
@@ -1982,11 +2027,29 @@ bool SyntaxAnalysis::ZSQX_valueParamTable(string funcName){
             myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack expression.");
             break;
         }
-        item = ZSQX_expression(funcName);
-		item2.type = ValueParamDeliver;
-		item2.target = item.name;
-		globalTmpCodeArr.push_back(item2);
+
+		ret = ZSQX_expression(funcName);
+		if (ret.isSurable) {
+			char x[15] = { '\0' };
+			sprintf(x, "%d", ret.type == IntType ? ret.number : ret.character);
+			four.type = AssignState;
+			four.isLeftArr = four.isTargetArr = false;
+			four.target = generateVar();
+			four.op = '+';
+			four.right = "0";
+			four.left = x;
+			globalTmpCodeArr.push_back(four);
+			paramTable.push_back(four.target);
+		}
+		else {
+			paramTable.push_back(ret.name);
+		}
     }
+	for (unsigned int i = 0; i < paramTable.size(); i++) {
+		four.type = ValueParamDeliver;
+		four.target = paramTable.at(i);
+		globalTmpCodeArr.push_back(four);
+	}
 
     return true;
 }
@@ -2031,7 +2094,9 @@ bool SyntaxAnalysis::ZSQX_readStatement(string funcName){
 	order = checkAssignId(id,funcName);
 	if (order >= 0) {
 		four.type = (globalSymbolTable.at(order).getValueType() == IntType) ? ReadInt : ReadChar;
-		four.target = "G" + order + id;
+		char ggg[10] = {'\0'};
+		sprintf(ggg,"%d",order);
+		four.target = "G" + string(ggg) + id;
 		globalTmpCodeArr.push_back(four);
 	}//没找到,不管了
 
@@ -2062,7 +2127,9 @@ bool SyntaxAnalysis::ZSQX_readStatement(string funcName){
 		order = checkAssignId(id, funcName);
 		if (order >= 0) {
 			four.type = (globalSymbolTable.at(order).getValueType() == IntType) ? ReadInt : ReadChar;
-			four.target = "G" + order + id;
+			char ggg[10] = {'\0'};
+			sprintf(ggg,"%d",order);
+			four.target = "G" + string(ggg) + id;
 			globalTmpCodeArr.push_back(four);
 		}//没找到,不管了
     }
@@ -2245,12 +2312,12 @@ bool SyntaxAnalysis::ZSQX_returnStatement(string funcName){
                 myLexicalAnalysis.setNextSym();
             }
         }else{
+			item.type = ReturnEmpty;
+			globalTmpCodeArr.push_back(item);
             preRead = false;
         }
     }else{
         preRead = false;
-		item.type = ReturnEmpty;
-		globalTmpCodeArr.push_back(item);
     }
 
     if(preRead)
@@ -2419,11 +2486,11 @@ bool SyntaxAnalysis::isDefined(string id, string functionName) {
 	return false;
 }*/
 /*＜标识符＞‘[’＜表达式＞‘]’需要检查:标识符存不存在，标识符对应的是不是数组，如果是数组,表达式对应的下标值是否越界*/   
-int SyntaxAnalysis::idArrExpCheck(string identifier,string funcName, bool expSurable, int index = 0) {
+int SyntaxAnalysis::idArrExpCheck(string identifier,string funcName, bool expSurable, int index) {
 	bool globalIndexOut = false;//在全局中发现此为数组且但越界
 	bool globalNotArray = false;//全局中发现不是数组
 	bool isDefined = false;
-	bool order = -1;
+	int order = -1;
 	for (unsigned int i = 0; i < globalSymbolTable.size(); i++) {
 		SymbolTableItem item = globalSymbolTable.at(i);
 		if (item.getFuncName() == "GLOBAL") {//作用域全局
@@ -2431,7 +2498,7 @@ int SyntaxAnalysis::idArrExpCheck(string identifier,string funcName, bool expSur
 				isDefined = true;
 				if (item.getArrSize() > 0) {//是数组
 					if (expSurable) {//数组下标值确定
-						if (index >= item.getArrSize || index <0) {//越界
+						if (index >= item.getArrSize() || index <0) {//越界
 							globalIndexOut = true;
 						}
 						else {
@@ -2452,7 +2519,7 @@ int SyntaxAnalysis::idArrExpCheck(string identifier,string funcName, bool expSur
 				isDefined = true;
 				if (item.getArrSize() > 0) {
 					if (expSurable) {
-						if (index >= item.getArrSize || index <0) {//越界
+						if (index >= item.getArrSize() || index <0) {//越界
 							myError.SemanticAnalysisError(ArrIndexOutOfRangeError, getLineNumber(), identifier);
 							return -1;
 						}

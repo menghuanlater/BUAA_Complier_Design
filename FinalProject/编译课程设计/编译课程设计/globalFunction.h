@@ -5,6 +5,7 @@
 */
 #ifndef GLOBALFUNCTION_H
 #define GLOBALFUNCTION_H
+#define _CRT_SECURE_NO_WARNINGS
 #include "ConstValue.h"
 #include "SymbolTable.h"
 #include <string>
