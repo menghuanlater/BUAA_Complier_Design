@@ -1,6 +1,10 @@
 
+int AT(int a,int b,int c){
+    return (89);
+}
+
 void main(){
     int a;
-    a = 2*(3+4 - 5*7)/2-4*(3*6+4);
+    a =  AT(a,3,'c');
     return;
 }

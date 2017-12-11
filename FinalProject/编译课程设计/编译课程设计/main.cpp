@@ -47,7 +47,7 @@ int main(void){
 	if (!ErrorFlag) {
 		cout << "Correct compilation of source program.Next will generator temporary code to tmpCode.txt" << endl;
 		writeTmpCodeToFile();
-		cout << "Temporary Code have been writen to tmpCode.txt,then we will generator final mips32 code to mips.txt" << endl;
+		cout << "Temporary Code have been writen to tmpCode.txt,then we will generator final mips32 code to mips.asm" << endl;
 		generateMipsCode();
 	}
 

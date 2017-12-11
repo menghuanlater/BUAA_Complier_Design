@@ -31,6 +31,8 @@ private:
 
 	int length;//数组的长度,变量设置为0
 
+	unsigned int address;
+
 public:
 	SymbolTableItem(string id,string funcName);
 	int getOrder() {
@@ -60,7 +62,13 @@ public:
 	char getConstChar() {
 		return constCharValue;
 	}
+	unsigned int getAddress() {
+		return address;
+	}
 	//set
+	void setAddress(unsigned int addr) {
+		address = addr;
+	}
 	void setItemType(ItemType type) {
 		itemType = type;
 	}
