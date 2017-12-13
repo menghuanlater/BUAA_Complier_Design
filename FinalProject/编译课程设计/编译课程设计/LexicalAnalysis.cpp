@@ -183,7 +183,7 @@ bool LexicalAnalysis::nextSym(){
     }else if(temp=='\''){
         temp = getChar();
         if(temp=='+'||temp=='-'||temp=='*'||temp=='/'|| temp=='_'||
-            (temp>='A' && temp<='Z') || (temp>='a' && temp<='z')){
+            (temp>='A' && temp<='Z') || (temp>='a' && temp<='z') || (temp>='0' && temp<='9')){
             globalChar = temp;
             temp = getChar();
             if(temp!='\''){

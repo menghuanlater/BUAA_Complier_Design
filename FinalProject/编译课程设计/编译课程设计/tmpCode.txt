@@ -1,16 +1,16 @@
 int fibnaci()
 Param int n
 T1 = 2 + 0
-T2 = G11n - T1
+T2 = G13n - T1
 BGZ T2 Label1
 Ret int 1
 Jump Label2
 Label1:
-T3 = G11n - 1
+T3 = G13n - 1
 Push T3
 Call fibnaci
 T4 = Ret + 0
-T5 = G11n - 2
+T5 = G13n - 2
 Push T5
 Call fibnaci
 T6 = Ret + 0
@@ -26,40 +26,40 @@ Print string "g_var_int2:"
 Print id G5g_var_int2
 New Line.
 Print string "g_var_char1:"
-Print id G7g_var_char1
+Print id G8g_var_char1
 New Line.
 Print string "g_var_char2:"
-Print id G8g_var_char2
+Print id G9g_var_char2
 New Line.
 Print string "------------------------"
 New Line.
 Ret
 void printglobalarrvalue()
 Param int looplength
-G15i = 0 + 0
+G17i = 0 + 0
 Print string "g_var_int_arr:"
 New Line.
 Label3:
-T1 = G15i - G14looplength
+T1 = G17i - G16looplength
 BGEZ T1 Label4
-T2 = G6g_var_int_arr[G15i]
+T2 = G6g_var_int_arr[G17i]
 Print id T2
 New Line.
-T3 = G15i + 1
-G15i = T3 + 0
+T3 = G17i + 1
+G17i = T3 + 0
 Jump Label3
 Label4:
-G15i = 0 + 0
+G17i = 0 + 0
 Print string "g_var_char_arr:"
 New Line.
 Label5:
-T4 = G15i - G14looplength
+T4 = G17i - G16looplength
 BGEZ T4 Label6
-T5 = G9g_var_char_arr[G15i]
+T5 = G10g_var_char_arr[G17i]
 Print id T5
 New Line.
-T6 = G15i + 1
-G15i = T6 + 0
+T6 = G17i + 1
+G17i = T6 + 0
 Jump Label5
 Label6:
 Ret
@@ -67,9 +67,9 @@ Ret
 void testswitchcase()
 Param int value1
 Param int value2
-T2 = G17value1 - 0
+T2 = G19value1 - 0
 BEZ T2 Label8
-T3 = G17value1 - 1
+T3 = G19value1 - 1
 BEZ T3 Label9
 Jump Label7
 Label8:
@@ -85,9 +85,9 @@ Push T1
 Call printglobalarrvalue
 Jump Label7
 Label7:
-T4 = G18value2 - 1
+T4 = G20value2 - 1
 BEZ T4 Label12
-T5 = G18value2 - 2
+T5 = G20value2 - 2
 BEZ T5 Label13
 Print string "Excuse Me."
 New Line.
@@ -101,7 +101,7 @@ Print string "Sally Go2."
 New Line.
 Jump Label11
 Label11:
-T6 = G18value2 + G17value1
+T6 = G20value2 + G19value1
 T11 = T6 - 3
 BEZ T11 Label16
 T12 = T6 - 1
@@ -110,7 +110,7 @@ Print char 'a'
 New Line.
 Jump Label15
 Label16:
-T7 = G17value1 * G18value2
+T7 = G19value1 * G20value2
 T8 = T7 + 3
 T9 = T8 - 5
 BEZ T9 Label18
@@ -149,7 +149,7 @@ Ret
 void testifelse()
 Param char target
 T1 = 110 + 0
-T2 = G24target - T1
+T2 = G26target - T1
 BGEZ T2 Label23
 Print string "smaller than n"
 New Line.
@@ -159,7 +159,7 @@ Print string "not smaller than n"
 New Line.
 Label24:
 T3 = 110 + 0
-T4 = G24target - T3
+T4 = G26target - T3
 BGZ T4 Label25
 Print string "smaller than n or equal to n"
 New Line.
@@ -169,7 +169,7 @@ Print string "bigger than n"
 New Line.
 Label26:
 T5 = 110 + 0
-T6 = G24target - T5
+T6 = G26target - T5
 BNZ T6 Label27
 Print string "equal to n"
 New Line.
@@ -179,7 +179,7 @@ Print string "not equal to n"
 New Line.
 Label28:
 T7 = 110 + 0
-T8 = G24target - T7
+T8 = G26target - T7
 BLZ T8 Label29
 Print string "bigger than n or equal to n"
 New Line.
@@ -189,7 +189,7 @@ Print string "smaller than n"
 New Line.
 Label30:
 T9 = 110 + 0
-T10 = G24target - T9
+T10 = G26target - T9
 BLEZ T10 Label31
 Print string "bigger than n"
 New Line.
@@ -199,7 +199,7 @@ Print string "not bigger than n"
 New Line.
 Label32:
 T11 = 110 + 0
-T12 = G24target - T11
+T12 = G26target - T11
 BEZ T12 Label33
 Print string "not equal to n"
 New Line.
@@ -214,21 +214,21 @@ Ret
 void main()
 G4g_var_int1 = 47 + 0
 G5g_var_int2 = 1 + 0
-G7g_var_char1 = 97 + 0
-G8g_var_char2 = 109 + 0
+G8g_var_char1 = 97 + 0
+G9g_var_char2 = 109 + 0
 Call printglobalvarvalue
 G4g_var_int1 = 46 + 0
 G5g_var_int2 = 8 + 0
 Call printglobalvarvalue
-G26i = 0 + 0
+G28i = 0 + 0
 Label35:
 T1 = 11 + 0
-T2 = G26i - T1
+T2 = G28i - T1
 BGZ T2 Label36
-G6g_var_int_arr[G26i] = G26i + 0
-G9g_var_char_arr[G26i] = 120 + 0
-T3 = G26i + 1
-G26i = T3 + 0
+G6g_var_int_arr[G28i] = G28i + 0
+G10g_var_char_arr[G28i] = 120 + 0
+T3 = G28i + 1
+G28i = T3 + 0
 Jump Label35
 Label36:
 T4 = 0 + 0
@@ -238,25 +238,25 @@ G6g_var_int_arr[3] = T6 + 0
 T7 = 12 + 0
 Push T7
 Call printglobalarrvalue
-G27flag1 = 1 + 0
+G29flag1 = 1 + 0
 T8 = 2 + 0
 T9 = G6g_var_int_arr[T8]
-G28flag2 = T9 + 0
-Push G27flag1
-Push G28flag2
+G30flag2 = T9 + 0
+Push G29flag1
+Push G30flag2
 Call testswitchcase
-T10 = G27flag1 - 1
-T11 = G28flag2 - 1
+T10 = G29flag1 - 1
+T11 = G30flag2 - 1
 Push T10
 Push T11
 Call testswitchcase
 T12 = -3 + 0
-T13 = G28flag2 + 4
+T13 = G30flag2 + 4
 Push T12
 Push T13
 Call testswitchcase
 T14 = -2 + 0
-T15 = G28flag2 + 3
+T15 = G30flag2 + 3
 Push T14
 Push T15
 Call testswitchcase
@@ -269,25 +269,25 @@ T18 = 1 + 0
 Push T18
 Call fibnaci
 T19 = Ret + 0
-G29myfib = T19 + 0
+G31myfib = T19 + 0
 Print string "Fib(1):"
-Print id G29myfib
+Print id G31myfib
 New Line.
 T20 = 2 + 0
 Push T20
 Call fibnaci
 T21 = Ret + 0
-G29myfib = T21 + 0
+G31myfib = T21 + 0
 Print string "Fib(2):"
-Print id G29myfib
+Print id G31myfib
 New Line.
 T22 = 8 + 0
 Push T22
 Call fibnaci
 T23 = Ret + 0
-G29myfib = T23 + 0
+G31myfib = T23 + 0
 Print string "Fib(8):"
-Print id G29myfib
+Print id G31myfib
 New Line.
 T24 = 4 + 0
 T25 = G6g_var_int_arr[T24]
@@ -309,33 +309,33 @@ T35 = T32 / 111
 T36 = T35 * T34
 G5g_var_int2 = T36 + 0
 Call printglobalvarvalue
-G31relationfalg = 97 + 0
-Push G31relationfalg
+G33relationfalg = 97 + 0
+Push G33relationfalg
 Call testifelse
-G31relationfalg = 110 + 0
-Push G31relationfalg
+G33relationfalg = 110 + 0
+Push G33relationfalg
 Call testifelse
-G31relationfalg = 115 + 0
-Push G31relationfalg
+G33relationfalg = 115 + 0
+Push G33relationfalg
 Call testifelse
 Print string "Please enter the number of items you want to calculate the Fibonacci sequence:"
 New Line.
-Read Int G30inputfib
-Push G30inputfib
+Read Int G32inputfib
+Push G32inputfib
 Call fibnaci
 T37 = Ret + 0
-G29myfib = T37 + 0
+G31myfib = T37 + 0
 Print string "the Fib number you want to get is:"
-Print id G29myfib
+Print id G31myfib
 New Line.
 Print string "lalalalala."
 New Line.
-Read Int G32testifelse
-Read Int G33returnten
-Read Int G34returntwo
+Read Int G34testifelse
+Read Int G35returnten
+Read Int G36returntwo
 Print string "sum is:"
-T38 = G32testifelse + G33returnten
-T39 = T38 + G34returntwo
+T38 = G34testifelse + G35returnten
+T39 = T38 + G36returntwo
 Print id T39
 New Line.
 Print string "procedure is Over, Thank you."

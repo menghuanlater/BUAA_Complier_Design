@@ -162,22 +162,22 @@ syscall
 la $a0 String3
 li $v0 4
 syscall
-li $a3 268501772
+li $a3 268501776
 lw $a0 0($a3)
 li $v0 11
 syscall
-# com printf G7g_var_char1
+# com printf G8g_var_char1
 li $a0 10
 li $v0 11
 syscall
 la $a0 String4
 li $v0 4
 syscall
-li $a3 268501776
+li $a3 268501780
 lw $a0 0($a3)
 li $v0 11
 syscall
-# com printf G8g_var_char2
+# com printf G9g_var_char2
 li $a0 10
 li $v0 11
 syscall
@@ -282,7 +282,7 @@ lw $a1 0($a1)
 bgez $a1 Label6
 lw $t0 8($fp)
 addiu $t0 $t0 16
-li $t1 268501780
+li $t1 268501784
 addiu $t2 $fp 16
 lw $t2 0($t2)
 li $t3 4
@@ -810,7 +810,7 @@ lw $ra 0($fp)
 lw $fp 4($fp)
 jr $ra
 main:
-li $fp 268501828
+li $fp 268501836
 addiu $sp $fp 12
 addiu $sp $sp 36
 sw $sp 8($fp)
@@ -821,10 +821,10 @@ sw $t1 0($t0)
 li $t0 268501720
 li $t1 1
 sw $t1 0($t0)
-li $t0 268501772
+li $t0 268501776
 li $t1 97
 sw $t1 0($t0)
-li $t0 268501776
+li $t0 268501780
 li $t1 109
 sw $t1 0($t0)
 jal printglobalvarvalue
@@ -866,7 +866,7 @@ addu $t0 $t0 $t1
 addiu $t1 $fp 12
 lw $t1 0($t1)
 sw $t1 0($t0)
-li $t0 268501780
+li $t0 268501784
 addiu $t1 $fp 12
 lw $t1 0($t1)
 li $t2 4
@@ -1068,7 +1068,7 @@ addiu $a3 $fp 24
 lw $a0 0($a3)
 li $v0 1
 syscall
-# com printf G29myfib
+# com printf G31myfib
 li $a0 10
 li $v0 11
 syscall
@@ -1097,7 +1097,7 @@ addiu $a3 $fp 24
 lw $a0 0($a3)
 li $v0 1
 syscall
-# com printf G29myfib
+# com printf G31myfib
 li $a0 10
 li $v0 11
 syscall
@@ -1126,7 +1126,7 @@ addiu $a3 $fp 24
 lw $a0 0($a3)
 li $v0 1
 syscall
-# com printf G29myfib
+# com printf G31myfib
 li $a0 10
 li $v0 11
 syscall
@@ -1298,7 +1298,7 @@ addiu $a3 $fp 24
 lw $a0 0($a3)
 li $v0 1
 syscall
-# com printf G29myfib
+# com printf G31myfib
 li $a0 10
 li $v0 11
 syscall

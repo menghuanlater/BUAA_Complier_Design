@@ -539,6 +539,7 @@ bool SyntaxAnalysis::ZSQX_varDefinition(string funcName){
     //loop
     while(true){
         //,
+		symbol = myLexicalAnalysis.getGlobalSymbol();
         if(!(symbol == COMMA))
             break;
 

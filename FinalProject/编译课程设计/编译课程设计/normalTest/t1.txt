@@ -2,9 +2,9 @@ const int g_const_int1 = 23,g_const_int2 = 24;
 const char g_const_char1 = 'a',g_const_char2 = 'm';
 
 int g_var_int1,g_var_int2;
-int g_var_int_arr[12];
+int g_var_int_arr[12],g_var_int3;
 char g_var_char1,g_var_char2;
-char g_var_char_arr[12];
+char g_var_char_arr[12],g_vat_char3;
 
 int Fibnaci(int n){
     if(n<=2)
