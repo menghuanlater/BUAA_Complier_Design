@@ -698,7 +698,10 @@ bool SyntaxAnalysis::ZSQX_haveReturnValueFunctionDefinition(){
     }
     //预读
     myLexicalAnalysis.nextSym();
-
+	//在函数定义完成之时,最终都要加上一句return;
+	FourYuanItem item;
+	item.type = ReturnEmpty;
+	globalTmpCodeArr.push_back(item);
     return true;
 }
 
@@ -793,7 +796,9 @@ bool SyntaxAnalysis::ZSQX_noReturnValueFunctionDefinition(){
     }
     //预读
     myLexicalAnalysis.nextSym();
-
+	FourYuanItem item;
+	item.type = ReturnEmpty;
+	globalTmpCodeArr.push_back(item);
     return true;
 }
 
@@ -945,7 +950,7 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
     }
 	//表达式计算
 	turnToPostfixExp(tar,obj);
-	returnValue.name = calculateExp(obj, isSure,type,expResult,getLineNumber(),isCache,cache);
+	returnValue.name = calculateExp(obj, isSure,type,expResult,getLineNumber(),isCache,cache,funcName);
 	returnValue.isSurable = isSure;
 	returnValue.type = type;
 	if (isSure) {
@@ -1020,7 +1025,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 				int orderx;
 				if (item2.isSurable) {
 					item3.type = AssignState;
-					item3.target = generateVar();
+					item3.target = generateVar(funcName);
 					item3.isLeftArr = false;
 					item3.isTargetArr = false;
 					if (item2.type == CharType) {
@@ -1034,7 +1039,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					else {
 						orderx = idArrExpCheck(id, funcName, true, item2.number);
 						char gv[10] = { '\0' };
-						sprintf(gv, "%d", item2.character);
+						sprintf(gv, "%d", item2.number);
 						item3.left = gv;
 						item3.op = '+';
 						item3.right = "0";
@@ -1053,7 +1058,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 				}
 				if (orderx >= 0) {
 					item3.type = AssignState;
-					item3.target = generateVar();
+					item3.target = generateVar(funcName);
 					item3.isLeftArr = true;
 					item3.isTargetArr = false;
 					char ggg[10] = { '\0' };
@@ -1068,6 +1073,10 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					}
 					
 					item.type = StringType;
+					SymbolTableItem t = globalSymbolTable.at(orderx);
+					item.isNotCharVar = true;
+					if (t.getValueType() == CharType)
+						item.isNotCharVar = false;
 					item.str = item3.target;
 					obj.push_back(item);
 				}
@@ -1075,7 +1084,6 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					item.type = StringType;
 					item.str = id;
 				}
-				obj.push_back(item);
 
                 if(myLexicalAnalysis.isFinish()){
                     myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack ].");
@@ -1103,7 +1111,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					globalTmpCodeArr.push_back(item3);
 				}
 				item3.type = AssignState;
-				item3.target = generateVar();
+				item3.target = generateVar(funcName);
 				item3.isTargetArr = item3.isLeftArr = false;
 				item3.left = "Ret";
 				item3.op = '+';
@@ -1114,8 +1122,10 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 				else {
 					globalTmpCodeArr.push_back(item3);
 				}
+				//待完善:检查函数是否存在,返回其所在符号表的order,根据其返回类型决定isChar的值
 				item.type = StringType;
 				item.str = item3.target;
+				item.isNotCharVar = true;
 				obj.push_back(item);
 
                 if(myLexicalAnalysis.isFinish()){
@@ -1131,12 +1141,41 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
                 preRead = false;
 				int order = idCheckInFactor(id,funcName);
 				if (order >= 0) {
+					//需要检查是否是无参的函数
 					SymbolTableItem y = globalSymbolTable.at(order);
 					if (y.getItemType() == Constant) {
 						item.type = y.getValueType();
 						item.number = (item.type == IntType) ? (y.getConstInt()) : (y.getConstChar());
 					}
+					else if (y.getItemType() == Function) {//无参数的带返回值的函数调用
+						item3.type = FunctionCall;
+						item3.target = id;
+						if (isCache) {
+							cache.push_back(item3);
+						}
+						else {
+							globalTmpCodeArr.push_back(item3);
+						}
+						item3.type = AssignState;
+						item3.target = generateVar(funcName);
+						item3.isTargetArr = item3.isLeftArr = false;
+						item3.left = "Ret";
+						item3.op = '+';
+						item3.right = "0";
+						if (isCache) {
+							cache.push_back(item3);
+						}
+						else {
+							globalTmpCodeArr.push_back(item3);
+						}
+						item.type = StringType;
+						item.str = item3.target;
+						item.isNotCharVar = (y.getFuncType() == ReturnCharType) ? false : true;
+					}
 					else {
+						item.isNotCharVar = true;
+						if (y.getItemType() == Variable && y.getValueType() == CharType)
+							item.isNotCharVar = false;
 						item.type = StringType;
 						char ggg[10] = {'\0'};
 						sprintf(ggg,"%d",order);
@@ -1145,7 +1184,14 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 				}
 				else {
 					item.type = StringType;
+					item.isNotCharVar = true;
 					item.str = id;
+					if (isCache) {
+						cache.push_back(item3);
+					}
+					else {
+						globalTmpCodeArr.push_back(item3);
+					}
 				}
 				obj.push_back(item);
             }
@@ -1172,8 +1218,15 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
             }
             //<表达式
             item2 = ZSQX_expression(funcName, isCache, cache);
-			item.type = StringType;
-			item.str = item2.name;
+			if (item2.isSurable) {
+				item.type = IntType;
+				item.number = (item2.type == IntType) ? item2.number : item2.character;
+			}
+			else {
+				item.type = StringType;
+				item.str = item2.name;
+				item.isNotCharVar = (item2.type == IntType) ? true : false;
+			}
 			obj.push_back(item);
             //)
             if(myLexicalAnalysis.isFinish()){
@@ -1480,6 +1533,7 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
 		else {
 			fourItem.left = ret.name;
 		}
+		checkTypeMatch(globalSymbolTable.at(orderx).getValueType(), ret.type);
 		if (isCache) {
 			cache.push_back(fourItem);
 		}
@@ -1677,7 +1731,7 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 		fourItem.isLeftArr = fourItem.isTargetArr = false;
 		char x[15] = { '\0' };
 		sprintf(x,"%d",ret1.type == IntType? ret1.number:ret1.character);
-		fourItem.target = generateVar();
+		fourItem.target = generateVar(funcName);
 		fourItem.left = x;
 		fourItem.op = '+';
 		fourItem.right = "0";
@@ -1710,7 +1764,7 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 				fourItem.isLeftArr = fourItem.isTargetArr = false;
 				char x[15] = { '\0' };
 				sprintf(x, "%d", ret2.type == IntType ? ret2.number : ret2.character);
-				fourItem.target = generateVar();
+				fourItem.target = generateVar(funcName);
 				fourItem.left = x;
 				fourItem.op = '+';
 				fourItem.right = "0";
@@ -1726,7 +1780,9 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 				right = ret2.name;
 			}
 			//
-			fourItem.target = generateVar();
+			fourItem.target = generateVar(funcName);
+			fourItem.type = AssignState;
+			fourItem.isLeftArr = fourItem.isTargetArr = false;
 			fourItem.left = left;
 			fourItem.right = right;
 			fourItem.op = '-';
@@ -1932,7 +1988,7 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
     }
     ExpRet ret = ZSQX_expression(funcName, isCache, cache);
 	if (ret.isSurable) {
-		left = generateVar();
+		left = generateVar(funcName);
 		fourItem.type = AssignState;
 		fourItem.isTargetArr = fourItem.isLeftArr = false;
 		fourItem.target = left;
@@ -1986,7 +2042,7 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
 		CaseRet t = caseTable.at(i);
 		fourItem.type = AssignState;
 		fourItem.isLeftArr = fourItem.isTargetArr = false;
-		fourItem.target = generateVar();
+		fourItem.target = generateVar(funcName);
 		fourItem.op = '-';
 		fourItem.left = left;
 		char x[15] = { '\0' };
@@ -2198,7 +2254,7 @@ bool SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isCache, vector<
 		sprintf(x,"%d",ret.type == IntType ? ret.number : ret.character);
 		four.type = AssignState;
 		four.isLeftArr = four.isTargetArr = false;
-		four.target = generateVar();
+		four.target = generateVar(funcName);
 		four.op = '+';
 		four.right = "0";
 		four.left = x;
@@ -2236,7 +2292,7 @@ bool SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isCache, vector<
 			sprintf(x, "%d", ret.type == IntType ? ret.number : ret.character);
 			four.type = AssignState;
 			four.isLeftArr = four.isTargetArr = false;
-			four.target = generateVar();
+			four.target = generateVar(funcName);
 			four.op = '+';
 			four.right = "0";
 			four.left = x;
@@ -2436,6 +2492,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 				four.target = x;
 			}
 			else {
+				four.isNotPrintCharId = (ret.type == CharType) ? false : true;
 				four.type = PrintId;
 				four.target = ret.name;
 			}
@@ -2447,7 +2504,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 			}
         }
 		four.type = PrintChar;
-		four.target = "\n";
+		four.target = "10";
 		if (isCache) {
 			cache.push_back(four);
 		}
@@ -2467,6 +2524,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 			four.target = x;
 		}
 		else {
+			four.isNotPrintCharId = (ret.type == CharType) ? false : true;
 			four.type = PrintId;
 			four.target = ret.name;
 		}
@@ -2477,7 +2535,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 			globalTmpCodeArr.push_back(four);
 		}
 		four.type = PrintChar;
-		four.target = "\n";
+		four.target = "10";
 		if (isCache) {
 			cache.push_back(four);
 		}
@@ -2574,7 +2632,10 @@ bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<
                 myLexicalAnalysis.setNextSym();
             }
         }else{
-			item.type = ReturnEmpty;
+			if (funcName == "main")
+				item.type = OverProcedure;
+			else
+				item.type = ReturnEmpty;
 			if (isCache) {
 				cache.push_back(item);
 			}

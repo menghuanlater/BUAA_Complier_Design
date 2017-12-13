@@ -22,3 +22,18 @@ case的几个数值不可以出现相同的情况
 
 
 int超出范围的检查处理
+
+switch(表达式)
+
+
+//语法结构检查存在的问题
+int x{
+    return 10;    ----->此处报错不好,会直接跳过void main()的分析,为何会出现缺少semicolon的问题
+}
+
+void main(){
+    int a[23];
+    a[1] = x;
+    printf("hahaha:",a[1]);
+    return;
+}

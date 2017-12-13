@@ -1,10 +1,5 @@
-
-int AT(int a,int b,int c){
-    return (89);
-}
-
 void main(){
     int a;
-    a =  AT(a,3,'c');
-    return;
+    a = 12;
+    switch()
 }

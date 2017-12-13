@@ -85,7 +85,8 @@ enum TmpCodeType {
 	ReturnInt,
 	ReturnChar,
 	ReturnId,
-	ReturnEmpty
+	ReturnEmpty,
+	OverProcedure
 };
 //四元式结构体
 struct FourYuanItem {
@@ -96,6 +97,7 @@ struct FourYuanItem {
 	string index1;
 	bool isTargetArr;
 	bool isLeftArr;
+	bool isNotPrintCharId;//打印的是不是char类型的id
 	string left;
 	string index2;
 	string right;
@@ -106,6 +108,7 @@ struct PostfixItem {
 	ValueType type;
 	string str;
 	int number;
+	bool isNotCharVar;//是否是char型变量或者说是char型数组某个元素
 };
 
 /*

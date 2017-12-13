@@ -1,3 +1,0 @@
-.data
-.text
-#accomplish generate mips code.

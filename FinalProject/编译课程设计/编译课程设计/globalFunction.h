@@ -14,7 +14,7 @@ using namespace std;
 
 //函数声明
 string generateLabel();
-string generateVar();
+string generateVar(string);
 bool isStringDigit(string);
 int stringToInt(string);
 //文件操作
@@ -26,7 +26,9 @@ void generateData(ofstream &);
 void generateText(ofstream &);
 //表达式的相关计算处理
 void turnToPostfixExp(vector<PostfixItem>, vector<PostfixItem> &);
-string calculateExp(vector<PostfixItem> &,bool &,ValueType &,int &,int,bool,vector<FourYuanItem> &);
+string calculateExp(vector<PostfixItem> &,bool &,ValueType &,int &,int,bool,vector<FourYuanItem> &,string);
 
+//取消字符串中的转义字符
+void cancelEscapeChar(string & target);
 #endif // !GLOBALFUNCTION_H
 
