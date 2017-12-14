@@ -61,7 +61,7 @@ Print string "gCh4:"
 Print id G41gch4
 New Line.
 G43i = 0 + 0
-Print string "gIn2[]:"
+Print string "gInt2[]:"
 New Line.
 Label3:
 T10 = 10 + 0

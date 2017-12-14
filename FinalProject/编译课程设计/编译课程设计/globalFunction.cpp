@@ -10,6 +10,7 @@
 #include <map>
 #include "error.h"
 
+#define TEMP_REGISTER 6 //$t4~$t9
 
 static int labelCount = 0;//全局标签计数器
 static int tmpVarCount = 0;//全局临时变量计数器
@@ -24,6 +25,7 @@ const int tempStackMax = 100;//设置临时参数栈最大为100字节(最多有
 const unsigned int dataBaseAddr = 0x10010000;//数据段起始地址
 unsigned int returnValueSpace;//函数返回值存放点
 unsigned int funcBeginAddr;//整体函数栈的起始地址(即全局数据区域起始地址)
+
 
 const string tmpCodeToFileName = "tmpCode.txt";//中间代码输出文件
 const string mipsCodeToFileName = "mips.asm";//最终汇编代码输出文件
@@ -523,12 +525,13 @@ void getAddrOfLocal(string funcName,string eleName,string targetReg,ofstream & o
 		else
 			number += item.getArrSize() * 4;
 	}
-	out << "addiu " << targetReg << " $fp " << number + 12 << endl;
+	out << "addiu " << targetReg << " $fp " << number + 8 << endl;
 }
 //获取临时变量的地址
 void getAddrOfTemp(int order, string targetReg,ofstream & out) {
-	out << "lw " << targetReg << " 8($fp)" << endl;
-	out << "addiu " << targetReg << " " << targetReg << " " << (order-1) * 4 << endl;
+	//@need:order > TEMP_REGISTER
+	out << "move " << targetReg << " $k0" << endl;
+	out << "addiu " << targetReg << " " << targetReg << " " << (order-1-TEMP_REGISTER) * 4 << endl;
 }
 
 //生成Text段代码的辅助函数
@@ -564,8 +567,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 		}
 		else if (index1.at(0) == 'T') {//在临时变量表
 			//放在$t1
-			getAddrOfTemp(stringToInt(index1.substr(1)),"$t1",out);
-			out << "lw $t1 0($t1)" << endl;//下标值存入$t1
+			int g = stringToInt(index1.substr(1));
+			if (g > TEMP_REGISTER) {
+				getAddrOfTemp(g, "$t1", out);
+				out << "lw $t1 0($t1)" << endl;
+			}
+			else {
+				out << "move $t1 " << "$t" << (g + 3)<<endl;
+			}
 		}
 		else {//纯数字
 			int number = stringToInt(index1);
@@ -591,8 +600,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 			out << "lw $t1 0($t1)" << endl;
 		}
 		else if (left.at(0) == 'T') {//临时变量表
-			getAddrOfTemp(stringToInt(left.substr(1)),"$t1",out);
-			out << "lw $t1 0($t1)" << endl;
+			int g = stringToInt(left.substr(1));
+			if (g > TEMP_REGISTER) {
+				getAddrOfTemp(g, "$t1", out);
+				out << "lw $t1 0($t1)" << endl;
+			}
+			else {
+				out << "move $t1 " << "$t" << (g + 3)<<endl;
+			}
 		}
 		else if (left == "Ret") {//函数调用的返回值
 			out << "lw $t1 " << returnValueSpace << "($0)" << endl;
@@ -614,8 +629,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 				out << "lw $t2 0($t2)" << endl;
 			}
 			else if (right.at(0) == 'T') {//临时变量表
-				getAddrOfTemp(stringToInt(right.substr(1)),"$t2",out);
-				out << "lw $t2 0($t2)" << endl;
+				int g = stringToInt(right.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$t2", out);
+					out << "lw $t2 0($t1)" << endl;
+				}
+				else {
+					out << "move $t2 " << "$t" << (g + 3)<<endl;
+				}
 			}
 			else {//数字
 				out << "li $t2 " << stringToInt(right) << endl;
@@ -642,6 +663,8 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 	}
 	else{
 		//$t0存放target地址
+		bool isTemp = false;
+		int g, g1;
 		if (item.target.at(0) == 'G') {//符号表内的变量
 			int order = stringToInt(item.target.substr(1));
 			SymbolTableItem item = globalSymbolTable.at(order);
@@ -652,8 +675,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 				getAddrOfLocal(item.getFuncName(),item.getId(),"$t0",out);
 			}
 		}
-		else if (item.target.at(0) == 'T') {//临时变量,需要分配空间
-			getAddrOfTemp(stringToInt(item.target.substr(1)),"$t0",out);
+		else if (item.target.at(0) == 'T') {//临时变量
+			g1 = g = stringToInt(item.target.substr(1));
+			if (g > TEMP_REGISTER) {
+				getAddrOfTemp(stringToInt(item.target.substr(1)), "$t0", out);
+			}
+			else {
+				isTemp = true;
+			}
 		}
 		//分析left
 		if (item.isLeftArr) {
@@ -682,8 +711,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 				out << "lw $t2 0($t2)" << endl;
 			}
 			else if (index2.at(0) == 'T') {//在临时变量表
-				getAddrOfTemp(stringToInt(index2.substr(1)),"$t2",out);
-				out << "lw $t2 0($t2)" << endl;
+				g = stringToInt(index2.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$t2", out);
+					out << "lw $t2 0($t2)" << endl;
+				}
+				else {
+					out << "move $t2 " << "$t" << (g + 3)<<endl;
+				}
 			}
 			else {//纯数字
 				out << "li $t2 " << stringToInt(index2) << endl;
@@ -713,8 +748,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 				out << "lw $t1 0($t1)" << endl;
 			}
 			else if (left.at(0) == 'T') {//临时变量表
-				getAddrOfTemp(stringToInt(left.substr(1)),"$t1",out);
-				out << "lw $t1 0($t1)" << endl;
+				g = stringToInt(left.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$t1", out);
+					out << "lw $t1 0($t1)" << endl;
+				}
+				else {
+					out << "move $t1 " << "$t" << (g + 3)<<endl;
+				}
 			}
 			else if (left == "Ret") {//函数调用的返回值
 				out << "lw $t1 " << returnValueSpace << "($0)" << endl;
@@ -735,8 +776,14 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 					out << "lw $t2 0($t2)" << endl;
 				}
 				else if (right.at(0) == 'T') {//临时变量表
-					getAddrOfTemp(stringToInt(right.substr(1)), "$t2", out);
-					out << "lw $t2 0($t2)" << endl;
+					g = stringToInt(right.substr(1));
+					if (g > TEMP_REGISTER) {
+						getAddrOfTemp(g, "$t2", out);
+						out << "lw $t2 0($t2)" << endl;
+					}
+					else {
+						out << "move $t2 " << "$t" << (g + 3)<<endl;
+					}
 				}
 				else {//数字
 					out << "li $t2 " << stringToInt(right) << endl;
@@ -760,6 +807,10 @@ void helpAssignStatement(FourYuanItem item,ofstream & out) {
 				if (item.op == '*')
 					out << "move $t1 $0" << endl;
 			}
+		}
+		if (isTemp) {
+			out << "move $t" << (g1 + 3) << " $t1" << endl;
+			return;
 		}
 	}
 	//从$t1将值存入内存
@@ -815,12 +866,15 @@ void initializeStack(string funcName,ofstream & out) {
 		}
 	}
 	out << "addiu $sp $sp " << number << endl;
-	//临时变量区入口地址确定
-	out << "sw $sp 8($fp)" << endl;
+	//临时变量区入口地址确定,存放入$k0
+	out << "move $k0 $sp" << endl;
+	out << "move $k1 $0 " << endl;
 	//分配所需最大的临时空间
 	map<string, unsigned>::iterator iter = maxTempOrderMap.find(funcName);
 	if (iter != maxTempOrderMap.end()) {
-		out << "addiu $sp $sp " << iter->second * 4<< endl;
+		if(iter->second>TEMP_REGISTER)
+			out << "addiu $sp $sp " << (iter->second - TEMP_REGISTER) * 4<< endl;
+		out << "addiu $k1 $0 " << iter->second << endl;
 	}
 }
 
@@ -829,10 +883,21 @@ void helpFunctionDef(string funcName, ofstream & out) {
 		//main函数只需要做全局变量的数据分配
 		int size = getGlobalVarSumSpace();
 		out << "li $fp " << funcBeginAddr + size << endl;
-		out << "addiu $sp $fp 12" << endl;
+		out << "addiu $sp $fp 8" << endl;
 		initializeStack(funcName,out);
 	}
 	else {
+		//将$k0,$k1寄存器的值保存入栈
+		out << "sw $k0 0($sp)" << endl;
+		out << "sw $k1 4($sp)" << endl;
+		out << "sw $t4 8($sp)" << endl;
+		out << "sw $t5 12($sp)" << endl;
+		out << "sw $t6 16($sp)" << endl;
+		out << "sw $t7 20($sp)" << endl;
+		out << "sw $t8 24($sp)" << endl;
+		out << "sw $t9 28($sp)" << endl;
+
+		out << "addiu $sp $sp 32" << endl;
 		//设置上一级函数的基地址
 		out << "sw $fp 4($sp)" << endl;
 		//设置fp
@@ -840,7 +905,7 @@ void helpFunctionDef(string funcName, ofstream & out) {
 		//设置返回地址
 		out << "sw $ra 0($fp)" << endl;
 		//初始化栈空间
-		out << "addiu $sp $fp 12" << endl;
+		out << "addiu $sp $fp 8" << endl;
 		initializeStack(funcName,out);
 	}
 }
@@ -857,12 +922,18 @@ void helpBJump(FourYuanItem item,ofstream & out) {
 		else {
 			getAddrOfLocal(item.getFuncName(),item.getId(), "$a1", out);
 		}
+		out << "lw $a1 0($a1)" << endl;
 	}
 	else if (obj.at(0) == 'T') {
-		getAddrOfTemp(stringToInt(obj.substr(1)),"$a1",out);
+		int g = stringToInt(obj.substr(1));
+		if (g > TEMP_REGISTER) {
+			getAddrOfTemp(g, "$a1", out);
+			out << "lw $a1 0($a1)" << endl;
+		}
+		else {
+			out << "move $a1 " << "$t" << (g + 3) << endl;
+		}
 	}
-	//取出比较的数
-	out << "lw $a1 0($a1)" << endl;
 	switch (item.type)
 	{
 	case BEZ:
@@ -892,6 +963,16 @@ void helpBJump(FourYuanItem item,ofstream & out) {
 void helpReturn(ofstream & out) {
 	//栈指针恢复到$fp
 	out << "move $sp $fp" << endl;
+	//$k0 $k1寄存器值恢复
+	out << "lw $t9 -4($sp)" << endl;
+	out << "lw $t8 -8($sp)" << endl;
+	out << "lw $t7 -12($sp)" << endl;
+	out << "lw $t6 -16($sp)" << endl;
+	out << "lw $t5 -20($sp)" << endl;
+	out << "lw $t4 -24($sp)" << endl;
+	out << "lw $k1 -28($sp)" << endl;
+	out << "lw $k0 -32($sp)" << endl;
+	out << "addiu $sp $sp -32" << endl;
 	//返回地址存入$ra
 	out << "lw $ra 0($fp)" << endl;
 	//函数栈区起始地址恢复--->上一级函数基地址$fp恢复
@@ -920,8 +1001,14 @@ void generateText(ofstream & out) {
 				out << "lw $a2 0($a2)" << endl;
 			}
 			else {//临时变量
-				getAddrOfTemp(stringToInt(item.target.substr(1)),"$a2",out);
-				out << "lw $a2 0($a2)" << endl;
+				int g = stringToInt(item.target.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$a2", out);
+					out << "lw $a2 0($a2)" << endl;
+				}
+				else {
+					out << "move $a2 " << "$t" << (g + 3) << endl;
+				}
 			}
 			out << "sw $a2 " << currentParamSp << "($0)" << endl;
 			currentParamSp += 4;
@@ -999,16 +1086,24 @@ void generateText(ofstream & out) {
 				int order = stringToInt(item.target.substr(1));
 				SymbolTableItem item = globalSymbolTable.at(order);
 				if (item.getFuncName() == "GLOBAL") {
-					getAddrOfGlobal(item.getId(),"$a3",out);
+					getAddrOfGlobal(item.getId(),"$a0",out);
 				}
 				else {
-					getAddrOfLocal(item.getFuncName(),item.getId(), "$a3", out);
+					getAddrOfLocal(item.getFuncName(),item.getId(), "$a0", out);
 				}
+				out << "lw $a0 0($a0)" << endl;
 			}
 			else if (item.target.at(0) == 'T') {
-				getAddrOfTemp(stringToInt(item.target.substr(1)),"$a3",out);
+				int g = stringToInt(item.target.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$a0", out);
+					out << "lw $a0 0($a0)" << endl;
+				}
+				else {
+					out << "move $a0 " << "$t" << (g + 3) << endl;
+				}
 			}
-			out << "lw $a0 0($a3)" << endl;
+			
 			if (!item.isNotPrintCharId)
 				out << "li $v0 11" << endl;
 			else
@@ -1034,11 +1129,18 @@ void generateText(ofstream & out) {
 				else {
 					getAddrOfLocal(item.getFuncName(), item.getId(), "$v0", out);
 				}
+				out << "lw $v0 0($v0)" << endl;
 			}
 			else if (item.target.at(0) == 'T') {
-				getAddrOfTemp(stringToInt(item.target.substr(1)), "$v0", out);
+				int g = stringToInt(item.target.substr(1));
+				if (g > TEMP_REGISTER) {
+					getAddrOfTemp(g, "$v0", out);
+					out << "lw $v0 0($v0)" << endl;
+				}
+				else {
+					out << "move $v0 " << "$t" << (g + 3) << endl;
+				}
 			}
-			out << "lw $v0 0($v0)" << endl;
 			out << "sw $v0 " << returnValueSpace << "($0)" << endl;
 			//返回地址
 			helpReturn(out);

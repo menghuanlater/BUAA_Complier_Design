@@ -53,7 +53,7 @@ void testAllDefine{
     printf("gCh4:",gCh4);
 
     i = 0;
-    printf("gIn2[]:");
+    printf("gInt2[]:");
     while(i<10){
         i = i + 1;
         printf(gInt2[i-1]);
