@@ -2505,7 +2505,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 			}
         }
 		four.type = PrintChar;
-		four.target = "10";
+		four.target = "\n";
 		if (isCache) {
 			cache.push_back(four);
 		}
@@ -2536,7 +2536,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 			globalTmpCodeArr.push_back(four);
 		}
 		four.type = PrintChar;
-		four.target = "10";
+		four.target = "\n";
 		if (isCache) {
 			cache.push_back(four);
 		}

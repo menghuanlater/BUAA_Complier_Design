@@ -100,6 +100,10 @@ int stringToInt(string target) {
 
 void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 	vector<PostfixItem> tmp;
+	if (tar.size() == 1) {
+		obj.push_back(tar.at(0));
+		return;
+	}
 	if (tar.size() > 0) {
 		PostfixItem t = tar.at(0);
 		if (t.type == CharType && (t.number == '+' || t.number == '-')) {
@@ -413,7 +417,7 @@ void writeTmpCodeToFile() {
 			constStringSet.push_back(item.target);
 			break;
 		case PrintChar:
-			if (item.target == "10") {
+			if (item.target == "\n") {
 				out << "New Line." << endl;
 			}else
 				out << "Print char " << '\'' << item.target.at(0) << '\'' << endl;
@@ -467,6 +471,10 @@ void generateMipsCode() {
 void generateData(ofstream & out) {
 	for (unsigned int i = 0; i < constStringSet.size(); i++) {
 		string item = constStringSet.at(i);
+		//检查是否是重复的公共字符串
+		map<string,string>::iterator iter = stringWithLabel.find(item);
+		if(iter!=stringWithLabel.end())
+			continue;
 		strMemSize += item.size() + 1;//'\0'占一个字节
 		string label = generateStrLabel();
 		out << "\t" << label << ":.asciiz \"" << item << "\"" << endl;
@@ -976,7 +984,7 @@ void generateText(ofstream & out) {
 			break;
 		}
 		case PrintChar:
-			out << "li $a0 " << stringToInt(item.target) << endl;
+			out << "li $a0 " << (int)item.target.at(0) << endl;
 			out << "li $v0 11" << endl;
 			out << "syscall" << endl;
 			break;
