@@ -165,6 +165,7 @@ void main(){
     g_var_int1 = (1*(1 + 3) * 'a'*(1) + g_var_int_arr[4]) / (returnTwo(1));
     g_var_int2 = (666/g_var_int_arr[2])/111*(returnTen(2));
     printGlobalVarValue;
+    printf(-3*-4++7+-6);
 
     relationFalg = 'a';
     testIfElse(relationFalg);

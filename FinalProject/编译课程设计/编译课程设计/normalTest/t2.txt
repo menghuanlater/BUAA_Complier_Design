@@ -1,0 +1,154 @@
+const int MAX=10;
+const cHaR A='a';
+const cHaR plus = '+', minus = '-', mult = '*', div = '/';
+
+int n,x,y,kind,m,ans,_a,_b;
+char ch,alphabet[26];
+
+Void testDefine
+{
+    CONST int int0=0,int1=1,int10=10;
+
+    const int int_0=0,int_1=-1,int_10=-10;
+
+    const int _int0=0,_int1=+1,_int10=+10;
+
+    const char char0='0',char1='1';
+
+    int var0,var1,arr1[1],var11,arr11[11];
+
+    alphabet[0] = 'a';
+    alphabet[1] = 'b';
+    alphabet[2] = 'c';
+    alphabet[3] = 'd';
+    alphabet[4] = 'e';
+    alphabet[5] = 'f';
+    alphabet[6] = 'g';
+    alphabet[7] = 'h';
+    alphabet[8] = 'i';
+    alphabet[9] = 'j';
+    alphabet[10] = 'k';
+    alphabet[11] = 'l';
+    alphabet[12] = 'm';
+    alphabet[13] = 'n';
+    alphabet[14] = 'o';
+    alphabet[15] = 'p';
+    alphabet[16] = 'q';
+    alphabet[17] = 'r';
+    alphabet[18] = 's';
+    alphabet[19] = 't';
+    alphabet[20] = 'u';
+    alphabet[21] = 'v';
+    alphabet[22] = 'w';
+    alphabet[23] = 'x';
+    alphabet[24] = 'y';
+    alphabet[25] = 'z';
+}
+
+int fibo(int n)
+{
+    if (n<0) return(-1);
+    else if (n==0) return(0);
+    else if (n==1) return(1);
+    else if (n>MAX) return(-2);
+    else return(fibo(n-1)+fibo(n-2));
+}
+
+void printspace
+{
+    printf(" ");
+}
+
+void display(int m)
+{
+    int i;
+    char letter;
+    if (m<=0)
+        return;
+    else if (m>26)
+        m = 26;
+    else {
+        i = 0;
+        while(i<m)
+        {
+            printf(alphabet[i]);
+            i = i + 1;
+        }
+        printspace;
+    }
+}
+
+void Expre
+{
+    int x,y,z;
+    scanf(x,y);
+    z = +((x+y) - (-y*(-2)) + (-2*0));
+    printf("expre:",z);
+    printspace;
+}
+
+int mod(int x, int y)
+{
+    int z;
+    z = x - x/y*y;
+    return(z);
+}
+
+int gcd(int a, int b)
+{
+    if (b==0) return(0);
+    else if (mod(a,b)==0)
+        return(b);
+    else return(gcd(b, mod(a,b)));
+}
+
+void process
+{
+    char choice;
+    scanf(choice);
+    switch (choice)
+    {
+        case 'a':
+            expre;
+        case 'b':
+        {
+            scanf(n);
+            ans = fibo(n);
+            printf("fibo:",ans);
+            printspace;
+        }
+        case 'd':
+        {
+            scanf(m);
+            display(m);
+        }
+        case 'e':
+        {
+            scanf(_a,_b);
+            printf("gcd:",gcd(_a,_b));
+            printspace;
+        }
+        case 'f':
+            printf("string:!#$%&'()*+,-./:;<=>?@[\]^_`{|}~");
+    }
+    {
+        ;
+    }
+    ;
+    {}
+}
+
+void main()
+{
+    int i,num;
+    i = 0;
+    testDefine;
+    scanf(num);
+    while (i<num)
+    {
+        i = i + 1;
+        process;
+    }
+    return;
+    printf("Test Not Return");
+}

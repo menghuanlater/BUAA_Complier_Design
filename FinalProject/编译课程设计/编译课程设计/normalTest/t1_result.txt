@@ -43,6 +43,7 @@ g_var_char_arr:
 x
 x
 x
+13
 Sally Go2.
 Lala
 DiDi

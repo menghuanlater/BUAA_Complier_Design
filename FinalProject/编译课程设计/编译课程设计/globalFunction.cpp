@@ -1062,6 +1062,7 @@ void generateText(ofstream & out) {
 			break;
 		}
 		case PrintStr: {
+			cancelEscapeChar(item.target);
 			map<string, string>::iterator iter = stringWithLabel.find(item.target);
 			if (iter != stringWithLabel.end()) {
 				out << "la $a0 " << iter->second << endl;

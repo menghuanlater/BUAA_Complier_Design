@@ -1,241 +1,220 @@
-void testalldefine()
-G33gint1 = 10 + 0
-G36gint4 = 40 + 0
-G38gch1 = 48 + 0
-G41gch4 = 57 + 0
-G43i = 0 + 0
-Label1:
-T1 = 10 + G41gch4
-T2 = T1 - 56
-T3 = T2 - 1
-T4 = G43i - T3
-BGEZ T4 Label2
-T5 = 20 + G43i
-G34gint2[G43i] = T5 + 0
-T6 = 30 + G43i
-G35gint3[G43i] = T6 + 0
-T7 = 50 + G43i
-G37gint5[G43i] = T7 + 0
-G39gch2[G43i] = 97 + 0
-G40gch3[G43i] = 98 + 0
-G42gch5[G43i] = 99 + 0
-T8 = G43i + 56
-T9 = T8 - 55
-G43i = T9 + 0
-Jump Label1
-Label2:
-Print string "int1:"
-Print int 333
-New Line.
-Print string "int2:"
-Print int 789
-New Line.
-Print string "int3:"
-Print int -7125
-New Line.
-Print string "int4:"
-Print int -1
-New Line.
-Print string "char1:"
-Print char '0'
-New Line.
-Print string "char2:"
-Print char '-'
-New Line.
-Print string "char3:"
-Print char '*'
-New Line.
-Print string "char4:"
-Print char 'D'
-New Line.
-Print string "gInt1:"
-Print id G33gint1
-New Line.
-Print string "gInt4:"
-Print id G36gint4
-New Line.
-Print string "gCh1:"
-Print id G38gch1
-New Line.
-Print string "gCh4:"
-Print id G41gch4
-New Line.
-G43i = 0 + 0
-Print string "gInt2[]:"
-New Line.
-Label3:
-T10 = 10 + 0
-T11 = G43i - T10
-BGEZ T11 Label4
-T12 = G43i + 1
-G43i = T12 + 0
-T13 = G43i - 1
-T14 = G34gint2[T13]
-Print id T14
-New Line.
-Jump Label3
-Label4:
-G43i = 0 + 0
-Print string "gInt3[]:"
-New Line.
-Label5:
-T15 = 10 + 0
-T16 = G43i - T15
-BGEZ T16 Label6
-T17 = G43i + 1
-G43i = T17 + 0
-T18 = G43i - 1
-T19 = G35gint3[T18]
-Print id T19
-New Line.
-Jump Label5
-Label6:
-G43i = 0 + 0
-Print string "gInt5[]:"
-New Line.
-Label7:
-T20 = 10 + 0
-T21 = G43i - T20
-BGEZ T21 Label8
-T22 = G43i + 1
-G43i = T22 + 0
-T23 = G43i - 1
-T24 = G37gint5[T23]
-Print id T24
-New Line.
-Jump Label7
-Label8:
-Print string "gCh2[3]:"
-T25 = 3 + 0
-T26 = G39gch2[T25]
-Print id T26
-New Line.
-Print string "gCh2[6]:"
-T27 = 6 + 0
-T28 = G39gch2[T27]
-Print id T28
-New Line.
-Print string "gCh3[3]:"
-T29 = 3 + 0
-T30 = G40gch3[T29]
-Print id T30
-New Line.
-Print string "gCh3[6]:"
-T31 = 6 + 0
-T32 = G40gch3[T31]
-Print id T32
-New Line.
-Print string "gCh5[3]:"
-T33 = 3 + 0
-T34 = G42gch5[T33]
-Print id T34
-New Line.
-Print string "gCh5[6]:"
-T35 = 6 + 0
-T36 = G42gch5[T35]
-Print id T36
-New Line.
+void testdefine()
+G15alphabet[0] = 97 + 0
+G15alphabet[1] = 98 + 0
+G15alphabet[2] = 99 + 0
+G15alphabet[3] = 100 + 0
+G15alphabet[4] = 101 + 0
+G15alphabet[5] = 102 + 0
+G15alphabet[6] = 103 + 0
+G15alphabet[7] = 104 + 0
+G15alphabet[8] = 105 + 0
+G15alphabet[9] = 106 + 0
+G15alphabet[10] = 107 + 0
+G15alphabet[11] = 108 + 0
+G15alphabet[12] = 109 + 0
+G15alphabet[13] = 110 + 0
+G15alphabet[14] = 111 + 0
+G15alphabet[15] = 112 + 0
+G15alphabet[16] = 113 + 0
+G15alphabet[17] = 114 + 0
+G15alphabet[18] = 115 + 0
+G15alphabet[19] = 116 + 0
+G15alphabet[20] = 117 + 0
+G15alphabet[21] = 118 + 0
+G15alphabet[22] = 119 + 0
+G15alphabet[23] = 120 + 0
+G15alphabet[24] = 121 + 0
+G15alphabet[25] = 122 + 0
 Ret
-void givevaluetoglobalvar()
-G8gint1 = 100 + 0
-G11gint4 = 400 + 0
-G13gch1 = 68 + 0
-G16gch4 = 70 + 0
-G45i = 0 + 0
-Label9:
-T1 = 10 + 0
-T2 = G45i - T1
-BGEZ T2 Label10
-T3 = 200 + G45i
-G9gint2[G45i] = T3 + 0
-T4 = 300 + G45i
-G10gint3[G45i] = T4 + 0
-T5 = 500 + G45i
-G12gint5[G45i] = T5 + 0
-G14gch2[G45i] = 105 + 0
-G15gch3[G45i] = 106 + 0
-G17gch5[G45i] = 107 + 0
-T6 = G45i + 66
-T7 = T6 - 65
-G45i = T7 + 0
-Jump Label9
-Label10:
-Ret
-int calculatefactorial()
-Param int item
+int fibo()
+Param int n
 T1 = 0 + 0
-T2 = G47item - T1
-BGEZ T2 Label11
-Print string "The factorial number must >= 0 ."
-New Line.
+T2 = G34n - T1
+BGEZ T2 Label1
+Ret int -1
+Jump Label2
+Label1:
+T3 = 0 + 0
+T4 = G34n - T3
+BNZ T4 Label3
 Ret int 0
+Jump Label4
+Label3:
+T5 = 1 + 0
+T6 = G34n - T5
+BNZ T6 Label5
+Ret int 1
+Jump Label6
+Label5:
+T7 = 10 + 0
+T8 = G34n - T7
+BLEZ T8 Label7
+Ret int -2
+Jump Label8
+Label7:
+T9 = G34n - 1
+Push T9
+Call fibo
+T10 = Ret + 0
+T11 = G34n - 2
+Push T11
+Call fibo
+T12 = Ret + 0
+T13 = T10 + T12
+Ret id T13
+Label8:
+Label6:
+Label4:
+Label2:
+Ret
+void printspace()
+Print string " "
+New Line.
+Ret
+void display()
+Param int m
+T1 = 0 + 0
+T2 = G37m - T1
+BGZ T2 Label9
+Ret
+Jump Label10
+Label9:
+T3 = 26 + 0
+T4 = G37m - T3
+BLEZ T4 Label11
+G37m = 26 + 0
 Jump Label12
 Label11:
-T3 = 0 + 0
-T4 = G47item - T3
-BNZ T4 Label13
-Ret int 1
-Jump Label14
+G38i = 0 + 0
 Label13:
-T5 = G47item - 1
-Push T5
-Call calculatefactorial
-T6 = Ret + 0
-T7 = T6 * G47item
-Ret id T7
-Label14:
-Label12:
-Ret
-int fibonaci()
-Param int n
-T1 = 2 + 0
-T2 = G49n - T1
-BGZ T2 Label15
-T3 = G49n + 1
-T4 = 1 + 0
-T5 = T3 - T4
-BGZ T5 Label17
-Print string "The Fibonaci number must >=1."
-New Line.
-Ret int 0
-Jump Label18
-Label17:
-Label18:
-Ret int 1
-Jump Label16
-Label15:
-T6 = G49n - 1
-Push T6
-Call fibonaci
-T7 = Ret + 0
-T8 = G49n - 2
-Push T8
-Call fibonaci
-T9 = Ret + 0
-T10 = T7 + T9
-Ret id T10
-Label16:
-Ret
-void main()
-Call givevaluetoglobalvar
-Call testalldefine
-T1 = 8 + 0
-Push T1
-Call fibonaci
-T2 = Ret + 0
-G52givevaluetoglobalvar = T2 + 0
-T3 = 10 + 0
-Push T3
-Call calculatefactorial
-T4 = Ret + 0
-G53testalldefine[1] = T4 + 0
-Print string "xxx:"
-Print id G52givevaluetoglobalvar
-New Line.
-Print string "yyy:"
-T5 = 1 + 0
-T6 = G53testalldefine[T5]
+T5 = G38i - G37m
+BGEZ T5 Label14
+T6 = G15alphabet[G38i]
 Print id T6
 New Line.
-Print string "Over,Ok!"
+T7 = G38i + 1
+G38i = T7 + 0
+Jump Label13
+Label14:
+Call printspace
+Label12:
+Label10:
+Ret
+void expre()
+Read Int G41x
+Read Int G42y
+T1 = G41x + G42y
+T2 = G42y * -2
+T3 = 0 - T2
+T4 = T1 - T3
+T5 = T4 + 0
+G43z = T5 + 0
+Print string "expre:"
+Print id G43z
+New Line.
+Call printspace
+Ret
+int mod()
+Param int x
+Param int y
+T1 = G45x / G46y
+T2 = T1 * G46y
+T3 = G45x - T2
+G47z = T3 + 0
+Ret id G47z
+Ret
+int gcd()
+Param int a
+Param int b
+T1 = 0 + 0
+T2 = G50b - T1
+BNZ T2 Label15
+Ret int 0
+Jump Label16
+Label15:
+Push G49a
+Push G50b
+Call mod
+T3 = Ret + 0
+T4 = 0 + 0
+T5 = T3 - T4
+BNZ T5 Label17
+Ret id G50b
+Jump Label18
+Label17:
+Push G49a
+Push G50b
+Call mod
+T6 = Ret + 0
+Push G50b
+Push T6
+Call gcd
+T7 = Ret + 0
+Ret id T7
+Label18:
+Label16:
+Ret
+void process()
+Read Char G52choice
+T3 = G52choice - 97
+BEZ T3 Label20
+T4 = G52choice - 98
+BEZ T4 Label21
+T5 = G52choice - 100
+BEZ T5 Label22
+T6 = G52choice - 101
+BEZ T6 Label23
+T7 = G52choice - 102
+BEZ T7 Label24
+Jump Label19
+Label20:
+Call expre
+Jump Label19
+Label21:
+Read Int G6n
+Push G6n
+Call fibo
+T1 = Ret + 0
+G11ans = T1 + 0
+Print string "fibo:"
+Print id G11ans
+New Line.
+Call printspace
+Jump Label19
+Label22:
+Read Int G10m
+Push G10m
+Call display
+Jump Label19
+Label23:
+Read Int G12_a
+Read Int G13_b
+Print string "gcd:"
+Push G12_a
+Push G13_b
+Call gcd
+T2 = Ret + 0
+Print id T2
+New Line.
+Call printspace
+Jump Label19
+Label24:
+Print string "string:!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+New Line.
+Jump Label19
+Label19:
+Ret
+void main()
+G54i = 0 + 0
+Call testdefine
+Read Int G55num
+Label26:
+T1 = G54i - G55num
+BGEZ T1 Label27
+T2 = G54i + 1
+G54i = T2 + 0
+Call process
+Jump Label26
+Label27:
+Print string "Test Not Return"
 New Line.
