@@ -1,0 +1,156 @@
+int1:333
+int2:789
+int3:-7125
+int4:-1
+char1:0
+char2:-
+char3:*
+char4:D
+gInt1:10
+gInt4:40
+gCh1:0
+gCh4:9
+gInt2[]:
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+gInt3[]:
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+gInt5[]:
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+gCh2[3]:a
+gCh2[6]:a
+gCh3[3]:b
+gCh3[6]:b
+gCh5[3]:c
+gCh5[6]:c
+many params1:5226
+many params2:-1446
+The All Value Of GGG:
+a
+b
+c
+4
+e
++
+-
+*
+/
+_
+Hello Boy, you need to be careful
+If you input 0 ---> end the procedure
+If you input 1 ---> we return the number of 1+1
+If you input 2 ---> we return the number of 2*2
+If you input others ---> we carry out the next procedure
+Hey,Input int number to choose:
+
+//输入0
+You mean to exit.Ok -_-
+//程序结束
+//输入1
+The result 1+1 is:2
+//程序结束
+//输入2
+The result 2*2 is:4
+//程序结束
+//输入其他
+Next the trip.
+complex --- x1:-211
+complex --- x2:247
+complex --- x3:157
+complex --- x4:4708
+complex --- x5:16252
+//继续下面的运行
+
+complex expression add --- > x6:4578
+Test scanf
+
+//输入模块省略,自行检查
+Test printf character
+return100:d
+gCh2[1]:i
+gCh1:D
+const1:y
+const2:a
+multi_layer:14165
+In If-Else i = 4
+In If-Else i = 3
+In If-Else i = 2
+In If-Else i = 1
+Test If-Else Over.
+At test While:1
+At test While:2
+At test While:3
+At test While:4
+At test While:5
+At test While:6
+At test While:7
+At test While:8
+At test While:9
+At test While:10
+At test While:11
+At test While:12
+At test While:13
+At test While:14
+At test While:15
+At test While:16
+At test While:17
+At test While:18
+At test While:19
+At test While:20
+At test While:21
+At test While:22
+At test While:23
+At test While:24
+At test While:25
+At test While:26
+At test While:27
+Welcome
+Welcome
+False
+Tiga
+Tiga
+Tiga
+Sally
+TAT_-_
+My Sniper
+CoCo
+True
+Tiga
+Tiga
+Tiga
+TAT_-_
+My Sniper
+CoCo
+Tiga
+Tiga
+Tiga
+My Sniper
+CoCo
+CoCo
+Congratulations,you passed all tests.

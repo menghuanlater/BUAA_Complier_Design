@@ -1,220 +1,897 @@
-void testdefine()
-G15alphabet[0] = 97 + 0
-G15alphabet[1] = 98 + 0
-G15alphabet[2] = 99 + 0
-G15alphabet[3] = 100 + 0
-G15alphabet[4] = 101 + 0
-G15alphabet[5] = 102 + 0
-G15alphabet[6] = 103 + 0
-G15alphabet[7] = 104 + 0
-G15alphabet[8] = 105 + 0
-G15alphabet[9] = 106 + 0
-G15alphabet[10] = 107 + 0
-G15alphabet[11] = 108 + 0
-G15alphabet[12] = 109 + 0
-G15alphabet[13] = 110 + 0
-G15alphabet[14] = 111 + 0
-G15alphabet[15] = 112 + 0
-G15alphabet[16] = 113 + 0
-G15alphabet[17] = 114 + 0
-G15alphabet[18] = 115 + 0
-G15alphabet[19] = 116 + 0
-G15alphabet[20] = 117 + 0
-G15alphabet[21] = 118 + 0
-G15alphabet[22] = 119 + 0
-G15alphabet[23] = 120 + 0
-G15alphabet[24] = 121 + 0
-G15alphabet[25] = 122 + 0
-Ret
-int fibo()
-Param int n
-T1 = 0 + 0
-T2 = G34n - T1
-BGEZ T2 Label1
-Ret int -1
-Jump Label2
+void testalldefine()
+G34gint1 = 10 + 0
+G37gint4 = 40 + 0
+G39gch1 = 48 + 0
+G42gch4 = 57 + 0
+G44i = 0 + 0
 Label1:
-T3 = 0 + 0
-T4 = G34n - T3
-BNZ T4 Label3
-Ret int 0
-Jump Label4
-Label3:
-T5 = 1 + 0
-T6 = G34n - T5
-BNZ T6 Label5
-Ret int 1
-Jump Label6
-Label5:
-T7 = 10 + 0
-T8 = G34n - T7
-BLEZ T8 Label7
-Ret int -2
-Jump Label8
-Label7:
-T9 = G34n - 1
-Push T9
-Call fibo
-T10 = Ret + 0
-T11 = G34n - 2
-Push T11
-Call fibo
-T12 = Ret + 0
-T13 = T10 + T12
-Ret id T13
-Label8:
-Label6:
-Label4:
+T1 = 10 + G42gch4
+T2 = T1 - 56
+T3 = T2 - 1
+T4 = G44i - T3
+BGEZ T4 Label2
+T5 = 20 + G44i
+G35gint2[G44i] = T5 + 0
+T6 = 30 + G44i
+G36gint3[G44i] = T6 + 0
+T7 = 50 + G44i
+G38gint5[G44i] = T7 + 0
+G40gch2[G44i] = 97 + 0
+G41gch3[G44i] = 98 + 0
+G43gch5[G44i] = 99 + 0
+T8 = G44i + 56
+T9 = T8 - 55
+G44i = T9 + 0
+Jump Label1
 Label2:
-Ret
-void printspace()
-Print string " "
+Print string "int1:"
+Print int 333
+New Line.
+Print string "int2:"
+Print int 789
+New Line.
+Print string "int3:"
+Print int -7125
+New Line.
+Print string "int4:"
+Print int -1
+New Line.
+Print string "char1:"
+Print char '0'
+New Line.
+Print string "char2:"
+Print char '-'
+New Line.
+Print string "char3:"
+Print char '*'
+New Line.
+Print string "char4:"
+Print char 'D'
+New Line.
+Print string "gInt1:"
+Print id G34gint1
+New Line.
+Print string "gInt4:"
+Print id G37gint4
+New Line.
+Print string "gCh1:"
+Print id G39gch1
+New Line.
+Print string "gCh4:"
+Print id G42gch4
+New Line.
+G44i = 0 + 0
+Print string "gInt2[]:"
+New Line.
+Label3:
+T10 = 10 + 0
+T11 = G44i - T10
+BGEZ T11 Label4
+T12 = G44i + 1
+G44i = T12 + 0
+T13 = G44i - 1
+T14 = G35gint2[T13]
+Print id T14
+New Line.
+Jump Label3
+Label4:
+G44i = 0 + 0
+Print string "gInt3[]:"
+New Line.
+Label5:
+T15 = 10 + 0
+T16 = G44i - T15
+BGEZ T16 Label6
+T17 = G44i + 1
+G44i = T17 + 0
+T18 = G44i - 1
+T19 = G36gint3[T18]
+Print id T19
+New Line.
+Jump Label5
+Label6:
+G44i = 0 + 0
+Print string "gInt5[]:"
+New Line.
+Label7:
+T20 = 10 + 0
+T21 = G44i - T20
+BGEZ T21 Label8
+T22 = G44i + 1
+G44i = T22 + 0
+T23 = G44i - 1
+T24 = G38gint5[T23]
+Print id T24
+New Line.
+Jump Label7
+Label8:
+Print string "gCh2[3]:"
+T25 = 3 + 0
+T26 = G40gch2[T25]
+Print id T26
+New Line.
+Print string "gCh2[6]:"
+T27 = 6 + 0
+T28 = G40gch2[T27]
+Print id T28
+New Line.
+Print string "gCh3[3]:"
+T29 = 3 + 0
+T30 = G41gch3[T29]
+Print id T30
+New Line.
+Print string "gCh3[6]:"
+T31 = 6 + 0
+T32 = G41gch3[T31]
+Print id T32
+New Line.
+Print string "gCh5[3]:"
+T33 = 3 + 0
+T34 = G43gch5[T33]
+Print id T34
+New Line.
+Print string "gCh5[6]:"
+T35 = 6 + 0
+T36 = G43gch5[T35]
+Print id T36
 New Line.
 Ret
-void display()
-Param int m
-T1 = 0 + 0
-T2 = G37m - T1
-BGZ T2 Label9
-Ret
-Jump Label10
+void givevaluetoglobalvar()
+G8gint1 = 100 + 0
+G11gint4 = 400 + 0
+G13gch1 = 68 + 0
+G16gch4 = 70 + 0
+G46i = 0 + 0
 Label9:
-T3 = 26 + 0
-T4 = G37m - T3
-BLEZ T4 Label11
-G37m = 26 + 0
-Jump Label12
-Label11:
-G38i = 0 + 0
-Label13:
-T5 = G38i - G37m
-BGEZ T5 Label14
-T6 = G15alphabet[G38i]
-Print id T6
-New Line.
-T7 = G38i + 1
-G38i = T7 + 0
-Jump Label13
-Label14:
-Call printspace
-Label12:
+T1 = 10 + 0
+T2 = G46i - T1
+BGEZ T2 Label10
+T3 = 200 + G46i
+G9gint2[G46i] = T3 + 0
+T4 = 300 + G46i
+G10gint3[G46i] = T4 + 0
+T5 = 500 + G46i
+G12gint5[G46i] = T5 + 0
+G14gch2[G46i] = 105 + 0
+G15gch3[G46i] = 106 + 0
+G17gch5[G46i] = 107 + 0
+T6 = G46i + 66
+T7 = T6 - 65
+G46i = T7 + 0
+Jump Label9
 Label10:
 Ret
-void expre()
-Read Int G41x
-Read Int G42y
-T1 = G41x + G42y
-T2 = G42y * -2
-T3 = 0 - T2
-T4 = T1 - T3
-T5 = T4 + 0
-G43z = T5 + 0
-Print string "expre:"
-Print id G43z
+int returnadd()
+Param int int1
+Param int int2
+Param int int3
+Param int int4
+Param int int5
+Param int int6
+Param int int7
+Param int int8
+Param int int9
+Param int int10
+T1 = G48int1 + G49int2
+T2 = T1 + G50int3
+T3 = T2 + G51int4
+T4 = T3 + G52int5
+T5 = T4 + G53int6
+T6 = T5 + G54int7
+T7 = T6 + G55int8
+T8 = T7 + G56int9
+T9 = T8 + G57int10
+G58gint2 = T9 + 0
+Ret id G58gint2
+Ret
+int returnmix()
+Param char char1
+Param char char2
+Param char char3
+Param char char4
+Param char char5
+Param char char6
+Param char char7
+Param char char8
+Param char char9
+Param char char10
+G71i = 0 + 0
+T1 = G60char1 + G61char2
+T2 = T1 + G62char3
+T3 = T2 + G63char4
+T4 = T3 + G64char5
+T5 = G65char6 * G66char7
+T6 = T4 - T5
+T7 = T6 + G67char8
+T8 = T7 - G68char9
+T9 = G69char10 / 2
+T10 = T8 + T9
+G70gch2 = T10 + 0
+Label11:
+T11 = 10 + 0
+T12 = G71i - T11
+BGEZ T12 Label12
+T13 = G71i - 0
+BEZ T13 Label14
+T14 = G71i - 1
+BEZ T14 Label15
+T15 = G71i - 2
+BEZ T15 Label16
+T16 = G71i - 3
+BEZ T16 Label17
+T17 = G71i - 4
+BEZ T17 Label18
+T18 = G71i - 5
+BEZ T18 Label19
+T19 = G71i - 6
+BEZ T19 Label20
+T20 = G71i - 7
+BEZ T20 Label21
+T21 = G71i - 8
+BEZ T21 Label22
+T22 = G71i - 9
+BEZ T22 Label23
+Print string "Are you kidding me?\n"
 New Line.
-Call printspace
-Ret
-int mod()
-Param int x
-Param int y
-T1 = G45x / G46y
-T2 = T1 * G46y
-T3 = G45x - T2
-G47z = T3 + 0
-Ret id G47z
-Ret
-int gcd()
-Param int a
-Param int b
-T1 = 0 + 0
-T2 = G50b - T1
-BNZ T2 Label15
-Ret int 0
-Jump Label16
+Jump Label13
+Label14:
+G18ggg[0] = G60char1 + 0
+Jump Label13
 Label15:
-Push G49a
-Push G50b
-Call mod
-T3 = Ret + 0
-T4 = 0 + 0
-T5 = T3 - T4
-BNZ T5 Label17
-Ret id G50b
-Jump Label18
-Label17:
-Push G49a
-Push G50b
-Call mod
-T6 = Ret + 0
-Push G50b
-Push T6
-Call gcd
-T7 = Ret + 0
-Ret id T7
-Label18:
+G18ggg[1] = G61char2 + 0
+Jump Label13
 Label16:
-Ret
-void process()
-Read Char G52choice
-T3 = G52choice - 97
-BEZ T3 Label20
-T4 = G52choice - 98
-BEZ T4 Label21
-T5 = G52choice - 100
-BEZ T5 Label22
-T6 = G52choice - 101
-BEZ T6 Label23
-T7 = G52choice - 102
-BEZ T7 Label24
-Jump Label19
-Label20:
-Call expre
-Jump Label19
-Label21:
-Read Int G6n
-Push G6n
-Call fibo
-T1 = Ret + 0
-G11ans = T1 + 0
-Print string "fibo:"
-Print id G11ans
-New Line.
-Call printspace
-Jump Label19
-Label22:
-Read Int G10m
-Push G10m
-Call display
-Jump Label19
-Label23:
-Read Int G12_a
-Read Int G13_b
-Print string "gcd:"
-Push G12_a
-Push G13_b
-Call gcd
-T2 = Ret + 0
-Print id T2
-New Line.
-Call printspace
-Jump Label19
-Label24:
-Print string "string:!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-New Line.
-Jump Label19
+G18ggg[2] = G62char3 + 0
+Jump Label13
+Label17:
+G18ggg[3] = G63char4 + 0
+Jump Label13
+Label18:
+G18ggg[4] = G64char5 + 0
+Jump Label13
 Label19:
+G18ggg[5] = G65char6 + 0
+Jump Label13
+Label20:
+G18ggg[6] = G66char7 + 0
+Jump Label13
+Label21:
+G18ggg[7] = G67char8 + 0
+Jump Label13
+Label22:
+G18ggg[8] = G68char9 + 0
+Jump Label13
+Label23:
+G18ggg[9] = G69char10 + 0
+Jump Label13
+Label13:
+T23 = G71i + 1
+G71i = T23 + 0
+Jump Label11
+Label12:
+Ret id G70gch2
+Ret
+char mixparam()
+Param int int1
+Param char char1
+Param int int2
+Param char char2
+T1 = G73int1 + G74char1
+BEZ T1 Label25
+Ret char '4'
+Jump Label26
+Label25:
+T2 = G75int2 + G76char2
+BEZ T2 Label27
+Ret char '5'
+Jump Label28
+Label27:
+Ret char '4'
+Label28:
+Label26:
+Ret
+int calculatefactorial()
+Param int item
+T1 = 0 + 0
+T2 = G78item - T1
+BGEZ T2 Label29
+Print string "The factorial number must >= 0 ."
+New Line.
+Ret int 0
+Jump Label30
+Label29:
+T3 = 0 + 0
+T4 = G78item - T3
+BNZ T4 Label31
+Ret int 1
+Jump Label32
+Label31:
+T5 = G78item - 1
+Push T5
+Call calculatefactorial
+T6 = Ret + 0
+T7 = T6 * G78item
+Ret id T7
+Label32:
+Label30:
+Ret
+int fibonaci()
+Param int n
+T1 = 2 + 0
+T2 = G80n - T1
+BGZ T2 Label33
+T3 = G80n + 1
+T4 = 1 + 0
+T5 = T3 - T4
+BGZ T5 Label35
+Print string "The Fibonaci number must >=1."
+New Line.
+Ret int 0
+Jump Label36
+Label35:
+Label36:
+Ret int 1
+Jump Label34
+Label33:
+T6 = G80n - 1
+Push T6
+Call fibonaci
+T7 = Ret + 0
+T8 = G80n - 2
+Push T8
+Call fibonaci
+T9 = Ret + 0
+T10 = T7 + T9
+Ret id T10
+Label34:
+Ret
+char return100()
+Ret char '1'
+Ret
+int returnintvalue()
+T1 = 8 + 0
+Push T1
+Call fibonaci
+T2 = Ret + 0
+T3 = 4 + 0
+Push T3
+Call calculatefactorial
+T4 = Ret + 0
+T5 = 100 + T2
+T6 = T5 + T4
+Ret id T6
+Ret
+void complexexpression()
+T1 = 9 + 0
+Push T1
+Call fibonaci
+T2 = Ret + 0
+T3 = 7 * T2
+T4 = 7 - T3
+T5 = 5 + 0
+Push T5
+Call calculatefactorial
+T6 = Ret + 0
+T7 = T6 - 174
+T8 = T7 + 67
+Call return100
+T9 = Ret + 0
+T10 = T9 - 16
+T11 = T10 - 12
+T12 = T4 / 2
+T13 = T8 / T11
+T14 = T12 - T13
+T15 = T14 + -96
+G84x1 = T15 + 0
+Print string "complex --- x1:"
+Print id G84x1
+New Line.
+T16 = 7 + 0
+Push T16
+Call fibonaci
+T17 = Ret + 0
+T18 = 1 + 0
+Push T18
+Call fibonaci
+T19 = Ret + 0
+T20 = -15 + T17
+T21 = T20 + T19
+T22 = T21 - 2
+T23 = 3 + 0
+Push T23
+Call calculatefactorial
+T24 = Ret + 0
+T25 = 56 * T22
+T26 = 89 - T25
+T27 = T26 + T24
+T28 = 3 * T27
+T29 = T28 - 3
+T30 = 2 + T29
+T31 = T30 + 4
+T32 = 1 + T31
+T33 = T32 - 0
+T34 = T33 - 1
+T35 = 111 + T34
+T36 = T35 + 2
+T37 = 4 + 0
+Push T37
+Call calculatefactorial
+T38 = Ret + 0
+T39 = 6 + 0
+Push T39
+Call fibonaci
+T40 = Ret + 0
+T41 = T38 / 4
+T42 = T41 * 111
+T43 = T36 - T42
+T44 = T43 + T40
+G85x2 = T44 + 0
+Print string "complex --- x2:"
+Print id G85x2
+New Line.
+T45 = 6 + 0
+Push T45
+Call fibonaci
+T46 = Ret + 0
+T47 = 139 + T46
+T48 = 2 + 0
+Push T48
+Call fibonaci
+T49 = Ret + 0
+Push T49
+Call fibonaci
+T50 = Ret + 0
+Push T50
+Call fibonaci
+T51 = Ret + 0
+Push T51
+Call fibonaci
+T52 = Ret + 0
+Push T52
+Call calculatefactorial
+T53 = Ret + 0
+T54 = T47 + T53
+T55 = T54 + 9
+G86x3 = T55 + 0
+Print string "complex --- x3:"
+Print id G86x3
+New Line.
+Call return100
+T56 = Ret + 0
+T57 = 3 + 0
+Push T57
+Call fibonaci
+T58 = Ret + 0
+T59 = G9gint2[T58]
+T60 = 3 + 0
+Push T60
+Call calculatefactorial
+T61 = Ret + 0
+T62 = G12gint5[T61]
+T63 = T56 / 50
+T64 = 14 - T63
+T65 = T64 + T59
+T66 = T65 - T62
+T67 = T66 + 5000
+G87x4 = T67 + 0
+Print string "complex --- x4:"
+Print id G87x4
+New Line.
+T68 = 5 + 0
+Push T68
+Call calculatefactorial
+T69 = Ret + 0
+T70 = T69 - 67
+T71 = 4 + 0
+T72 = G10gint3[T71]
+Call return100
+T73 = Ret + 0
+T74 = 5 + 0
+Push T74
+Call fibonaci
+T75 = Ret + 0
+T76 = T70 * 97
+T77 = T76 + G84x1
+T78 = T77 - G86x3
+T79 = T78 + 4666
+T80 = T79 + 72
+T81 = T80 + 87
+T82 = T81 + 57
+T83 = T82 + G13gch1
+T84 = T83 + 5320
+T85 = T84 + 0
+T86 = T85 + T72
+T87 = T86 + 1000
+T88 = T87 - T73
+T89 = T88 + T75
+G88x5 = T89 + 0
+Print string "complex --- x5:"
+Print id G88x5
+New Line.
+Ret
+void complexif_else()
+G90i = 4 + 0
+Label37:
+T1 = 0 + 0
+T2 = G90i - T1
+BLZ T2 Label38
+T3 = 4 + 0
+T4 = G90i - T3
+BNZ T4 Label39
+Print string "In If-Else i = 4"
+New Line.
+Jump Label40
+Label39:
+T5 = 3 + 0
+T6 = G90i - T5
+BNZ T6 Label41
+Print string "In If-Else i = 3"
+New Line.
+Jump Label42
+Label41:
+T7 = 2 + 0
+T8 = G90i - T7
+BNZ T8 Label43
+Print string "In If-Else i = 2"
+New Line.
+Jump Label44
+Label43:
+T9 = 1 + 0
+T10 = G90i - T9
+BNZ T10 Label45
+Print string "In If-Else i = 1"
+New Line.
+Jump Label46
+Label45:
+Print string "Test If-Else Over."
+New Line.
+Label46:
+Label44:
+Label42:
+Label40:
+T11 = G90i - 1
+G90i = T11 + 0
+Jump Label37
+Label38:
+Ret
+void complexswitch_case()
+G92k = 1 + 0
+Label47:
+T1 = 4 + 0
+T2 = G92k - T1
+BGZ T2 Label48
+T9 = G92k - 1
+BEZ T9 Label50
+T10 = G92k - 2
+BEZ T10 Label51
+T11 = G92k - 3
+BEZ T11 Label54
+T12 = G92k - 4
+BEZ T12 Label57
+Jump Label49
+Label50:
+Print string "Welcome"
+New Line.
+Print string "Welcome"
+New Line.
+Jump Label49
+Label51:
+T3 = G92k - 2
+BEZ T3 Label52
+Print string "False"
+New Line.
+Jump Label53
+Label52:
+Print string "True"
+New Line.
+Label53:
+Jump Label49
+Label54:
+G8gint1 = 3 + 0
+Label55:
+BEZ G8gint1 Label56
+Print string "Tiga"
+New Line.
+T4 = G8gint1 - 1
+G8gint1 = T4 + 0
+Jump Label55
+Label56:
+Jump Label49
+Label57:
+T5 = G92k + 1
+T6 = T5 - 2
+BEZ T6 Label59
+T7 = T5 - 3
+BEZ T7 Label60
+T8 = T5 - 4
+BEZ T8 Label61
+Print string "CoCo"
+New Line.
+Jump Label58
+Label59:
+Print string "Sally"
+New Line.
+Jump Label58
+Label60:
+Print string "TAT_-_"
+New Line.
+Jump Label58
+Label61:
+Print string "My Sniper"
+New Line.
+Jump Label58
+Label58:
+Jump Label49
+Label49:
+T13 = G92k + 1
+G92k = T13 + 0
+Jump Label47
+Label48:
+Ret
+void complexwhile()
+G94i = 0 + 0
+Label64:
+T1 = 3 + 0
+T2 = G94i - T1
+BGEZ T2 Label65
+G95j = 0 + 0
+Label66:
+T3 = 3 + 0
+T4 = G95j - T3
+BGEZ T4 Label67
+G96k = 0 + 0
+Label68:
+T5 = 3 + 0
+T6 = G96k - T5
+BGEZ T6 Label69
+Print string "At test While:"
+T7 = G94i * 9
+T8 = G95j * 3
+T9 = T7 + T8
+T10 = T9 + G96k
+T11 = T10 + 1
+Print id T11
+New Line.
+T12 = G96k + 1
+G96k = T12 + 0
+Jump Label68
+Label69:
+T13 = G95j + 1
+G95j = T13 + 0
+Jump Label66
+Label67:
+T14 = G94i + 1
+G94i = T14 + 0
+Jump Label64
+Label65:
+Ret
+int _multi_layer()
+Param int a1
+Param int a2
+T1 = G98a1 + G99a2
+Ret id T1
 Ret
 void main()
-G54i = 0 + 0
-Call testdefine
-Read Int G55num
-Label26:
-T1 = G54i - G55num
-BGEZ T1 Label27
-T2 = G54i + 1
-G54i = T2 + 0
-Call process
-Jump Label26
-Label27:
-Print string "Test Not Return"
+Call givevaluetoglobalvar
+Call testalldefine
+Print string "many params1:"
+T1 = 1 + 0
+T2 = 26 + 0
+T3 = 33 + 0
+T4 = 445 + 0
+T5 = 512 + 0
+T6 = 656 + 0
+T7 = 744 + 0
+T8 = 834 + 0
+T9 = 954 + 0
+T10 = 1021 + 0
+Push T1
+Push T2
+Push T3
+Push T4
+Push T5
+Push T6
+Push T7
+Push T8
+Push T9
+Push T10
+Call returnadd
+T11 = Ret + 0
+Print id T11
+New Line.
+Print string "many params2:"
+T12 = 97 + 0
+T13 = 98 + 0
+T14 = 99 + 0
+T15 = 52 + 0
+T16 = 101 + 0
+T17 = 43 + 0
+T18 = 45 + 0
+T19 = 42 + 0
+T20 = 47 + 0
+T21 = 95 + 0
+Push T12
+Push T13
+Push T14
+Push T15
+Push T16
+Push T17
+Push T18
+Push T19
+Push T20
+Push T21
+Call returnmix
+T22 = Ret + 0
+Print id T22
+New Line.
+G106i = 0 + 0
+Print string "The All Value Of GGG:"
+New Line.
+Label70:
+T23 = 10 + 0
+T24 = G106i - T23
+BGEZ T24 Label71
+T25 = G18ggg[G106i]
+Print id T25
+New Line.
+T26 = G106i + 1
+G106i = T26 + 0
+Jump Label70
+Label71:
+Print string "Hello Boy, you need to be careful"
+New Line.
+Print string "If you input 0 ---> end the procedure"
+New Line.
+Print string "If you input 1 ---> we return the number of 1+1"
+New Line.
+Print string "If you input 2 ---> we return the number of 2*2"
+New Line.
+Print string "If you input others ---> we carry out the next procedure"
+New Line.
+Print string "Hey,Input int number to choose:"
+New Line.
+Read Int G101returnscanfsymbol
+T27 = 0 + 0
+T28 = G101returnscanfsymbol - T27
+BNZ T28 Label72
+Print string "You mean to exit.Ok -_-"
+New Line.
+Jump Label73
+Label72:
+T29 = 1 + 0
+T30 = G101returnscanfsymbol - T29
+BNZ T30 Label74
+Print string "The result 1+1 is:"
+Print int 2
+New Line.
+Jump Label75
+Label74:
+T31 = 2 + 0
+T32 = G101returnscanfsymbol - T31
+BNZ T32 Label76
+Print string "The result 2*2 is:"
+Print int 4
+New Line.
+Jump Label77
+Label76:
+Print string "Next the trip."
+New Line.
+Label77:
+Label75:
+Label73:
+Call complexexpression
+Print string "complex expression add --- > x6:"
+Print int 4578
+New Line.
+Print string "Test scanf"
+New Line.
+Read Int G107int1
+Read Int G108int2
+Read Int G109int3
+Print string "int1:"
+Print id G107int1
+New Line.
+Print string "int2:"
+Print id G108int2
+New Line.
+Print string "int3:"
+Print id G109int3
+New Line.
+Read Char G110char1
+Read Char G111char2
+Read Char G112char3
+Print string "char1:"
+Print id G110char1
+New Line.
+Print string "char2:"
+Print id G111char2
+New Line.
+Print string "char3:"
+Print id G112char3
+New Line.
+Read Int G107int1
+Read Char G110char1
+Read Int G108int2
+Read Char G111char2
+Read Int G109int3
+Read Char G112char3
+Print string "int1:"
+Print id G107int1
+New Line.
+Print string "int2:"
+Print id G108int2
+New Line.
+Print string "int3:"
+Print id G109int3
+New Line.
+Print string "char1:"
+Print id G110char1
+New Line.
+Print string "char2:"
+Print id G111char2
+New Line.
+Print string "char3:"
+Print id G112char3
+New Line.
+Print string "Test printf character"
+New Line.
+Print string "return100:"
+Call return100
+T33 = Ret + 0
+Print id T33
+New Line.
+Print string "gCh2[1]:"
+T34 = 1 + 0
+T35 = G14gch2[T34]
+Print id T35
+New Line.
+Print string "gCh1:"
+Print id G13gch1
+New Line.
+Print string "const1:"
+Print char 'y'
+New Line.
+Print string "const2:"
+Print char 'a'
+New Line.
+Print string "multi_layer:"
+T36 = 3 + 0
+Push T36
+Call calculatefactorial
+T37 = Ret + 0
+Push T37
+Call fibonaci
+T38 = Ret + 0
+T39 = 2333 + 0
+T40 = 6763 + 0
+Push T39
+Push T40
+Call _multi_layer
+T41 = Ret + 0
+T42 = 7 + 0
+Push T42
+Call calculatefactorial
+T43 = Ret + 0
+Push T41
+Push T43
+Call _multi_layer
+T44 = Ret + 0
+T45 = 8 + 0
+Push T45
+Call fibonaci
+T46 = Ret + 0
+Push T44
+Push T46
+Call _multi_layer
+T47 = Ret + 0
+Push T38
+Push T47
+Call _multi_layer
+T48 = Ret + 0
+Print id T48
+New Line.
+Call complexif_else
+Call complexwhile
+Call complexswitch_case
+Print string "Congratulations,you passed all tests."
 New Line.

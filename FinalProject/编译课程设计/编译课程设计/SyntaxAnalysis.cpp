@@ -921,6 +921,7 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
 		PostfixItem item;
 		item.type = CharType;
 		item.number = (symbol == ADD) ? '+' : '-';
+		item.isNotOperator = false;
 		tar.push_back(item);
         //补足预读
         myLexicalAnalysis.nextSym();
@@ -939,6 +940,7 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
 		PostfixItem item;
 		item.type = CharType;
 		item.number = (symbol == ADD) ? '+' : '-';
+		item.isNotOperator = false;
 		tar.push_back(item);
 
         nextSymFlag = myLexicalAnalysis.nextSym();
@@ -980,6 +982,7 @@ bool SyntaxAnalysis::ZSQX_item(vector<PostfixItem> & obj, string funcName, bool 
 		PostfixItem item;
 		item.type = CharType;
 		item.number = (symbol == MULT) ? '*' : '/';
+		item.isNotOperator = false;
 		obj.push_back(item);
         nextSymFlag = myLexicalAnalysis.nextSym();
         if(!nextSymFlag){
@@ -1147,6 +1150,8 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					if (y.getItemType() == Constant) {
 						item.type = y.getValueType();
 						item.number = (item.type == IntType) ? (y.getConstInt()) : (y.getConstChar());
+						if (item.type == CharType)
+							item.isNotOperator = true;
 					}
 					else if (y.getItemType() == Function) {//无参数的带返回值的函数调用
 						item3.type = FunctionCall;
@@ -1209,6 +1214,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
         case CHAR://直接正确
 			item.type = CharType;
 			item.number = myLexicalAnalysis.getGlobalChar();
+			item.isNotOperator = true;
 			obj.push_back(item);
             break;
         case LSBRACKET:
@@ -1746,6 +1752,7 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 	}
 	else {
 		left = ret1.name;
+		fourItem.target = ret1.name;
 	}
 
     if(!myLexicalAnalysis.isFinish()){
@@ -2602,7 +2609,8 @@ bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<
 				}
 				else {
 					item.type = ReturnChar;
-					char x[2] = {ret.character,0};
+					char x[15] = {'\0'};
+					sprintf(x, "%d", ret.character);
 					item.target = x;
 					if (isCache) {
 						cache.push_back(item);

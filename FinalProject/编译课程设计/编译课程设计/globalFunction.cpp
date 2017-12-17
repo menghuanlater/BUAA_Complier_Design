@@ -108,7 +108,7 @@ void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 	}
 	if (tar.size() > 0) {
 		PostfixItem t = tar.at(0);
-		if (t.type == CharType && (t.number == '+' || t.number == '-')) {
+		if (t.type == CharType && (t.number == '+' || t.number == '-') && t.isNotOperator == false) {
 			if (t.number == '-') {
 				t.type = IntType;
 				t.number = 0;
@@ -125,6 +125,10 @@ void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 			switch (item.number) {
 				case '+':
 				case '-':
+					if (item.isNotOperator) {
+						obj.push_back(item);
+						break;
+					}
 					while (tmp.size() != 0) {
 						obj.push_back(tmp.at(tmp.size()-1));
 						tmp.pop_back();
@@ -133,6 +137,10 @@ void turnToPostfixExp(vector<PostfixItem>tar, vector<PostfixItem> & obj) {
 					break;
 				case '*':
 				case '/':
+					if (item.isNotOperator) {
+						obj.push_back(item);
+						break;
+					}
 					while (tmp.size() != 0) {
 						if (tmp.at(tmp.size() - 1).number == '*' || tmp.at(tmp.size() - 1).number == '/') {
 							obj.push_back(tmp.at(tmp.size() - 1));
@@ -196,6 +204,10 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 				switch (item.number) {
 					case '+':
 					case '-': {
+						if (item.isNotOperator) {
+							tmp.push_back(item);
+							break;
+						}
 						if (tmp.size() > 1) {
 							bool isAbleDirect = true;
 							int leftDigit, rightDigit;
@@ -245,6 +257,10 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 					}
 					case '*':
 					case '/': {
+						if (item.isNotOperator) {
+							tmp.push_back(item);
+							break;
+						}
 						if (tmp.size() > 1) {
 							bool isAbleDirect = true;
 							int leftDigit, rightDigit;

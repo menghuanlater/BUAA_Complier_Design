@@ -37,3 +37,6 @@ void main(){
     printf("hahaha:",a[1]);
     return;
 }
+
+
+//表达式里面嵌入'*','+'等如何解决

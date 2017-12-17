@@ -109,6 +109,7 @@ struct PostfixItem {
 	string str;
 	int number;
 	bool isNotCharVar;//是否是char型变量或者说是char型数组某个元素
+	bool isNotOperator;//如果是char型常量,是不是运算符
 };
 
 /*
