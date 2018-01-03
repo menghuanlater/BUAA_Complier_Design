@@ -190,6 +190,8 @@ string calculateExp(vector<PostfixItem> & tar, bool & isSure,ValueType & t,int &
 			if (!item.isNotCharVar) {//是字符型变量
 				t = CharType;
 			}
+			else
+				t = IntType;
 			return item.str;
 		}
 	}

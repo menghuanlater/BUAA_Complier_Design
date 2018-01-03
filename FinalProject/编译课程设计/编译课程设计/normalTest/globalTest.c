@@ -351,7 +351,7 @@ void main(){
     complexExpression;
     
     printf("complex expression add --- > x6:",(3*'*'+'/'-'-'+'a'*'+'+909/'_'+'/'*3+'+'*3));
-    
+    printf("complex expression add --- > x7:",('-'-6*'/'+'-'*5+'+'+'*'));
     printf("Test scanf");
     scanf(int1,int2,int3);
     printf("int1:",int1);

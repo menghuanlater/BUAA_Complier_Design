@@ -1,182 +1,154 @@
-const int stepmask = -1;
-const char plus = '+', times = '*', minus = '-', div = '/',udl='_';
+const int MAX=10;
+const cHaR A='a';
+const cHaR plus = '+', minus = '-', mult = '*', div = '/';
 
-int list[10];
-char op;
+int n,x,y,kind,m,ans,_a,_b;
+char ch,alphabet[26];
 
-int Fact(int n)
+Void testDefine
 {
-    if (n == 0)
-        return (+div*(minus / 1000 - 1) + plus - times--1 / times + ('/'*(-1 + 2)));
-    else
-        return (n*fact(n - 1));
+    CONST int int0=0,int1=1,int10=10;
+
+    const int int_0=0,int_1=-1,int_10=-10;
+
+    const int _int0=0,_int1=+1,_int10=+10;
+
+    const char char0='0',char1='1';
+
+    int var0,var1,arr1[1],var11,arr11[11];
+
+    alphabet[0] = 'a';
+    alphabet[1] = 'b';
+    alphabet[2] = 'c';
+    alphabet[3] = 'd';
+    alphabet[4] = 'e';
+    alphabet[5] = 'f';
+    alphabet[6] = 'g';
+    alphabet[7] = 'h';
+    alphabet[8] = 'i';
+    alphabet[9] = 'j';
+    alphabet[10] = 'k';
+    alphabet[11] = 'l';
+    alphabet[12] = 'm';
+    alphabet[13] = 'n';
+    alphabet[14] = 'o';
+    alphabet[15] = 'p';
+    alphabet[16] = 'q';
+    alphabet[17] = 'r';
+    alphabet[18] = 's';
+    alphabet[19] = 't';
+    alphabet[20] = 'u';
+    alphabet[21] = 'v';
+    alphabet[22] = 'w';
+    alphabet[23] = 'x';
+    alphabet[24] = 'y';
+    alphabet[25] = 'z';
 }
 
-int isLetter(char c1) {
-    if (c1 == '_')
-        return(1);
-    else if (c1 >= 'a') {
-        if (c1 <= 'z') {
-            return(1);
-        }
-        else
-            return(0);
-    }
-    else if (c1 >= 'A') {
-        if (c1 <= 'Z') {
-            return(1);
-        }
-        else;
-    }
-    else;
-    return(0);
-}
-
-int choose_pivot(int i, int j)
+int fibo(int n)
 {
-    return((i + j) / 2);
+    if (n<0) return(-1);
+    else if (n==0) return(0);
+    else if (n==1) return(1);
+    else if (n>MAX) return(-2);
+    else return(fibo(n-1)+fibo(n-2));
 }
 
-void printlist(int n)
+void printspace
+{
+    printf(" ");
+}
+
+void display(int m)
 {
     int i;
-    i = 0;
-    while (i < n) {
-        printf(" ", list[i]); i = i + 1;
-    }
-}
-
-void quicksort(int m, int n)
-{
-    int key, x, y, z, tmp;
-
-    key = list[choose_pivot(m, n)];
-    x = m;
-    y = n;
-    while (x <= y)
-    {
-        while (key <list[y]) y = y - 1;
-        while (key > list[x]) x = x + 1;
-        if (x <= y) {
-            tmp = list[x];
-            list[x] = list[y];
-            list[y] = tmp;
-            x = x + 1;
-            y = y - 1;
-        }
-        else;
-    }
-    if (x<n)
-        quicksort(x, n);
-    else;
-    if (m<y)
-        quicksort(m, y); else;
-}
-
-void exprCheck
-{
-    int a,b,res;
-int flag;
-char op;
-scanf(a,op,b);
-printf(a);
-printf(op);
-printf(b);
-printf("=");
-
-flag = 1;
-switch (op)
-{
-case '+': {
-    res = a + b;
-    printf(res);
-    flag = 0;
-}
-case '-': {
-    res = a - b;
-    printf(res);
-    flag = 0;
-}
-case '*': {
-    res = a*b;
-    printf(res);
-    flag = 0;
-}
-case '/': {
-    flag = 0;
-    if (b == 0) {
-        printf("ERROR:Divided by ZERO. ");
-    }
+    char letter;
+    if (m<=0)
+        return;
+    else if (m>26)
+        m = 26;
     else {
-        res = a / b;
-        printf(res);
+        i = 0;
+        while(i<m)
+        {
+            printf(alphabet[i]);
+            i = i + 1;
+        }
+        printspace;
     }
 }
-}
-if (flag) {
-    printf("Undefined operation:",op);
-    printf("Please select one from set {+,-,*,/}. ");
-}
-else;
+
+void Expre
+{
+    int x,y,z;
+    scanf(x,y);
+    z = +((x+y) - (-y*(-2)) + (-2*0));
+    printf("expre:",z);
+    printspace;
 }
 
-void arrayChek
+int mod(int x, int y)
 {
-    const int a = 10;
-    int i;
-    i = 0;
-while (i < 10) {
-    list[i] = 10 - i;
-    i = i + 1;
-}
-list[1] = 16;
-list[2] = 3;
-list[3] = -8;
-list[4] = 40;
-list[5] = -1;
-list[6] = 2;
-list[7] = -10;
-i = 1;
-quicksort(choose_pivot(0, choose_pivot(1, 1) - i), choose_pivot(9, 9));
-printlist(10);
+    int z;
+    z = x - x/y*y;
+    return(z);
 }
 
-void recurCheck
+int gcd(int a, int b)
 {
-    int i;
-scanf(i);
-while (13 <= i) {
-    printf("Please input a smaller one:");
-    scanf(i);
-}
-printf(fact(i));
+    if (b==0) return(0);
+    else if (mod(a,b)==0)
+        return(b);
+    else return(gcd(b, mod(a,b)));
 }
 
-void letterCheck
+void process
 {
-    char x;
-scanf(x);
-if (isLetter(x)) printf("True");
-else printf("False");
+    char choice;
+    scanf(choice);
+    switch (choice)
+    {
+        case 'a':
+            expre;
+        case 'b':
+        {
+            scanf(n);
+            ans = fibo(n);
+            printf("fibo:",ans);
+            printspace;
+        }
+        case 'd':
+        {
+            scanf(m);
+            display(m);
+        }
+        case 'e':
+        {
+            scanf(_a,_b);
+            printf("gcd:",gcd(_a,_b));
+            printspace;
+        }
+        case 'f':
+            printf("string:!#$%&'()*+,-./:;<=>?@[\]^_`{|}~");
+    }
+    {
+        ;
+    }
+    ;
+    {}
 }
 
 void main()
 {
-    int choice;
-
-    scanf(choice);
-    while (choice != 0) {
-        switch ((choice + 0/5) * 4 / 4 + 19 - 19)
-        {
-        case 1: exprCheck;
-        case 2: arrayChek;
-        case 3: recurCheck;
-        case 4: letterCheck;
-        default: {
-            printf("Wrong number:", choice);
-        }
-        }
-        printf("    ");
-        scanf(choice);
+    int i,num;
+    i = 0;
+    testDefine;
+    scanf(num);
+    while (i<num)
+    {
+        i = i + 1;
+        process;
     }
+    return;
+    printf("Test Not Return");
 }

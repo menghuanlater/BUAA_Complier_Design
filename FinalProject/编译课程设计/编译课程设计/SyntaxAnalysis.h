@@ -25,7 +25,7 @@ struct ExpRet {
 	ValueType type;//值类型
 	int number;
 	char character;
-	bool isMatchStruct;//是否符合文法
+	bool isEmpty;//是否是空的
 };
 //情况子语句返回
 struct CaseRet {
@@ -45,6 +45,7 @@ private:
 	string return_declare_funcName;
 	SymbolCode relation;//关系运算符
 	vector<FourYuanItem> noUseCache;//无用的cache
+	bool haveReturn;//有参函数是否有有效的return语句(必须有效)
 	//
     int getLineNumber(){//获取词法分析当前行
         return myLexicalAnalysis.getLineCount();
@@ -78,7 +79,15 @@ private:
 	int checkAssignId(string identifier,string funcName);
 	//检查switch的case语句是否出现相同的值
 	void checkCase(vector<int> cases);
+	void checkSwitchType(ValueType s_type, ValueType e_type) {
+		if (s_type != e_type) {
+			myError.SemanticAnalysisError(CaseTypeNotMatchError,getLineNumber(),"");
+		}
+	}
 
+	//返回语句检查
+	void checkReturn(string funcName);//无返回值的return
+	void checkReturn(string funcName,ValueType retType);
 
 public:
     //标准构造函数
@@ -128,13 +137,13 @@ public:
     //＜情况语句＞ ::= switch ‘(’＜表达式＞‘)’ ‘{’＜情况表＞[＜缺省＞] ‘}’
     bool ZSQX_situationStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜情况表＞ ::= ＜情况子语句＞{＜情况子语句＞}
-    vector<CaseRet> ZSQX_situationTable(string funcName,string endLabel, vector<FourYuanItem> &);
+    vector<CaseRet> ZSQX_situationTable(string funcName,string endLabel,ValueType type,vector<FourYuanItem> &);
     //＜情况子语句＞ ::= case＜常量＞：＜语句＞
-    CaseRet ZSQX_situationSonStatement(string funcName,string endLabel, vector<FourYuanItem> &);
+    CaseRet ZSQX_situationSonStatement(string funcName,string endLabel, ValueType type,vector<FourYuanItem> &);
     //＜缺省＞ ::= default : ＜语句＞
     bool ZSQX_default(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜值参数表＞ ::= ＜表达式＞{,＜表达式＞}
-    bool ZSQX_valueParamTable(string funcName, bool isCache, vector<FourYuanItem> & cache);
+    vector<ValueType> ZSQX_valueParamTable(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜读语句＞ ::= scanf ‘(’＜标识符＞{,＜标识符＞}‘)’
     bool ZSQX_readStatement(string funcName, bool isCache, vector<FourYuanItem> & cache);
     //＜写语句＞ ::= printf ‘(’ ＜字符串＞,＜表达式＞ ‘)’| printf ‘(’＜字符串＞ ‘)’| printf ‘(’＜表达式＞‘)’

@@ -75,7 +75,8 @@ enum SemanticErrorCode {
 	ParamNumNotMatchError,
 	ParamTypeNotMatchError,
 	AssignObjectNotVar,
-	CaseSameValueError
+	CaseSameValueError,
+	CaseTypeNotMatchError
 };
 /*与return语句有关的error
 1.无返回值存在有返回值的return

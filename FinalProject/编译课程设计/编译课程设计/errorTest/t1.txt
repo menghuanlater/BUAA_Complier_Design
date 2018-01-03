@@ -1,16 +1,16 @@
 const int g_const_int1 = 23,g_const_int2 = 24;
-const char g_const_char1 = 'a',g_const_char2 = 'm'
+const char g_const_char1 = 'a',g_const_char2 = 'm';
 
 int g_var_int1,g_var_int2;
-int g_var_int_arr[12];
-int g_var_char1,g_var_char2;
-int g_var_char_arr[12];
+int g_var_int_arr[12],g_var_int3;
+char g_var_char1,g_var_char2;
+char g_var_char_arr[12],g_vat_char3;
 
-int Fibnaci(int n)
+int Fibnaci(int n){
     if(n<=2)
         return (1);
     else
-        return (Fibnaci(n-1)+Fibnaci(n-2))
+        return (Fibnaci(n-1)+Fibnaci(n-2));
 }
 
 void printGlobalVarValue{
@@ -41,11 +41,22 @@ void printGlobalArrValue(int loopLength){
 void testSwitchCase(int value1,int value2){
     
     switch(value1){
-        case 0: {
+        case '0':{
 		    printf("Hello World.");
             printGlobalVarValue;
 	    }
         case +1:{
+		    printf("Welcome to BUAA.");
+            printGlobalArrValue(3);
+	    }
+    }
+
+    switch(g_var_char1){
+        case '0':{
+		    printf("Hello World.");
+            printGlobalVarValue;
+	    }
+        case 23:{
 		    printf("Welcome to BUAA.");
             printGlobalArrValue(3);
 	    }
@@ -71,17 +82,22 @@ void testSwitchCase(int value1,int value2){
                 default:printf("mmppppooodd");
             }
         }
+        case +3:printGlobalVarValue;
         case 1:printGlobalVarValue;
         default:printf(g_const_char1);
 	}
 }
 
 
-int returnTen{
+int returnTen(int x){
     return (10);
 }
 
-int returnTwo{
+int returnTwo(int x){
+    return;
+}
+
+int VVV{
     return (2);
 }
 
@@ -120,31 +136,44 @@ void testIfElse(char target){
     
 }
 
+int BBB(int x,int y,char z){
+    return (x+y+z);
+}
+
 void main(){
     int i;
     int flag1,flag2;
     int myFib,inputFib;
     CHAR relationFalg;
-    int testIfElse,returnTen,returnTwo;
 
     g_var_int1 = g_const_int1 + g_const_int2;
     g_var_int2 = g_const_int2 - g_const_int1;
-    g_var_char1 = g_const_char1 + 1;
-    g_var_char2 = g_const_char2 - 1;
+    g_var_char1 = g_const_char1;
+    g_var_char2 = g_const_char2;
     
     printGlobalVarValue;
 
     g_var_int1 = g_const_int1 * 2;
     g_var_int2 = g_const_int2 / 3;
 
+    g_var_int1 = returnTwll;
+    g_var_int1 = returnTen();
+    g_var_int1 = printGlobalVarValue;
+    g_var_char1 = VVV(); 
+    g_var_int1 = BBB(1,6,7);
+    g_var_int1 = BBB(3,5);
+    g_var_int1 = BBB(1,3,'+');
+    g_var_int1 = BBB();
+
     printGlobalVarValue;
 
     i = 0;
     while(i<=11){
         g_var_int_arr[i] = i;
-        g_var_char_arr[i] = 'a' + i;
+        g_var_char_arr[i] = 'x';
         i = i + 1;
     }
+    g_var_int_arr[3] = g_var_int_arr[0] + 3;
     printGlobalArrValue(12);
 
     flag1 = 1;flag2 = g_var_int_arr[2];
@@ -161,9 +190,10 @@ void main(){
     myFib = Fibnaci(8);
     printf("Fib(8):",myFib);
 
-    g_var_int1 = ((1 + 3) * 'a' + g_var_int_arr[4]) / (returnTwo);
-    g_var_int2 = (666/g_var_int_arr[2])/111*(returnTen);
+    g_var_int1 = (1*(1 + 3) * 'a'*(1) + g_var_int_arr[4]) / (returnTwo(1));
+    g_var_int2 = (666/g_var_int_arr[2])/111*(returnTen(2));
     printGlobalVarValue;
+    printf(-3*-4++7+-6);
 
     relationFalg = 'a';
     testIfElse(relationFalg);
