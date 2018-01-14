@@ -9,12 +9,13 @@
 */
 #include <iostream>
 #include <string>
-#include <vector>
 #include "error.h"
 #include "ConstValue.h"
 #include "LexicalAnalysis.h"
 #include "SyntaxAnalysis.h"
 #include "globalFunction.h"
+#include "optimize.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -49,8 +50,16 @@ int main(void){
 		writeTmpCodeToFile();
 		cout << "Temporary Code have been writen to tmpCode.txt,then we will generator final mips32 code to mips.asm" << endl;
 		generateMipsCode();
+		cout << "Mips code have been writen into mips.asm" << endl;
+		toDoOptimize();
+		cout << "Accomplish Optimization." << endl;
+		op_writeTmpCodeToFile();
+		cout << "Ok,temporary optimize code have been writen to op_tmpCode.txt" << endl;
+		op_generateMipsCode();
+		cout << "Ok,optimize mips code have been writen to op_mips.asm" << endl;
 	}
 
     cout<<"Analysis accomplish. Thanks for using!"<<endl;
+
     return 0;
 }

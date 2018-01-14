@@ -18,4 +18,5 @@ SymbolTableItem::SymbolTableItem(string id,string funcName){
 	functionName = funcName;
 	identifier = id;
 	length = 0;//默认为0
+	weight = 0;
 }

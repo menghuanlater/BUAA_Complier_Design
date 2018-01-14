@@ -8,6 +8,8 @@
 
 using namespace std;
 
+extern int tmpVarCount;
+
 //标准构造函数,采用初始化成员列表
 SyntaxAnalysis::SyntaxAnalysis(Error & myError,LexicalAnalysis & myLexicalAnalysis):myError(myError),myLexicalAnalysis(myLexicalAnalysis){
     isMainVoid = false;
@@ -687,6 +689,8 @@ bool SyntaxAnalysis::ZSQX_haveReturnValueFunctionDefinition(){
         return false;
     }
     //复合语句
+	//将tmpVarCount设置为0
+	tmpVarCount = 0;
     ZSQX_compoundStatement(funcName);
 
     if(myLexicalAnalysis.isFinish()){
@@ -785,6 +789,8 @@ bool SyntaxAnalysis::ZSQX_noReturnValueFunctionDefinition(){
         return false;
     }
     //复合语句
+	//将tmpVarCount设置为0
+	tmpVarCount = 0;
     ZSQX_compoundStatement(funcName);
 
     if(myLexicalAnalysis.isFinish()){
@@ -814,8 +820,12 @@ bool SyntaxAnalysis::ZSQX_paramTable(string funcName){
     //类型标识符 int|char
     symbol = myLexicalAnalysis.getGlobalSymbol();
     if(!(symbol == INTSY || symbol == CHARSY)){
-        myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"param table can\'t be empty.");
-        myLexicalAnalysis.skipRead(')');
+		if (symbol == RSBRACKET)
+			myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"param table can\'t be empty.");
+		else {
+			myError.SyntaxAnalysisError(LackComposedPartError, getLineNumber(), "parament nedd start with int or char.");
+			myLexicalAnalysis.skipRead(')');
+		}
         return false;
     }
 
@@ -896,7 +906,7 @@ bool SyntaxAnalysis::ZSQX_compoundStatement(string funcName){
     ZSQX_varDescription(false,funcName);
 
     while(true){
-        if(!(ZSQX_statement(funcName,false,noUseCache)))
+        if(!(ZSQX_statement(funcName,false,noUseCache,1)))//初始为1
             break;
     }
 
@@ -904,11 +914,11 @@ bool SyntaxAnalysis::ZSQX_compoundStatement(string funcName){
 }
 
 //＜表达式＞ ::= ［＋｜－］＜项＞{＜加法运算符＞＜项＞}
-ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<FourYuanItem> & cache){
+ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
     bool x_flag = false;//作为是否有前缀项的flag
-	
+
 	//生成代码有关
 	bool isSure = false;
 	int expResult = 0;
@@ -929,7 +939,7 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
         myLexicalAnalysis.nextSym();
     }
     //<项>
-    ZSQX_item(tar,funcName,isCache,cache);
+    ZSQX_item(tar,funcName,isCache,cache,weight);
     //循环
     while(true){
         if(myLexicalAnalysis.isFinish()){
@@ -951,7 +961,7 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
             break;
         }
         //<项>
-        ZSQX_item(tar,funcName,isCache,cache);
+        ZSQX_item(tar,funcName,isCache,cache,weight);
     }
 	//表达式计算
 	if (tar.size() == 0) {
@@ -973,10 +983,10 @@ ExpRet SyntaxAnalysis::ZSQX_expression(string funcName, bool isCache, vector<Fou
 }
 
 //＜项＞ ::= ＜因子＞{＜乘法运算符＞＜因子＞}
-bool SyntaxAnalysis::ZSQX_item(vector<PostfixItem> & obj, string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_item(vector<PostfixItem> & obj, string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
-    ZSQX_factor(obj,funcName,isCache,cache);
+    ZSQX_factor(obj,funcName,isCache,cache,weight);
 
     while(true){
         if(myLexicalAnalysis.isFinish()){
@@ -997,13 +1007,13 @@ bool SyntaxAnalysis::ZSQX_item(vector<PostfixItem> & obj, string funcName, bool 
             break;
         }
         //<因子>
-        ZSQX_factor(obj,funcName, isCache, cache);
+        ZSQX_factor(obj,funcName, isCache, cache,weight);
     }
     return true;
 }
 
 //＜因子＞ ::= ＜标识符＞[‘(’<值参数表>‘)’]｜＜标识符＞‘[’＜表达式＞‘]’|‘(’＜表达式＞‘)’｜＜整数＞|＜字符＞
-bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
     bool preRead = true;
@@ -1031,12 +1041,12 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					return false;
 				}
 				//<表达式>
-				item2 = ZSQX_expression(funcName, isCache, cache);
+				item2 = ZSQX_expression(funcName, isCache, cache, weight);
 				string index2;
 				int orderx;
 				if (item2.isSurable) {
 					item3.type = AssignState;
-					item3.target = generateVar(funcName);
+					item3.target = generateVar();
 					item3.isLeftArr = false;
 					item3.isTargetArr = false;
 					if (item2.type == CharType) {
@@ -1065,11 +1075,28 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 				}
 				else {
 					orderx = idArrExpCheck(id, funcName, false);
-					index2 = item2.name;
+					if (item2.name.size() > 0 && item2.name.at(0)=='T') {
+						item3.type = AssignState;
+						item3.target = generateVar();
+						item3.isTargetArr = item3.isLeftArr = false;
+						item3.left = item2.name;
+						item3.op = '+';
+						item3.right = "0";
+						if (isCache) {
+							cache.push_back(item3);
+						}
+						else {
+							globalTmpCodeArr.push_back(item3);
+						}
+						index2 = item3.target;
+					}
+					else {
+						index2 = item2.name;
+					}
 				}
 				if (orderx >= 0) {
 					item3.type = AssignState;
-					item3.target = generateVar(funcName);
+					item3.target = generateVar();
 					item3.isLeftArr = true;
 					item3.isTargetArr = false;
 					char ggg[10] = { '\0' };
@@ -1112,7 +1139,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
                     return false;
                 }
                 //<值参数表>
-				vector<ValueType> retParamTable = ZSQX_valueParamTable(funcName, isCache, cache);
+				vector<ValueType> retParamTable = ZSQX_valueParamTable(funcName, isCache, cache, weight);
 				funcCallCheck(id,true,retParamTable);
 				item3.type = FunctionCall;
 				item3.target = id;
@@ -1123,7 +1150,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 					globalTmpCodeArr.push_back(item3);
 				}
 				item3.type = AssignState;
-				item3.target = generateVar(funcName);
+				item3.target = generateVar();
 				item3.isTargetArr = item3.isLeftArr = false;
 				item3.left = "Ret";
 				item3.op = '+';
@@ -1162,6 +1189,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 							item.isNotOperator = true;
 					}
 					else if (y.getItemType() == Function) {//无参数的带返回值的函数调用
+
 						item3.type = FunctionCall;
 						item3.target = id;
 						if (isCache) {
@@ -1171,7 +1199,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 							globalTmpCodeArr.push_back(item3);
 						}
 						item3.type = AssignState;
-						item3.target = generateVar(funcName);
+						item3.target = generateVar();
 						item3.isTargetArr = item3.isLeftArr = false;
 						item3.left = "Ret";
 						item3.op = '+';
@@ -1194,6 +1222,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 						char ggg[10] = {'\0'};
 						sprintf(ggg,"%d",order);
 						item.str = "G" + string(ggg) + id;;//G12ppp类似
+						addWeight(order,weight);
 					}
 				}
 				else {
@@ -1232,14 +1261,31 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
                 return false;
             }
             //<表达式
-            item2 = ZSQX_expression(funcName, isCache, cache);
+            item2 = ZSQX_expression(funcName, isCache, cache, weight);
 			if (item2.isSurable) {
 				item.type = IntType;
 				item.number = (item2.type == IntType) ? item2.number : item2.character;
 			}
 			else {
 				item.type = StringType;
-				item.str = item2.name;
+				if (item2.name.size() > 0 && item2.name.at(0) == 'T') {
+					item3.type = AssignState;
+					item3.target = generateVar();
+					item3.isTargetArr = item3.isLeftArr = false;
+					item3.left = item2.name;
+					item3.op = '+';
+					item3.right = "0";
+					if (isCache) {
+						cache.push_back(item3);
+					}
+					else {
+						globalTmpCodeArr.push_back(item3);
+					}
+					item.str = item3.target;
+				}
+				else {
+					item.str = item2.name;
+				}
 				item.isNotCharVar = (item2.type == IntType) ? true : false;
 			}
 			obj.push_back(item);
@@ -1267,7 +1313,7 @@ bool SyntaxAnalysis::ZSQX_factor(vector<PostfixItem> & obj, string funcName, boo
 
 /*＜语句＞ ::= ＜条件语句＞｜＜循环语句＞| ‘{’｛＜语句＞｝‘}’｜＜标识符＞[‘(’<值参数表>‘)’]; 
         ｜＜赋值语句＞;｜＜读语句＞;｜＜写语句＞;｜;|＜情况语句＞｜＜返回语句＞;*/
-bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
     symbol = myLexicalAnalysis.getGlobalSymbol();
@@ -1278,11 +1324,11 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
     
     switch(symbol){
         case IFSY:
-            ZSQX_conditionStatement(funcName, isCache, cache);
+            ZSQX_conditionStatement(funcName, isCache, cache, weight);
             preRead = false;
             break;
         case WHILESY:
-            ZSQX_loopStatement(funcName, isCache, cache);
+            ZSQX_loopStatement(funcName, isCache, cache,10*weight);
             preRead = false;
             break;
         case LBBRACKET:
@@ -1292,7 +1338,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
             }
             while(true){
                 //<语句>
-                if(!ZSQX_statement(funcName, isCache, cache))
+                if(!ZSQX_statement(funcName, isCache, cache,weight))
 					break;
                 if(myLexicalAnalysis.isFinish()){
                     break;
@@ -1330,7 +1376,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
                     return false;
                 }
                 //<值参数表>
-				vector<ValueType> retParamTable = ZSQX_valueParamTable(funcName, isCache, cache);
+				vector<ValueType> retParamTable = ZSQX_valueParamTable(funcName, isCache, cache,weight);
 				funcCallCheck(id,false,retParamTable);
 				four.target = id;
 				if (isCache) {
@@ -1362,7 +1408,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
                     myLexicalAnalysis.setNextSym();
                 }
             }else if(symbol == ASSIGN || symbol == LMBRACKET){//赋值语句识别前缀(去除标识符)
-                ZSQX_assignStatement(funcName,id, isCache, cache);
+                ZSQX_assignStatement(funcName,id, isCache, cache,weight);
                 
                 if(myLexicalAnalysis.isFinish()){
                     myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack semicolon.");
@@ -1380,7 +1426,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
             }
             break;
         case SCANFSY:
-            ZSQX_readStatement(funcName, isCache, cache);
+            ZSQX_readStatement(funcName, isCache, cache,weight);
 
             if(myLexicalAnalysis.isFinish()){
                 myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack semicolon.");
@@ -1393,7 +1439,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
             }
             break;
         case PRINTFSY:
-            ZSQX_writeStatement(funcName, isCache, cache);
+            ZSQX_writeStatement(funcName, isCache, cache,weight);
 
             if(myLexicalAnalysis.isFinish()){
                 myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack semicolon.");
@@ -1408,12 +1454,12 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
         case SEMI://空语句
             break;
         case SWITCHSY:
-            ZSQX_situationStatement(funcName, isCache, cache);
+            ZSQX_situationStatement(funcName, isCache, cache,weight);
 
             preRead = false;
             break;
         case RETURNSY:
-            ZSQX_returnStatement(funcName, isCache, cache);
+            ZSQX_returnStatement(funcName, isCache, cache,weight);
 
             if(myLexicalAnalysis.isFinish()){
                 myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack semicolon.");
@@ -1438,7 +1484,7 @@ bool SyntaxAnalysis::ZSQX_statement(string funcName, bool isCache, vector<FourYu
 
 //＜赋值语句＞ ::= ＜标识符＞＝＜表达式＞|＜标识符＞‘[’＜表达式＞‘]’=＜表达式＞
 //实际分析的是  ＝＜表达式＞|‘[’＜表达式＞‘]’=＜表达式＞
-bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCache, vector<FourYuanItem> & cache, int weight){
     //无需分析标识符,已经在语句中分析得出
     bool nextSymFlag;
     SymbolCode symbol;
@@ -1456,8 +1502,9 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
             return false;
         }
 		int order = checkAssignId(id,funcName);
+		addWeight(order,weight);
         //<表达式>
-        ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+        ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 		if (order >= 0)
 			checkTypeMatch(globalSymbolTable.at(order).getValueType(), ret.type);
 		char ggg[10] = {'\0'};
@@ -1469,7 +1516,25 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
 			fourItem.left = x;
 		}
 		else {
-			fourItem.left = ret.name;
+			if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+				FourYuanItem fourItem1;
+				fourItem1.type = AssignState;
+				fourItem1.target = generateVar();
+				fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+				fourItem1.left = ret.name;
+				fourItem1.op = '+';
+				fourItem1.right = "0";
+				if (isCache) {
+					cache.push_back(fourItem1);
+				}
+				else {
+					globalTmpCodeArr.push_back(fourItem1);
+				}
+				fourItem.left = fourItem1.target;
+			}
+			else {
+				fourItem.left = ret.name;
+			}
 		}
 		if (isCache) {
 			cache.push_back(fourItem);
@@ -1487,7 +1552,7 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
 		}
 		//<表达式>
 		fourItem.isTargetArr = true;
-		ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+		ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 		int orderx;
 		if (ret.isSurable) {
 			if (ret.type == CharType) {
@@ -1505,7 +1570,25 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
 		}
 		else {
 			orderx = idArrExpCheck(id, funcName, false);
-			fourItem.index1 = ret.name;
+			if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+				FourYuanItem fourItem1;
+				fourItem1.type = AssignState;
+				fourItem1.target = generateVar();
+				fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+				fourItem1.left = ret.name;
+				fourItem1.op = '+';
+				fourItem1.right = "0";
+				if (isCache) {
+					cache.push_back(fourItem1);
+				}
+				else {
+					globalTmpCodeArr.push_back(fourItem1);
+				}
+				fourItem.index1 = fourItem1.target;
+			}
+			else {
+				fourItem.index1 = ret.name;
+			}
 		}
 		if (orderx >= 0) {
 			char ggg[10] = { '\0' };
@@ -1542,14 +1625,32 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
             return false;
         }
         //<表达式>
-        ret = ZSQX_expression(funcName, isCache, cache);
+        ret = ZSQX_expression(funcName, isCache, cache, weight);
 		if (ret.isSurable) {
 			char x[15] = {'\0'};
 			sprintf(x,"%d",ret.type==IntType ? ret.number : ret.character);
 			fourItem.left = x;
 		}
 		else {
-			fourItem.left = ret.name;
+			if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+				FourYuanItem fourItem1;
+				fourItem1.type = AssignState;
+				fourItem1.target = generateVar();
+				fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+				fourItem1.left = ret.name;
+				fourItem1.op = '+';
+				fourItem1.right = "0";
+				if (isCache) {
+					cache.push_back(fourItem1);
+				}
+				else {
+					globalTmpCodeArr.push_back(fourItem1);
+				}
+				fourItem.left = fourItem1.target;
+			}
+			else {
+				fourItem.left = ret.name;
+			}
 		}
 		checkTypeMatch(globalSymbolTable.at(orderx).getValueType(), ret.type);
 		if (isCache) {
@@ -1565,7 +1666,7 @@ bool SyntaxAnalysis::ZSQX_assignStatement(string funcName,string id, bool isCach
 }
 
 //＜条件语句＞::= if ‘(’＜条件＞‘)’＜语句＞else＜语句＞
-bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	FourYuanItem four;
@@ -1574,6 +1675,8 @@ bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vect
 	string label1 = generateLabel();
 	string label2 = generateLabel();
     
+	//int tmpVarCountCopy = tmpVarCount;
+
 	//if
     if(!(symbol == IFSY)){
         return false;
@@ -1596,7 +1699,7 @@ bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vect
         return false;
     }
     
-	string judge = ZSQX_condition(funcName, isCache, cache);
+	string judge = ZSQX_condition(funcName, isCache, cache, weight);
 	//设置跳转语句
 	switch (relation) {
 	case LESS:
@@ -1684,8 +1787,9 @@ bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vect
         myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack statement.");
         return false;
     }
-    
-    ZSQX_statement(funcName, isCache, cache);
+    //
+	tmpVarCount = 0;
+    ZSQX_statement(funcName, isCache, cache, weight);
 	//先设好无条件跳转
 	four.type = Jump;
 	four.target = label2;
@@ -1723,7 +1827,8 @@ bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vect
         myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack statement.");
         return false;
     }
-    ZSQX_statement(funcName, isCache, cache);
+    ZSQX_statement(funcName, isCache, cache, weight);
+	tmpVarCount = 0;
 	four.type = Label;
 	four.target = label2;
 	if (isCache) {
@@ -1732,24 +1837,28 @@ bool SyntaxAnalysis::ZSQX_conditionStatement(string funcName, bool isCache, vect
 	else {
 		globalTmpCodeArr.push_back(four);
 	}
+	//tmpVarCount = tmpVarCountCopy;
     return true;
 }
 
 //＜条件＞ ::= ＜表达式＞＜关系运算符＞＜表达式＞｜＜表达式＞ 
 //＜关系运算符＞ ::= <｜<=｜>｜>=｜!=｜==
-string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<FourYuanItem> & cache){
+string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	FourYuanItem fourItem;
 	string  left, right;
+
+	//int copy = tmpVarCount;
+
     //<表达式>
-    ExpRet ret1 =  ZSQX_expression(funcName, isCache, cache);
+    ExpRet ret1 =  ZSQX_expression(funcName, isCache, cache, weight);
 	if (ret1.isSurable) {
 		fourItem.type = AssignState;
 		fourItem.isLeftArr = fourItem.isTargetArr = false;
 		char x[15] = { '\0' };
 		sprintf(x,"%d",ret1.type == IntType? ret1.number:ret1.character);
-		fourItem.target = generateVar(funcName);
+		fourItem.target = generateVar();
 		fourItem.left = x;
 		fourItem.op = '+';
 		fourItem.right = "0";
@@ -1762,8 +1871,27 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 		left = fourItem.target;
 	}
 	else {
-		left = ret1.name;
-		fourItem.target = ret1.name;
+		if (ret1.name.size() > 0 && ret1.name.at(0) == 'T') {
+			FourYuanItem fourItem1;
+			fourItem1.type = AssignState;
+			fourItem1.target = generateVar();
+			fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+			fourItem1.left = ret1.name;
+			fourItem1.op = '+';
+			fourItem1.right = "0";
+			if (isCache) {
+				cache.push_back(fourItem1);
+			}
+			else {
+				globalTmpCodeArr.push_back(fourItem1);
+			}
+			left = fourItem1.target;
+			fourItem.target = left;
+		}
+		else {
+			left = ret1.name;
+			fourItem.target = ret1.name;
+		}
 	}
 
     if(!myLexicalAnalysis.isFinish()){
@@ -1777,13 +1905,13 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
                 return "";
             }
             //<表达式>
-            ExpRet ret2 = ZSQX_expression(funcName, isCache, cache);
+            ExpRet ret2 = ZSQX_expression(funcName, isCache, cache, weight);
 			if (ret2.isSurable) {
 				fourItem.type = AssignState;
 				fourItem.isLeftArr = fourItem.isTargetArr = false;
 				char x[15] = { '\0' };
 				sprintf(x, "%d", ret2.type == IntType ? ret2.number : ret2.character);
-				fourItem.target = generateVar(funcName);
+				fourItem.target = generateVar();
 				fourItem.left = x;
 				fourItem.op = '+';
 				fourItem.right = "0";
@@ -1796,10 +1924,27 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 				right = fourItem.target;
 			}
 			else {
-				right = ret2.name;
+				if (ret2.name.size() > 0 && ret2.name.at(0) == 'T') {
+					FourYuanItem fourItem1;
+					fourItem1.type = AssignState;
+					fourItem1.target = generateVar();
+					fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+					fourItem1.left = ret2.name;
+					fourItem1.op = '+';
+					fourItem1.right = "0";
+					if (isCache) {
+						cache.push_back(fourItem1);
+					}
+					else {
+						globalTmpCodeArr.push_back(fourItem1);
+					}
+					right = fourItem1.target;
+				}
+				else {
+					right = ret2.name;
+				}
 			}
-			//
-			fourItem.target = generateVar(funcName);
+			fourItem.target = generateVar();
 			fourItem.type = AssignState;
 			fourItem.isLeftArr = fourItem.isTargetArr = false;
 			fourItem.left = left;
@@ -1811,16 +1956,20 @@ string SyntaxAnalysis::ZSQX_condition(string funcName, bool isCache, vector<Four
 			else {
 				globalTmpCodeArr.push_back(fourItem);
 			}
+			//tmpVarCount = copy;
+			tmpVarCount = 0;
 			return fourItem.target;
         }
 		
     }
 	relation = NOTEQ;
+	//tmpVarCount = copy;
+	tmpVarCount = 0;
 	return fourItem.target;
 }
 
 //＜循环语句＞ ::= while ‘(’＜条件＞‘)’＜语句＞
-bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 
@@ -1828,6 +1977,8 @@ bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<Fo
 
 	string label1 = generateLabel();
 	string label2 = generateLabel();
+
+	//int tmpVarCountCopy = tmpVarCount;
 
     //while
     symbol = myLexicalAnalysis.getGlobalSymbol();
@@ -1862,7 +2013,7 @@ bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<Fo
         myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack condition.");
         return false;
     }
-    string judge = ZSQX_condition(funcName, isCache, cache);
+    string judge = ZSQX_condition(funcName, isCache, cache, weight);
 	//设置条件跳转
 	switch (relation) {
 	case LESS:
@@ -1951,7 +2102,7 @@ bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<Fo
         return false;
     }
 
-    ZSQX_statement(funcName, isCache, cache);
+    ZSQX_statement(funcName, isCache, cache, weight);
 	four.type = Jump;//无条件跳转到循环
 	four.target = label1;
 	if (isCache) {
@@ -1969,11 +2120,12 @@ bool SyntaxAnalysis::ZSQX_loopStatement(string funcName, bool isCache, vector<Fo
 	else {
 		globalTmpCodeArr.push_back(four);
 	}
+	//tmpVarCount = tmpVarCountCopy;
     return true;
 }
 
 //＜情况语句＞ ::= switch ‘(’＜表达式＞‘)’ ‘{’＜情况表＞[＜缺省＞] ‘}’
-bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	string endLabel = generateLabel();//switch结束点
@@ -1981,6 +2133,8 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
 	FourYuanItem fourItem;
 	string left;
 	vector<FourYuanItem> myCache;
+
+	int tmpVarCountCopy = tmpVarCount;
 
     //switch
     symbol = myLexicalAnalysis.getGlobalSymbol();
@@ -2005,9 +2159,9 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
         myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack expression.");
         return false;
     }
-    ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+    ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 	if (ret.isSurable) {
-		left = generateVar(funcName);
+		left = generateVar();
 		fourItem.type = AssignState;
 		fourItem.isTargetArr = fourItem.isLeftArr = false;
 		fourItem.target = left;
@@ -2024,7 +2178,25 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
 		}
 	}
 	else {
-		left = ret.name;
+		if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+			FourYuanItem fourItem1;
+			fourItem1.type = AssignState;
+			fourItem1.target = generateVar();
+			fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+			fourItem1.left = ret.name;
+			fourItem1.op = '+';
+			fourItem1.right = "0";
+			if (isCache) {
+				cache.push_back(fourItem1);
+			}
+			else {
+				globalTmpCodeArr.push_back(fourItem1);
+			}
+			left = fourItem1.target;
+		}
+		else {
+			left = ret.name;
+		}
 	}
 	//left为比较case的关键变量
 	
@@ -2056,14 +2228,14 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
         return false;
     }
 	//跳转label的各种中间指令,同时取出case中的所有值去查看是否存在同值情况
-    vector<CaseRet> caseTable = ZSQX_situationTable(funcName,endLabel,ret.type,myCache);
+    vector<CaseRet> caseTable = ZSQX_situationTable(funcName,endLabel,ret.type,myCache, weight);
 	vector<int> cases;
 	for (unsigned int i = 0; i < caseTable.size(); i++) {
 		CaseRet t = caseTable.at(i);
 		cases.push_back(t.constValue);
 		fourItem.type = AssignState;
 		fourItem.isLeftArr = fourItem.isTargetArr = false;
-		fourItem.target = generateVar(funcName);
+		fourItem.target = generateVar();
 		fourItem.op = '-';
 		fourItem.left = left;
 		char x[15] = { '\0' };
@@ -2090,7 +2262,7 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
     if(!myLexicalAnalysis.isFinish()){
         symbol = myLexicalAnalysis.getGlobalSymbol();
         if(symbol == DEFAULTSY){
-            ZSQX_default(funcName, isCache, cache);
+            ZSQX_default(funcName, isCache, cache, weight);
         }
     }
 	//最后跳转到endLabel的指令
@@ -2132,31 +2304,35 @@ bool SyntaxAnalysis::ZSQX_situationStatement(string funcName, bool isCache, vect
     }
     //预读
     myLexicalAnalysis.nextSym();
+	//tmpVarCount = tmpVarCountCopy;
+	tmpVarCount = 0;
     return true;
 }
 
 //＜情况表＞ ::= ＜情况子语句＞{＜情况子语句＞}
-vector<CaseRet> SyntaxAnalysis::ZSQX_situationTable(string funcName,string endLabel,ValueType type,vector<FourYuanItem> & cache){
+vector<CaseRet> SyntaxAnalysis::ZSQX_situationTable(string funcName,string endLabel,ValueType type,vector<FourYuanItem> & cache, int weight){
     //分析情况子语句
-	CaseRet ret = ZSQX_situationSonStatement(funcName,endLabel,type,cache);
+	CaseRet ret = ZSQX_situationSonStatement(funcName,endLabel,type,cache, weight);
 	vector<CaseRet> caseTable;
 	caseTable.push_back(ret);
 	
+	int copy = tmpVarCount;
+
     while(true){
         if(myLexicalAnalysis.isFinish())
             break;
-		CaseRet ret = ZSQX_situationSonStatement(funcName,endLabel,type,cache);
+		CaseRet ret = ZSQX_situationSonStatement(funcName,endLabel,type,cache, weight);
 		if (!ret.recognize) {
 			break;
 		}
 		caseTable.push_back(ret);
     }
-
+	tmpVarCount = copy;
     return caseTable;
 }
 
 //＜情况子语句＞ ::= case＜常量＞：＜语句＞
-CaseRet SyntaxAnalysis::ZSQX_situationSonStatement(string funcName,string endLabel, ValueType type,vector<FourYuanItem> & cache){
+CaseRet SyntaxAnalysis::ZSQX_situationSonStatement(string funcName,string endLabel, ValueType type,vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	CaseRet ret;
@@ -2220,7 +2396,7 @@ CaseRet SyntaxAnalysis::ZSQX_situationSonStatement(string funcName,string endLab
 	fourItem.target = ret.label;
 	cache.push_back(fourItem);
 
-    ZSQX_statement(funcName, true, cache);
+    ZSQX_statement(funcName, true, cache, weight);
 	//生成jump到endLabel的代码
 	fourItem.type = Jump;
 	fourItem.target = endLabel;
@@ -2230,7 +2406,7 @@ CaseRet SyntaxAnalysis::ZSQX_situationSonStatement(string funcName,string endLab
 }
 
 //＜缺省＞ ::= default : ＜语句＞
-bool SyntaxAnalysis::ZSQX_default(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_default(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 
@@ -2258,13 +2434,13 @@ bool SyntaxAnalysis::ZSQX_default(string funcName, bool isCache, vector<FourYuan
         return false;
     }
     
-    ZSQX_statement(funcName, isCache, cache);
+    ZSQX_statement(funcName, isCache, cache, weight);
     return true;
 
 }
 
 //＜值参数表＞ ::= ＜表达式＞{,＜表达式＞}
-vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isCache, vector<FourYuanItem> & cache){
+vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
 	SymbolCode symbol;
 	ExpRet ret;
@@ -2273,7 +2449,7 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
 	vector<string> paramTable;
 	vector<ValueType> retParamTable;
 	//分析<表达式>
-	ret = ZSQX_expression(funcName, isCache, cache);
+	ret = ZSQX_expression(funcName, isCache, cache, weight);
 	if(!ret.isEmpty)
 		retParamTable.push_back(ret.type);
 	else {
@@ -2284,7 +2460,7 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
 		sprintf(x,"%d",ret.type == IntType ? ret.number : ret.character);
 		four.type = AssignState;
 		four.isLeftArr = four.isTargetArr = false;
-		four.target = generateVar(funcName);
+		four.target = generateVar();
 		four.op = '+';
 		four.right = "0";
 		four.left = x;
@@ -2297,7 +2473,25 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
 		paramTable.push_back(four.target);
 	}
 	else {
-		paramTable.push_back(ret.name);
+		if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+			FourYuanItem fourItem1;
+			fourItem1.type = AssignState;
+			fourItem1.target = generateVar();
+			fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+			fourItem1.left = ret.name;
+			fourItem1.op = '+';
+			fourItem1.right = "0";
+			if (isCache) {
+				cache.push_back(fourItem1);
+			}
+			else {
+				globalTmpCodeArr.push_back(fourItem1);
+			}
+			paramTable.push_back(fourItem1.target);
+		}
+		else {
+			paramTable.push_back(ret.name);
+		}
 	}
 
     while(true){
@@ -2316,14 +2510,14 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
             break;
         }
 
-		ret = ZSQX_expression(funcName, isCache, cache);
+		ret = ZSQX_expression(funcName, isCache, cache, weight);
 		retParamTable.push_back(ret.type);
 		if (ret.isSurable) {
 			char x[15] = { '\0' };
 			sprintf(x, "%d", ret.type == IntType ? ret.number : ret.character);
 			four.type = AssignState;
 			four.isLeftArr = four.isTargetArr = false;
-			four.target = generateVar(funcName);
+			four.target = generateVar();
 			four.op = '+';
 			four.right = "0";
 			four.left = x;
@@ -2336,7 +2530,25 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
 			paramTable.push_back(four.target);
 		}
 		else {
-			paramTable.push_back(ret.name);
+			if (ret.name.size() > 0 && ret.name.at(0) == 'T') {
+				FourYuanItem fourItem1;
+				fourItem1.type = AssignState;
+				fourItem1.target = generateVar();
+				fourItem1.isTargetArr = fourItem1.isLeftArr = false;
+				fourItem1.left = ret.name;
+				fourItem1.op = '+';
+				fourItem1.right = "0";
+				if (isCache) {
+					cache.push_back(fourItem1);
+				}
+				else {
+					globalTmpCodeArr.push_back(fourItem1);
+				}
+				paramTable.push_back(fourItem1.target);
+			}
+			else {
+				paramTable.push_back(ret.name);
+			}
 		}
     }
 	for (unsigned int i = 0; i < paramTable.size(); i++) {
@@ -2354,7 +2566,7 @@ vector<ValueType> SyntaxAnalysis::ZSQX_valueParamTable(string funcName, bool isC
 }
 
 //＜读语句＞ ::= scanf ‘(’＜标识符＞{,＜标识符＞}‘)’
-bool SyntaxAnalysis::ZSQX_readStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_readStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	FourYuanItem four;
@@ -2391,6 +2603,7 @@ bool SyntaxAnalysis::ZSQX_readStatement(string funcName, bool isCache, vector<Fo
 	
 	id = myLexicalAnalysis.getGlobalString();
 	order = checkAssignId(id,funcName);
+	addWeight(order,weight);
 	if (order >= 0) {
 		four.type = (globalSymbolTable.at(order).getValueType() == IntType) ? ReadInt : ReadChar;
 		char ggg[10] = {'\0'};
@@ -2429,6 +2642,7 @@ bool SyntaxAnalysis::ZSQX_readStatement(string funcName, bool isCache, vector<Fo
 		
 		id = myLexicalAnalysis.getGlobalString();
 		order = checkAssignId(id, funcName);
+		addWeight(order, weight);
 		if (order >= 0) {
 			four.type = (globalSymbolTable.at(order).getValueType() == IntType) ? ReadInt : ReadChar;
 			char ggg[10] = {'\0'};
@@ -2458,10 +2672,12 @@ bool SyntaxAnalysis::ZSQX_readStatement(string funcName, bool isCache, vector<Fo
 }
 
 //＜写语句＞ ::= printf ‘(’ ＜字符串＞,＜表达式＞ ‘)’| printf ‘(’＜字符串＞ ‘)’| printf ‘(’＜表达式＞‘)’
-bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
 	FourYuanItem four;
+
+	int tmpVarCountCopy = tmpVarCount;
 
     //分析printf
     symbol = myLexicalAnalysis.getGlobalSymbol();
@@ -2512,7 +2728,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
                 myError.SyntaxAnalysisError(LackComposedPartError,getLineNumber(),"lack expression.");
                 return false;
             }
-            ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+            ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 			if (ret.isSurable) {
 				four.type = (ret.type == IntType) ? PrintInt : PrintChar;
 				char x[15] = {'\0'};
@@ -2544,7 +2760,7 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 		}
     }else{
         //单纯表达式?
-		ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+		ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 		if (ret.isSurable) {
 			four.type = (ret.type == IntType) ? PrintInt : PrintChar;
 			char x[15] = { '\0' };
@@ -2588,16 +2804,19 @@ bool SyntaxAnalysis::ZSQX_writeStatement(string funcName, bool isCache, vector<F
 
     //预读
     myLexicalAnalysis.nextSym();
+	tmpVarCount = tmpVarCountCopy;
     return true;
 }
 
 //＜返回语句＞ ::= return[‘(’＜表达式＞‘)’]
-bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<FourYuanItem> & cache){
+bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<FourYuanItem> & cache, int weight){
     bool nextSymFlag;
     SymbolCode symbol;
     bool preRead = true;
 
 	FourYuanItem item;
+
+	int tmpVarCountCopy = tmpVarCount;
 
     //分析return
     symbol = myLexicalAnalysis.getGlobalSymbol();
@@ -2616,7 +2835,7 @@ bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<
                 return false;
             }
             //分析<表达式>
-            ExpRet ret = ZSQX_expression(funcName, isCache, cache);
+            ExpRet ret = ZSQX_expression(funcName, isCache, cache, weight);
 			if (ret.isSurable) {
 				if (ret.type == IntType) {
 					item.type = ReturnInt;
@@ -2685,6 +2904,7 @@ bool SyntaxAnalysis::ZSQX_returnStatement(string funcName, bool isCache, vector<
 
     if(preRead)
         myLexicalAnalysis.nextSym();
+	tmpVarCount = tmpVarCountCopy;
     return true;
 }
 
@@ -3134,5 +3354,14 @@ void SyntaxAnalysis::checkReturn(string funcName,ValueType retType) {
 			}
 			return;
 		}
+	}
+}
+
+//加权----引用计数
+void SyntaxAnalysis::addWeight(int order, int weight) {
+	SymbolTableItem item = globalSymbolTable.at(order);
+	if ((item.getItemType() == Variable || item.getItemType() == Parament) && item.getFuncName() != "GLOBAL"
+		&& item.getArrSize() == 0) {
+		globalSymbolTable.at(order).addWeight(weight);
 	}
 }

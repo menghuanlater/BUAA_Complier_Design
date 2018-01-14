@@ -10,20 +10,24 @@
 #include "SymbolTable.h"
 #include <string>
 #include <vector>
+#include "optimize.h"
 using namespace std;
 
 //函数声明
 string generateLabel();
-string generateVar(string);
+string generateVar();
 bool isStringDigit(string);
 int stringToInt(string);
 //文件操作
 //将中间代码写入到文件中
 void writeTmpCodeToFile();
+void op_writeTmpCodeToFile();
 //将中间代码翻译成最终的mips32汇编语言代码
 void generateMipsCode();
+void op_generateMipsCode();
 void generateData(ofstream &);
 void generateText(ofstream &);
+void op_generateText(ofstream &);
 //表达式的相关计算处理
 void turnToPostfixExp(vector<PostfixItem>, vector<PostfixItem> &);
 string calculateExp(vector<PostfixItem> &,bool &,ValueType &,int &,int,bool,vector<FourYuanItem> &,string);

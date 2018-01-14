@@ -31,6 +31,8 @@ private:
 
 	int length;//数组的长度,变量设置为0
 
+	int weight;//只针对函数内部的简单变量以及参数有效
+
 public:
 	SymbolTableItem(string id,string funcName);
 	int getOrder() {
@@ -78,6 +80,12 @@ public:
 	}
 	void setFuncType(FunctionType type) {
 		functionType = type;
+	}
+	void addWeight(int num) {
+		weight += num;
+	}
+	int getWeight() {
+		return weight;
 	}
 };
 
