@@ -43,7 +43,6 @@ g_var_char_arr:
 x
 x
 x
-13
 Sally Go2.
 Lala
 DiDi
@@ -74,6 +73,7 @@ g_var_int2:30
 g_var_char1:a
 g_var_char2:m
 ------------------------
+13
 smaller than n
 smaller than n or equal to n
 not equal to n

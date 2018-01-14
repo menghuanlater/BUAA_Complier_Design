@@ -228,6 +228,9 @@ void complexIf_Else(){
     i = 4;
     while(i>=0){
         if(i == 4){
+            if(i==4){
+                printf("In If-Else i = 4 haha\n");
+            }
             printf("In If-Else i = 4\n");
         }else{
             if(i == 3){

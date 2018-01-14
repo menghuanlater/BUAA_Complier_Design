@@ -29,9 +29,9 @@ void testAllDefine{
 
     i = (0+0*0-0-(0-'a'+'b'-1)*34445);
     while(i<(333-222-111+19-9+gCh4-'8'-1)){
-        gInt2[i] = 2*10+i;
-        gInt3[i] = 3*10+i;
-        gInt5[i] = 5*10+i;
+        gInt2[2*i/2] = 2*10+i;
+        gInt3[3*i/3] = 3*10+i;
+        gInt5[5*i/5] = 5*10+i;
         gCh2[i] = 'a';
         gCh3[i] = 'b';
         gCh5[i] = 'c';
@@ -218,12 +218,27 @@ void complexIf_Else{
     while(i>=0){
         if(i == 4){
             printf("In If-Else i = 4");
+            if(i == 4){
+                printf("In If-Else i = 4 again");
+            }else{
+                ;
+            }
         }else{
             if(i == 3){
                 printf("In If-Else i = 3");
+                if(i!=4){
+                    printf("In If-Else i = 3 again");
+                }else{
+                    ;
+                }   
             }else{
                 if(i == 2){
                     printf("In If-Else i = 2");
+                    if(i-2){
+                        printf("In If-Else i = 2 again");
+                    }else{
+                        ;
+                    }
                 }else{
                     if(i == 1){
                         printf("In If-Else i = 1");
@@ -386,6 +401,20 @@ void main(){
     complexWhile;
     
     complexSwitch_Case;
+
+    printf("input a char:");
+    scanf(char1);
+    while(char1!='d'){
+        switch(char1){
+            case 'a':printf("b--Fib(10):",Fibonaci(10));
+            case 'b':printf("b--Fib(9):",Fibonaci(9));
+            case 'c':printf("a--Fib(8):",Fibonaci(8));
+        }
+        printf("input a char:");
+        scanf(char1);
+    }
+
     printf("Congratulations,you passed all tests.");
+
     return;
 }
